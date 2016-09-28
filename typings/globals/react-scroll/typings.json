@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/f29ae556487dd6dd1ea268d8d11beed8663b3df2/react-scroll/react-scroll.d.ts",
+    "raw": "registry:dt/react-scroll#0.0.0+20160812231145",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/f29ae556487dd6dd1ea268d8d11beed8663b3df2/react-scroll/react-scroll.d.ts"
+  }
+}

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<!--title-->
+    <title>Charity Fund Pool</title>
+	
+	<!--CSS-->
+    <link href="templates/css/bootstrap.min.css" rel="stylesheet">
+    <link href="templates/css/font-awesome.min.css" rel="stylesheet">
+	<link href="templates/css/animate.css" rel="stylesheet">	
+	<link href="templates/css/prettyPhoto.css" rel="stylesheet">	
+	<link href="templates/css/main.css" rel="stylesheet">
+	<link id="css-preset" href="templates/css/presets/preset1.css" rel="stylesheet">
+	<link href="templates/css/responsive.css" rel="stylesheet">	
+    <link href="templates/css/custom.menu.css" rel="stylesheet">
+	
+	<!--Google Fonts-->
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,500,700,800,100,600' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,900' rel='stylesheet' type='text/css'>
+	
+    <!--[if lt IE 9]>
+	    <script src="js/html5shiv.js"></script>
+	    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="templates/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="templates/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="templates/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="templates/images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+<body>
+
+
+	<h1 id="bigOne"></h1>
+
+	<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+	<script>
+	// Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyAh5vjIaONRfbKPjeHiAc-UvV5nOXseA8Y",
+		authDomain: "charityfundpool.firebaseapp.com",
+		databaseURL: "https://charityfundpool.firebaseio.com",
+		storageBucket: "",
+		messagingSenderId: "42018346299"
+	};
+	firebase.initializeApp(config);
+
+	var bigOne = document.getElementById('bigOne');
+	var dbRef = firebase.database().ref().child('text');
+	dbRef.on('value', snap => bigOne.innerText = snap.val());
+
+	</script>
+
+
+	
+	<!-- Page Loader -->
+	<div class="preloader">
+        <div id="loaderImage"></div>
+    </div>
+
+	<header id="navigation">
+        <div class="navbar main-nav" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">
+                    	<h1><img class="img-responsive" src="templates/images/logo_custom.png" alt="Custom Logo Placeholder"></h1>
+                    </a>                    
+                </div>	
+				<div class="top-bar">	
+					<!--
+                    <div class="dropdown language-dropdown">						
+						<a data-toggle="dropdown" href="#"><span class="change-text">English </span><i class="fa fa-angle-down"></i></a>
+						<ul class="dropdown-menu language-change">
+							<li><a href="#">English </a></li>
+							<li><a href="#">German </a></li>
+							<li><a href="#">French </a></li>
+							<li><a href="#">Spanish </a></li>
+						</ul>								
+					</div>
+                    -->
+					<span class="contact-mail"><a href="#"><i class="fa fa-envelope-o"></i>contact@charityfundpool.com</a></span>
+					<span><i class="fa fa-phone"></i> (123) 456-7890</span>
+				</div>
+                
+
+
+
+
+    
+                <nav class="collapse navbar-collapse navbar-right">					
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html"><span>Home</span></a></li> 
+						<li><a href="#who-we-are"><span>Who We Are</span></a>                        
+                           
+                        </li>                        
+                        <li><a href="#cause-list"><span>Cause</span></a>
+                                       
+                        </li>
+						<li><a href="#recent-post"><span>News & Blog</span></a>
+                                                                        
+                        </li>
+                        <li><a href="#our-member"><span>Volunteer</span></a>                        
+                                             
+                        </li> 					
+                        <li><a href="#contact"><span>Contact</span></a>                                                                     
+                        </li>						
+                    </ul>					
+                </nav>
+
+
+
+                <!--
+                <div class="search">
+                    <form role="form">
+                        <i class="fa fa-search"></i>
+                        <div class="field-toggle">
+                            <input type="text" class="search-form" autocomplete="off" placeholder="Search">
+                        </div>
+                    </form>
+                </div>
+                -->
+            </div>
+        </div>
+    </header><!--/#navigation--> 
+	
+	<div id="carousel-wrapper">
+		<div id="main-carousel" class="carousel slide" data-ride="carousel">
+			<ol class="carousel-indicators">
+				<li data-target="#main-carousel" data-slide-to="0" class="active"></li>
+				<!--
+                <li data-target="#main-carousel" data-slide-to="1"></li>
+				<li data-target="#main-carousel" data-slide-to="2"></li>
+				<li data-target="#main-carousel" data-slide-to="3"></li>
+                -->
+			</ol>
+			<div class="carousel-inner">
+				<div class="item active" style="background-image: url(templates/images/home/1.jpg)">
+					<div class="carousel-caption container">
+						<h1 class="animated rollIn">Charity Fund Pool</h1>
+						<p class="animated rollIn">Brings awereness to the community through moderm website.</p>
+						<a href="#who-we-are" id="tohash" class="animated rollIn btn btn-primary">Get Start</a>
+						<!--<a href="https://www.youtube.com/watch?v=oAVtOmhQ5D4" data-gallery="prettyPhoto" class="watch-video"><i class="fa fa-play"></i> Watch Video</a>-->
+					</div>					
+				</div>
+                <!--
+				<div class="item" style="background-image: url(templates/images/home/2.jpg)">
+					<div class="carousel-caption container">
+						<h1 class="animated rollIn">Empower Children Dream</h1>
+						<p class="animated rollIn">Vestibulum vitae urna quis eros convallis hendrerit. Sed magna magna, congue vel dapibus a, sagittis in enim.</p>
+						<a href="#who-we-are" id="tohash1" class="animated rollIn btn btn-primary">Get Start</a>
+						<a href="https://www.youtube.com/watch?v=oAVtOmhQ5D4" data-gallery="prettyPhoto" class="watch-video"><i class="fa fa-play"></i> Watch Video</a>
+					</div>
+				</div>
+				<div class="item" style="background-image: url(templates/images/home/3.jpg)">
+					<div class="carousel-caption container">
+						<h1 class="animated rollIn">Empower Children Dream</h1>
+						<p class="animated rollIn">Vestibulum vitae urna quis eros convallis hendrerit. Sed magna magna, congue vel dapibus a, sagittis in enim.</p>
+						<a href="#who-we-are" id="tohash2" class="animated rollIn btn btn-primary">Get Start</a>
+						<a href="https://www.youtube.com/watch?v=oAVtOmhQ5D4" data-gallery="prettyPhoto" class="watch-video"><i class="fa fa-play"></i> Watch Video</a>
+					</div>
+				</div>
+				<div class="item" style="background-image: url(templates/images/home/4.jpg)">
+					<div class="carousel-caption container">
+						<h1 class="animated rollIn">Empower Children Dream</h1>
+						<p class="animated rollIn">Vestibulum vitae urna quis eros convallis hendrerit. Sed magna magna, congue vel dapibus a, sagittis in enim.</p>
+						<a href="#who-we-are" id="tohash3" class="animated rollIn btn btn-primary">Get Start</a>
+						<a href="https://www.youtube.com/watch?v=oAVtOmhQ5D4" data-gallery="prettyPhoto" class="watch-video"><i class="fa fa-play"></i> Watch Video</a>
+					</div>
+				</div>
+                -->
+			</div>	
+		</div> <!--/#main-carousel--> 
+    </div><!--/#carousel-wrapper--> 
+	
+	<div id="who-we-are">
+		<div class="container">
+			<div class="call-to-action">
+				<div class="row">
+					<div class="col-sm-9">
+						<h1>Join our Campaign!</h1>
+						<p>Proin gravida nibh vel velit auctor aliquet donate so far: <span>$30,00,000</span></p>					
+					</div>
+					<div class="col-sm-3">
+						<a href="#" class="pull-right btn btn-primary">Donate Now</a>
+					</div>
+				</div>
+			</div><!--/.call to action-->
+			<div class="text-center who-we-are padding-bottom padding-top">
+				<div class="row">
+					<div class="col-sm-4">
+						<img class="img-responsive" src="templates/images/about/1.png" alt="" />
+						<h2>Our World</h2>
+						<p class="lead">We are in 32 Countries</p>
+					</div>
+					<div class="col-sm-4">
+						<img class="img-responsive" src="templates/images/about/2.png" alt="" />
+						<h2>Our Promise</h2>
+						<p class="lead">59% Of all $ goes to Programs</p>
+					</div>
+					<div class="col-sm-4">
+						<img class="img-responsive" src="templates/images/about/3.png" alt="" />
+						<h2>Our Reach</h2>
+						<p class="lead">1198 Million Member</p>
+					</div>					
+				</div>
+			</div>
+			<div class="our-details-tab padding-bottom">
+				<div class="row">
+					<div class="col-sm-12 col-md-6">
+						<div id="about-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+							<div class="carousel-inner">
+								<div class="item active">
+									<img class="img-responsive" src="templates/images/about/p1.jpg" alt="" />
+								</div>
+								<div class="item">
+									<img class="img-responsive" src="templates/images/about/p2.jpg" alt="" />
+								</div>
+								<div class="item">
+									<img class="img-responsive" src="templates/images/about/p3.jpg" alt="" />
+								</div>
+							</div>
+						</div><!--/#about-carousel--> 
+					</div>
+					<div class="col-sm-12 col-md-6 tab-section">
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs nav-justified" role="tablist">
+							<li class="active"><a href="#story" role="tab" data-toggle="tab">Our Story</a></li>
+							<li><a href="#mission" role="tab" data-toggle="tab">Mission</a></li>
+							<li><a href="#activity" role="tab" data-toggle="tab">Our Activity</a></li>
+							<li><a href="#faq" role="tab" data-toggle="tab">FAQ</a></li>
+						</ul>
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div class="tab-pane fade in active" id="story">
+								<h4>Give the Life-changing Gift of Education in Citytown.</h4>
+								<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p> <p>I throw myself down among the tall grass by the trickling stream; and, as I lie close to the earth,</p>
+							</div>
+							<div class="tab-pane fade " id="mission">								
+								<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+								<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+							</div>
+							<div class="tab-pane fade " id="activity">								
+								<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p> <p>I throw myself down among the tall grass by the trickling stream; and, as I lie close to the earth,</p>
+							</div>
+							<div class="tab-pane fade " id="faq">
+								<h4>Frequently asked questions -</h4>
+								<ul>
+									<li>Q: Lorem Ipsum is simply dummy text ?</li>
+									<li>Ans: Lorem Ipsum is simply dummy text of the printing</li>
+									<li>Q: When an unknown printer took ?</li>
+									<li>Ans: Lorem Ipsum is simply dummy text of the printing and typesetting.</li>
+									<li>Q: I lie close to the earth ?</li>									
+									<li>Ans: Lorem Ipsum is simply dummy text. </li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#who-we-are--> 
+	
+	<div id="donations" class="parallax-section">
+		<div class="padding-top padding-bottom container">
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="donations">
+						<h1>Donations</h1>
+						<p class="lead">Building Stronger Kids with Better Food</p>
+						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+						<a href="#" class="btn btn-primary">Donate/pay in your money</a>
+					</div>
+				</div>
+				<div class="col-sm-7">
+					<div class="text-center overall-process">
+						<div class="cycle-image">
+							<img class="img-responsive" src="templates/images/cycle.png" alt="" />
+						</div>						
+						<img class="img-responsive" src="templates/images/cycle-line.png" alt="" />
+						<div class="round-progress">
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped active six-sec-ease-in-out" role="progressbar"  data-transition="26"></div>
+							</div>
+						</div>						
+						<div class="progress-info">
+							<p>Overall Process</p>
+							<span class="lead"><i class="fa fa-thumbs-o-up"></i> Raised $ 9800</span>							
+							<span class="lead"><i class="fa fa-flag-o"></i> Goal $ 98,000</span>							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#donations--> 
+	
+	<div id="cause-list" class="padding-bottom">
+		<div class="container">	
+			<div class="section-title">
+				<h1>Cause List</h1>				
+			</div>
+			<div id="cause-list-carousel" class="carousel slide" data-ride="carousel">
+`				<ol class="carousel-indicators">
+					<li data-target="#cause-list-carousel" data-slide-to="0" class="active"></li>
+					<li data-target="#cause-list-carousel" data-slide-to="1"></li>
+					<li data-target="#cause-list-carousel" data-slide-to="2"></li>
+				</ol>			
+				<div class="carousel-inner">
+					<div class="item active">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="list-image border-one">
+									<img class="img-responsive" src="templates/images/cause-list/1.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Please Help Refugees</h2>
+									<p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-two">
+									<img class="img-responsive" src="templates/images/cause-list/2.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Children Hunger</h2>
+									<p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-three">
+									<img class="img-responsive" src="templates/images/cause-list/3.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Domestic violence</h2>
+									<p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="list-image border-one">
+									<img class="img-responsive" src="templates/images/cause-list/1.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Please Help Refugees</h2>
+									<p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-two">
+									<img class="img-responsive" src="templates/images/cause-list/2.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Children Hunger</h2>
+									<p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-three">
+									<img class="img-responsive" src="templates/images/cause-list/3.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Domestic violence</h2>
+									<p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="list-image border-one">
+									<img class="img-responsive" src="templates/images/cause-list/1.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Please Help Refugees</h2>
+									<p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-two">
+									<img class="img-responsive" src="templates/images/cause-list/2.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Children Hunger</h2>
+									<p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="list-image border-three">
+									<img class="img-responsive" src="templates/images/cause-list/3.jpg" alt="" />
+								</div>
+								<div class="list-info">
+									<h2>Domestic violence</h2>
+									<p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
+									<p>On the other hand, we denounce with righteous indignation and dislike.</p>
+									<a href="#" class="btn btn-primary">Donate Now</a>
+								</div>								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#cause-list--> 
+	
+    <!--
+	<div id="video-section" class="parallax-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6">
+					<h1>How Can You Help!</h1>
+					<p class="lead">Help for cause</p>
+
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="active"><a href="#video" class="btn btn-primary" role="tab" data-toggle="tab">Watch Video</a></li>
+						<li><a href="#mobilization" class="btn btn-primary" role="tab" data-toggle="tab">Mobilization</a></li>
+						<li><a href="#support" class="btn btn-primary" role="tab" data-toggle="tab">Support</a></li>
+					</ul>					
+					<p>Aenean nonummy hendrerit mris. Phasellus porta. Fusce suscipit varius. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dui.</p>
+				</div>
+				<div class="col-sm-6">
+
+					<div class="tab-content">
+						<div class="tab-pane fade in active" id="video">
+							<div class="embed-responsive embed-responsive-4by3">
+								<iframe class="embed-responsive-item" src="http://player.vimeo.com/video/29805267"></iframe>						
+							</div>
+						</div>
+						<div class="tab-pane fade" id="mobilization">
+							<img class="img-responsive" src="templates/images/mobilization.jpg" alt="" />
+						</div>
+						<div class="tab-pane fade" id="support">
+							<h1>How we support for refugees</h1>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam.</p>
+							<ul>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Phasellus porta</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Fusce suscipit varius.</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Cum sociis natoque penatibus</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Nascetur ridiculus mus.</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Typi non habent claritatem</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Mirum est notare quam</a></li>
+								<li><a href="#"><i class="fa fa-angle-right"></i> Eodem modo typi</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#video-section--> 
+	
+	<div id="recent-post" class="padding-bottom padding-top-two">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-md-3">
+					<div class="section-title event-title">
+						<h1>Events</h1>
+					</div>
+					<div id="event-carousel" class="carousel slide" data-ride="carousel">
+						<ol class="carousel-indicators">
+							<li data-target="#event-carousel" data-slide-to="0" class="active"></li>
+							<li data-target="#event-carousel" data-slide-to="1"></li>
+							<li data-target="#event-carousel" data-slide-to="2"></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="item active">
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Aug <span>01</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Empowerment & Leadership</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>25</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Our Children Matter</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>21</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>A Standard Post Format &  Solve it</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>17</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">12:00 am - 5:00 pm</p>
+										<p>Care for Children</p>
+									</div>
+								</a>
+							</div><!--/.item-->
+							<div class="item">
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Aug <span>01</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Empowerment & Leadership</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>27</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Our Children Matter</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>24</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>A Standard Post Format &  Solve it</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>13</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">12:00 am - 5:00 pm</p>
+										<p>Care for Children</p>
+									</div>
+								</a>
+							</div><!--/.item-->
+							<div class="item">
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Aug <span>16</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Empowerment & Leadership</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>25</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>Our Children Matter</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>15</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">10:00 am - 12:00 am</p>
+										<p>A Standard Post Format &  Solve it</p>
+									</div>
+								</a>
+								<a href="#" class="single-event">
+									<div class="pull-left event-date">
+										<p>Jul <span>17</span></p>									
+									</div>
+									<div class="event-info">
+										<p class="event-time">12:00 am - 5:00 pm</p>
+										<p class="event-details">Care for Children</p>
+									</div>
+								</a>
+							</div><!--/.item-->
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-9">
+					<div class="section-title">
+						<h1>Most Recent Post</h1>
+					</div>					
+					<div id="recent-post-carousel" class="carousel slide" data-ride="carousel">
+						<ol class="carousel-indicators">
+							<li data-target="#recent-post-carousel" data-slide-to="0" class="active"></li>
+							<li data-target="#recent-post-carousel" data-slide-to="1"></li>
+							<li data-target="#recent-post-carousel" data-slide-to="2"></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="item active">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post1.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post2.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post3.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post4.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div><!--/.item--> 
+							<div class="item">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post3.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post1.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post4.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post2.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div><!--/.item--> 
+							<div class="item">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post4.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post1.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post3.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="single-post">
+											<div class="pull-left post-image">
+												<a href="#">
+													<img class="img-responsive" src="templates/images/recent-post/post2.jpg" alt="" />
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+											<div class="pull-right post-details">
+												<p class="post-date">03 Dec 2014</p>
+												<a href="#"><h5>Donec luctus imperdiet</h5></a>
+												<span>John doe</span>
+												<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div><!--/.item--> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#recent-post--> 
+	
+	<div id="contact">
+		<div class="container">
+			<div class="section-title">
+				<h1>Contact Us</h1>
+			</div>
+			<div class="row">
+				<div class="col-sm-10 col-sm-offset-1">
+					<div class="row contact-details">
+						<div class="col-sm-4">
+							<span><i class="fa fa-map-marker"></i></span>
+							<p class="contact-info">1234 Street Name, City Name</p>
+						</div>
+						<div class="col-sm-4">
+							<span><i class="fa fa-phone"></i></span>
+							<p class="contact-info">+(123) 456-7890 </p>
+						</div>
+						<div class="col-sm-4">
+							<span><i class="fa fa-envelope"></i></span>
+							<a class="contact-info" href="#">contact@humanity.com</a>
+						</div>
+					</div>
+					<div class="contact-form">
+						<form id="contact-form" class="contact-form" name="contact-form" method="post" action="send-mail.php">
+							<div class="row">
+								<div class="form-group col-sm-6">
+									<input type="text" name="name" class="form-control" required="required" placeholder="Name">
+									<input type="text" name="company" class="form-control" placeholder="Company">
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="email" name="email" class="form-control" required="required" placeholder="Email Address">
+									<input type="email" name="website" class="form-control" required="required" placeholder="Website">
+								</div>
+								<div class="form-group col-sm-12">
+									<textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Message"></textarea>
+								</div> 
+							</div>				                                   
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">Send Your Message</button>
+							</div>
+						</form>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/#Contact--> 
+	
+	<footer id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4">
+					<a href="index.html"><img class="img-responsive" src="templates/images/logo_custom.png" alt="Custom Logo placeholder" /></a>
+				</div>
+				<div class="col-sm-4">
+					<div class="copyright-text">
+						<p>&copy; copyright 2016 by <a href="#"> LiquidSpaceDesign Ltd.</a> All rights reserved.</p>
+					</div>					
+				</div>
+				<div class="col-sm-4">
+					<div class="footer-socials">
+						<ul>
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+							<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer><!--/#footer--> 
+				
+	<script src="bundle.js"></script>
+	
+	<!--/#scripts--> 
+    <script type="text/javascript" src="templates/js/jquery.js"></script>
+    <script type="text/javascript" src="templates/js/bootstrap.min.js"></script>	
+	<script type="text/javascript" src="templates/js/jquery.prettyPhoto.js"></script>
+	<script type="text/javascript" src="templates/js/jquery.parallax.js"></script>
+	<script type="text/javascript" src="templates/js/smoothscroll.js"></script>
+	<script type="text/javascript" src="templates/js/jquery.nav.js"></script>
+	<script type="text/javascript" src="templates/js/canvas.js"></script>
+	<script type="text/javascript" src="templates/js/preloader_canvas.js"></script>
+    <script type="text/javascript" src="templates/js/main.js"></script> 
+</body>
+</html>

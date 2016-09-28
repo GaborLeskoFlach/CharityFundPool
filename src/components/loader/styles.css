@@ -1,0 +1,35 @@
+@-webkit-keyframes spin
+{
+    from    { -webkit-transform: rotate(0deg); opacity: 0.2 }
+    50%     { -webkit-transform: rotate(180deg); opacity: 1 }
+    to      { -webkit-transform: rotate(360deg); opacity: 0.2 }
+}
+
+@keyframes spin
+{
+    from    { -webkit-transform: rotate(0deg); opacity: 0.2 }
+    50%     { -webkit-transform: rotate(180deg); opacity: 1 }
+    to      { -webkit-transform: rotate(360deg); opacity: 0.2 }
+}
+
+#ajaxloader{
+    width:30px;
+    height:30px;
+    left:50%;
+    top:15%;
+    margin: 0 0 0 -15px;
+    border : 8px solid black;
+    border-right-color : transparent;
+    border-radius: 50%;
+    box-shadow: 0 0 25px 2px #eee;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}   
+
+.ajaxloader-container-loaded{
+    display:none;
+}
+
+#ajaxloader-container{
+    padding:10px
+}

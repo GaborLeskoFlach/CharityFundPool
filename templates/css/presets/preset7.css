@@ -1,0 +1,69 @@
+a:focus, 
+a:hover, 
+#navigation .navbar-right .dropdown-menu li a:hover, 
+.search i:hover, 
+.call-to-action span, 
+.list-info span, 
+.member-info ul li a:hover, 
+.member-info .lead, #contact i, 
+#contact a.contact-info:hover{	
+	color:#a864a8;
+}
+
+.section-title:after, 
+.btn-primary, 
+#navigation .navbar-right li a span:after, 
+#navigation .navbar-fixed-top, 
+.carousel-indicators .active, 
+.list-image:after, 
+.list-image:before, 
+#event-carousel .event-date, 
+.become-volunteer  {	
+	background-color:#a864a8;	
+}
+.btn-primary, 
+.carousel-indicators .active, 
+#contact-form input:focus, 
+#contact-form textarea:focus {
+	border-color:#a864a8;
+}
+.search-form {
+	border:1px solid #a864a8;
+}
+.single-post .post-image:before {
+	border-color:#a864a8 transparent transparent;
+}
+
+.btn-primary:hover, 
+.btn-primary:focus, 
+.carousel-caption .btn-primary:hover,
+.btn-default:hover, .btn-default:focus, 
+#video-section .nav-tabs>li.active>a, 
+#video-section .nav-tabs>li >a:hover  {
+	background-color:#915791;
+	border-color:#915791;
+}
+
+#event-carousel .single-event:hover .event-date, 
+#footer{
+	background-color:#915791;
+}
+
+.btn-default {
+	background-color:rgba(168,100,168,0.85);
+}
+.photo-info {
+	background-color:rgba(168,100,168,0.8);
+}
+
+#donations{
+	background-color: #915791;
+	background-image:url(../../images/donation-bg/donations-bg7.jpg);	
+}
+.progress-striped .progress-bar, .progress-bar-striped {
+	background-image: linear-gradient(45deg, rgba(168,100,168,0.99) 25%, transparent 25%, transparent 50%, rgba(168,100,168,0.99) 50%, rgba(168,100,168,0.99) 75%, transparent 75%, transparent);
+}
+
+.round-progress .progress-bar {
+	background-color: #7c4b7c; 
+}
