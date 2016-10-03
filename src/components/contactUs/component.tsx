@@ -14,6 +14,13 @@ export class ContactUsComponent extends React.Component<IContactUsComponentProps
     }
 
     render(){
+
+
+
+
+        //TODO: Implement Google Map API method to retrieve location
+        // As a temporary measure I'm just gonna put an image in there
+
         return(
             <Element name="contact-us">
                		<div className="container">
@@ -36,6 +43,11 @@ export class ContactUsComponent extends React.Component<IContactUsComponentProps
                                         <a className="contact-info" href="#">contact@humanity.com</a>
                                     </div>
                                 </div>
+
+
+                                <img className="img-responsive" src="templates/images/tempMap.png" alt="" />
+
+
                                 <div className="contact-form">
                                     <form id="contact-form" className="contact-form" name="contact-form" method="post" action="send-mail.php">
                                         <div className="row">

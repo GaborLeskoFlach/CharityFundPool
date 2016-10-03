@@ -49,25 +49,29 @@ $(document).ready(function($) {
 		
 	}
 
-	menuToggle();	
+	//menuToggle();	
 	
 	//Menu Scrolling
+	/*
 	$('.navbar-nav').onePageNav({
 		currentClass: 'active',
 		filter: ':not(.exclude)',
 	});
-	
+	*/
+	/*
 	$('.navbar-nav li a').on('click', function(){
 		$('html, body').animate({scrollTop: $(this.hash).offset().top -40}, 500);
 		return false;
 	});
-	
+	*/
+
 	//Scrolling
 	$('#tohash, #tohash1, #tohash2, #tohas3').on('click', function(){
 		$('html, body').animate({scrollTop: $(this.hash).offset().top -75}, 1000);
 		return false;
 	});
 	
+	/*
 	//Parallax Scrolling
 	$(window).bind('load', function () {
 		parallaxInit();						  
@@ -78,6 +82,7 @@ $(document).ready(function($) {
 		$("#word-for-humanity").parallax("50%", 0.3);	
 	}	
 	parallaxInit();	
+	*/
 	
 	// Progress Bar
 	$.each($('div.progress-bar'),function(){
@@ -85,10 +90,12 @@ $(document).ready(function($) {
 	});
 	
 	//Pretty Photo
+	/*
 	 $("a[data-gallery^='prettyPhoto']").prettyPhoto({
 	  social_tools: false
 	 });
-	 
+	*/
+	
 	//Event Carousel
 	$('#event-carousel.carousel').carousel({
 	  interval: 8000
@@ -98,23 +105,7 @@ $(document).ready(function($) {
 		$(".navbar-nav li a").click(function(event) {
 		$(".navbar-collapse").collapse('hide');
 		});
-	});
-	
-	//style-chooser
-	var presets = $('.style-chooser ul li');
-
-	$('.style-chooser .toggler').on('click', function(event){
-		event.preventDefault();
-		$(this).closest('.style-chooser').toggleClass('opened');
-	});
-
-	$('.style-chooser ul li a').on('click', function(event){
-		event.preventDefault();
-		presets.removeClass('active');
-		$(this).parent().addClass('active');
-		$('#css-preset').removeAttr('href').attr('href', 'css/presets/preset' + $(this).parent().data('preset') + '.css');
-	})
-	
+	});		
 		
 });
 

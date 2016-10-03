@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Scroll from 'react-scroll';
+import { Link } from 'react-router';
 
 const Element    = Scroll.Element;
 
@@ -38,7 +39,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Please Help Refugees</h2>
                                             <p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -49,7 +50,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Children Hunger</h2>
                                             <p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -60,7 +61,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Domestic violence</h2>
                                             <p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                 </div>
@@ -75,7 +76,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Please Help Refugees</h2>
                                             <p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -86,7 +87,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Children Hunger</h2>
                                             <p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -97,7 +98,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Domestic violence</h2>
                                             <p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                 </div>
@@ -112,7 +113,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Please Help Refugees</h2>
                                             <p><span>85%</span> Donated / <span>$7,291</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -123,7 +124,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Children Hunger</h2>
                                             <p><span>25%</span> Donated / <span>$7,891</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                     <div className="col-sm-4">
@@ -134,7 +135,7 @@ export class CauseListComponent extends React.Component<ICauseListComponentProps
                                             <h2>Domestic violence</h2>
                                             <p><span>56%</span> Donated / <span>$6,000</span> To Go</p>
                                             <p>On the other hand, we denounce with righteous indignation and dislike.</p>
-                                            <a href="#" className="btn btn-primary">Donate Now</a>
+                                            <Link to="/donate" className="btn btn-primary">Donate Now</Link>
                                         </div>								
                                     </div>
                                 </div>

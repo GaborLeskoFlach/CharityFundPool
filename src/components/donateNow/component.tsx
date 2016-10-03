@@ -1,15 +1,16 @@
 import * as React from 'react';
 import * as DonationFields from './formFields';
-
-export interface IDonateNowComponentProps{
-    addDonation : (donation : IDonation) => void;
+import { Router } from 'react-router';
+ 
+interface IDonation{
+    firstName : string;
+    lastName : string;
+    amountToDonate : string;   
+    desc : string;
 }
 
-interface IDonation{
-    name : string;
-    price : string;
-    status : string;
-    desc : string;
+interface IDonateNowComponentProps{
+    history : any;
 }
 
 export class DonateNowComponent extends React.Component<IDonateNowComponentProps,{}>{
@@ -18,21 +19,26 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         super(props);
     }
 
-    addDonation(event:any) {
+    addDonation(event:React.FormEvent) {
+        
         // 1. Stop the form from submitting
         event.preventDefault();
+        
         // 2. Take the data from the form and create an object
         let donation : IDonation = {
-            name : (this.refs[DonationFields.name] as HTMLInputElement).value,
-            price : (this.refs[DonationFields.price] as HTMLInputElement).value,
-            status : (this.refs[DonationFields.status] as HTMLInputElement).value,
-            desc : (this.refs[DonationFields.desc] as HTMLInputElement).value,            
-        }
+            firstName : (this.refs[DonationFields.firstName] as HTMLInputElement).value,
+            lastName : (this.refs[DonationFields.lastName] as HTMLInputElement).value,
+            amountToDonate : (this.refs[DonationFields.amountToDonate] as HTMLInputElement).value,            
+            desc : (this.refs[DonationFields.desc] as HTMLInputElement).value   
+        };
 
-        // 3. Add the fish to the App State
-        this.props.addDonation(donation);
-        (this.refs[DonationFields.donationForm] as HTMLFormElement).reset();   
-             
+        //Save into DB?
+        (this.refs[DonationFields.donationForm] as HTMLFormElement).reset();      
+
+        //var transitionTo = Router.transitionTo;
+        //transitionTo('your_route_name', query={keyword: input_value});  
+
+        this.props.history.push('/');        
     }
 
   render() {
@@ -47,26 +53,26 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
 			<div className="row">
 				<div className="col-sm-10 col-sm-offset-1">
 					<div className="contact-form">
-                        <form ref="fishForm" onSubmit={this.addDonation.bind(this)}>
+                        <form ref="donationForm" onSubmit={this.addDonation.bind(this)}>
                             
                             <div className="form-group">
-                                <label htmlFor="fishName">Fish Name</label>
-                                <input className="form-control" id="fishName" type="text" ref="name" placeholder="Fish Name"/>
+                                <label htmlFor="firstName">First Name</label>
+                                <input className="form-control" id="firstName" type="text" ref="firstName" placeholder="First Name"/>
+                            </div>
+
+                          <div className="form-group">
+                                <label htmlFor="lastName">Last Name</label>
+                                <input className="form-control" id="lastName" type="text" ref="lastName" placeholder="Last Name"/>
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="fishPrice">Fish Price</label>
-                                <input className="form-control" id="fishPrice" type="text" ref="price" placeholder="Fish Price" />
+                                <label htmlFor="amountToDonate">Amount to donate</label>
+                                <input className="form-control" id="amountToDonate" type="text" ref="amountToDonate" placeholder="amount" />
                             </div>
 
-
-                            <select className="form-control" ref="status">
-                                <option value="available">Fresh!</option>
-                                <option value="unavailable">Sold Out!</option>
-                            </select>
-
-
-                            <textarea className="form-control" type="text" ref="desc" placeholder="Desc"></textarea>
+                            <div className="form-group">
+                                <textarea className="form-control" type="text" ref="desc" placeholder="Desc"></textarea>
+                            </div>
 
                             <button className="btn btn-primary" type="submit">Donate</button>
                         </form>
@@ -74,11 +80,6 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
 				</div>
 			</div>
 		</div>
-
-
-
-
     )
   }
-
 }

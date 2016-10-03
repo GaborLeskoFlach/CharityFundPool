@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as Scroll from 'react-scroll';
 
+import { Link } from 'react-router'
+
 const Element    = Scroll.Element;
 
 export interface IVolunteerComponentProps{
@@ -36,7 +38,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member1.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 1</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -53,7 +55,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member2.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 2</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -70,7 +72,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member3.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 3</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -87,7 +89,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member1.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 4</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -104,7 +106,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member4.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 5</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -121,7 +123,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member5.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 6</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -138,7 +140,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member6.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 7</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -155,7 +157,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                                     <div className="member-image">
                                                         <img className="img-responsive" src="templates/images/member/member7.jpg" alt="" />
                                                         <div className="member-info">
-                                                            <p className="lead">Jim Tobalt</p>
+                                                            <p className="lead">John Doe 8</p>
                                                             <p>Campaign Coordinator</p>
                                                             <ul>
                                                                 <li><a href="#"><i className="fa fa-facebook"></i></a></li>
@@ -457,7 +459,7 @@ export class VolunteerComponent extends React.Component<IVolunteerComponentProps
                                 <img className="img-responsive" src="templates/images/logo-icon.png" alt="" />
                                 <h1><span>Become a</span>Volunteer</h1>
                                 <p>This last point is important because there are some who advocate for democracy only when they are out of power.</p>
-                                <a href="/JoinUs/type/helper" className="btn btn-default">Apply Now</a>                                
+                                <Link to="/JoinUs/0" className="btn btn-default">Apply Now</Link>                                
                             </div>
                         </div>
                     </div>

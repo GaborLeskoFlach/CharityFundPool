@@ -90,10 +90,12 @@ $(document).ready(function($) {
 	});
 	
 	//Pretty Photo
+	/*
 	 $("a[data-gallery^='prettyPhoto']").prettyPhoto({
 	  social_tools: false
 	 });
-	 
+	*/
+	
 	//Event Carousel
 	$('#event-carousel.carousel').carousel({
 	  interval: 8000

@@ -110,14 +110,23 @@ export class NavigationComponent extends React.Component<INavigationComponentPro
 
                             <nav className="collapse navbar-collapse navbar-right">					
                                 <ul className="nav navbar-nav">    
+                                    
+                                    {/*
                                     {tabList.map((tab : ITab, index : number) => {
                                         return (<Tab key={index} tabProps={tab} handleClick={this.handleClick.bind(this)} />)									
-                                    })}                                                                                      
+                                    })}   */}
+
+                                    <li><Link to="/test1">go to Test1</Link></li>
+                                    <li><Link to="/test2">go to Test2</Link></li>
+                                    <li><Link to="/test3">go to Test3</Link></li>
                                 </ul>		
                             </nav>      
                         </div>
                     </div>
                 </header>
+
+                {this.props.children}
+
             </div>
         )
     }
