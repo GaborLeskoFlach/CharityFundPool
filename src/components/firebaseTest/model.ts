@@ -1,42 +1,36 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { FirebaseRef } from '../../firebase/firebase';
+import { _firebaseApp } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 
 export class Todos {
     @observable todos = map({});
 
     constructor() {
-
-        FirebaseRef.todos.on('value', (snapshot) => {
+        
+        _firebaseApp.database().ref('todos').on('value', (snapshot) => {
             this.todos = snapshot.val();
         });
-
-        this.add('Gabor');
-        this.add('Eric');
-        this.add('Zoltan');
-        this.add('Liana');
-        this.add('Zsuzsanna');
-
     }
 
     @computed get json() {
-        return toJS(this.todos);
+        const x =  toJS(this.todos);
+        return x;
     }
 
     @action("Add new Item to Firebase")
     add = (name) => {
-        const id = FirebaseRef.todos.push().key;
+        const id = _firebaseApp.database().ref('todos').push().key;
         this.update(id, name);
     };
 
     @action("Update an existing item in Firebase")
     update = (id, name) => {
-        FirebaseRef.todos.update({[id]: {name}})
+        _firebaseApp.database().ref('todos').update({[id]: {name}})
     };
 
     @action("Delete an item from Firebase")
     del = (id) => {
-        FirebaseRef.todos.child(id).remove();
+        _firebaseApp.database().ref('todos').child(id).remove();
     };
 }
 

@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { WhoWeAreComponent } from '../whoweare/component';
-import { WhatWeDoComponent } from '../whatwedo/component';
-import { CauseListComponent } from '../causes/component';
+import { Link } from 'react-router';
+
 import { FooterComponent } from '../footer/component';
-import { RecentPostsComponent } from '../recentPosts/component';
-import { VolunteerComponent } from '../volunteer/component';
-import { ContactUsComponent } from '../contactUs/component';
+
+import './styles.css';
 
 export class HomeComponent extends React.Component<{},{}>{
 
@@ -14,38 +12,65 @@ export class HomeComponent extends React.Component<{},{}>{
         super(props);
     }
 
-    
+
     render(){
+
+        let styleTemporary : React.CSSProperties = { color: "black" };
+
         return(
             <div>
-                <div id="what-we-do">
-                    <WhatWeDoComponent />
-                </div>
-
-                <div id="who-we-are">
-                    <WhoWeAreComponent />
-                </div>
-
-                <div id="cause-list" className="padding-bottom">
-                    <CauseListComponent />
-                </div>
-
-                <div id="recent-posts" className="padding-bottom padding-top-two">
-                    <RecentPostsComponent />		
-                </div>
-
-                <div id="our-members" className="padding-top-two padding-bottom-two">
-                    <VolunteerComponent />		
-                </div>
-
-                <div id="contact-us">	
-                    <ContactUsComponent />	
-                </div>
-
+                <div className="container">
+                    <div className="section-title-center">
+                        <h1>Welcome to Charity Fund Pool</h1>				
+                    </div>
+                    <div className="text-center who-we-are">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <img className="img-responsive" src="templates/images/home/CFPHomePageImage.png" alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div className="text-center who-we-are">
+                        <div className="row">
+                            <Link to="/register/NeedHelp">
+                                <div className="col-sm-4">
+                                    <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
+                                    <h2 style={styleTemporary}>I need help</h2>
+                                </div>
+                            </Link>
+                            <div className="col-sm-4">            
+                                <div>                    
+                                    <h2>Register now</h2>
+                                </div>
+                            </div>		                            
+                            <Link to="/register/HowToHelp">
+                                <div className="col-sm-4">
+                                    <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
+                                    <h2 style={styleTemporary}>I want to help</h2>                                    
+                                </div>		
+                            </Link>			
+                        </div>
+                    </div>
+                    <div className="text-center who-we-are">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <h1>Bringing the community together</h1>
+                                <h2>Register today if you need some help or you are looking to help</h2>
+                            </div>                                    
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <h1>*** We are currently developing our website ***</h1>
+                            </div>
+                        </div>
+                    </div>            
+                </div>            
+                
                 <footer id="footer">
                     <FooterComponent />
-                </footer>     
-            </div>                   
+                </footer>    
+            </div>                
         )
     }
 

@@ -40,6 +40,7 @@
     "eslint": "^2.13.1"
   },
   "dependencies": {
+    "calendar-base": "^0.3.0",
     "classnames": "^2.2.5",
     "es6-promise": "^3.2.1",
     "firebase": "^3.3.0",
@@ -48,9 +49,22 @@
     "mobx": "^2.4.1",
     "mobx-react": "^3.5.3",
     "mobx-react-devtools": "^4.2.4",
+    "moment": "^2.15.1",
+    "moment-range": "^2.2.0",
     "react": "^15.3.0",
+    "react-big-calendar": "^0.11.0",
+    "react-bootstrap": "^0.30.6",
+    "react-bootstrap-multiselect": "^2.3.0",
+    "react-data-components": "^1.1.0",
+    "react-date-range": "^0.2.4",
+    "react-day-picker": "^3.1.1",
     "react-dom": "^15.3.0",
+    "react-event-calendar": "^0.3.0",
+    "react-input-calendar": "^0.3.14",
     "react-router": "^2.8.1",
-    "react-scroll": "^1.4.0"
+    "react-scroll": "^1.4.0",
+    "react-select-box": "^3.0.1",
+    "react-select-popover": "^0.1.1",
+    "require": "^2.4.20"
   }
 }

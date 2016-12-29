@@ -1,6 +1,18 @@
-export const firstName : string = "firstName";
-export const lastName : string = "lastName";
+
+export const fullName : string = "fullName";
+export const emailAddress : string = 'emailAddress';
+export const phoneNo : string = 'phoneNo';
+export const zipCode : string = 'zipCode'; 
+
 export const amountToDonate : string = "amountToDonate";
-export const status : string = "status";
-export const desc : string = "desc";
+
+export const nameOnCard : string = 'nameOnCard';
+export const cardType : string = 'cardType';
+export const cardNumber : string = 'cardNumber';
+
+export const expiryDateMonth : string = 'expiryDateMonth';
+export const expiryDateYear : string = 'expiryDateYear';
+
+export const securityCode : string = 'securityCode';
+
 export const donationForm : string = "donationForm";

@@ -27,13 +27,17 @@
 14. Carousel-Fade
 15. Preloader
 16. Color Chooser
-
+17. New Stuff Added
 ==========================================================================*/
 
 
 /*========================
 =======Typography=========
 ==========================*/
+
+div#body > div > div.container{
+	padding-top:50px
+}
 
 body {
 	font-family: 'Raleway', sans-serif;
@@ -57,7 +61,7 @@ ul {
 }
 
 a {
-	color: #fff;
+	/*color: #fff;*/
 	text-decoration: none;
 	-webkit-transition: 300ms;
 	-moz-transition: 300ms;
@@ -123,6 +127,7 @@ h1, h2, h3, h4, h5, h6 {
 .section-title {
 	border-bottom: 1px solid #dddfe4;
 	margin-bottom: 15px;
+	margin-top : 50px;
 	padding-bottom: 0;
 	position: relative;
 }
@@ -191,7 +196,7 @@ h1, h2, h3, h4, h5, h6 {
 	background-attachment:fixed;
 	width: 100%;
 	min-height:437px;
-	color:#fff;
+	padding-top:85px;
 }
 
 .parallax-section h1 {
@@ -584,7 +589,7 @@ a.navbar-brand {
 .our-details-tab .tab-section {
 	margin-left:-15px;
 	padding-left:0;
-	height:292px;
+	/*height:292px;*/
 	overflow:hidden;
 }
 
@@ -1588,5 +1593,25 @@ a.navbar-brand {
 	background-color: #f26d7d;
 }
 
+
+/*========================
+=======New Stuf Added======
+==========================*/
+.sub-section-title-center{
+	text-align: center
+}
+
+.quote-title-center{
+	text-align: center	
+}
+
+.logo-center{
+	text-align: center
+}
+
+.section-title-center{
+	text-align:center;
+	padding-top:80px;
+}
 
 /*======================END============================*/

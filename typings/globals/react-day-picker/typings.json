@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/21b05005073a35496f9fda2d133a27b4627abf1c/react-day-picker/react-day-picker.d.ts",
+    "raw": "registry:dt/react-day-picker#1.2.0+20160713062231",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/21b05005073a35496f9fda2d133a27b4627abf1c/react-day-picker/react-day-picker.d.ts"
+  }
+}

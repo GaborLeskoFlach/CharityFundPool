@@ -23,12 +23,39 @@ export class TodosListComponent extends React.Component<{},{}> {
     };
 
     render() {
-        return (
-            <ul>
-                {map(todos.json, (it : ITodoItem, key) => (
-                        <li onClick={this.del.bind(this, key)} key={key}>{it.name}</li>)
-                )}
-            </ul>
-        )
+
+        if(todos.todos.size == 0){
+            return (
+                    <div className="container">
+                        <div className="section-title">
+                            <h1>TODOs are currently loading...</h1>
+                        </div>
+                    </div>
+            )
+        }else
+        {
+            return (
+
+                    <div className="container">
+                        <div className="section-title">
+                            <h1>TODOs</h1>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="contact-form">
+                                    
+                                <ul>
+                                    {map(todos.json, (it : ITodoItem, key) => (
+                                        <li onClick={this.del.bind(this, key)} key={key}>{it.name}</li>
+                                    ))}
+                                </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            )
+        }
     }
 }

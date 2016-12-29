@@ -1,0 +1,44 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] CLI Version:  3.2.0
+[debug] Platform:     win32
+[debug] Node Version: v6.6.0
+[debug] Time:         Mon Dec 26 2016 13:46:24 GMT+1100 (AUS Eastern Daylight Time)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/charityfundpool-staging 
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/charityfundpool-staging/tokens 
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'charityfundpool-staging'...
+[info] 
+[info] i  deploying database, hosting
+[info] +  database: rules ready to deploy.
+[info] i  hosting: preparing public directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/charityfundpool-staging/uploads/-KZt0XnWZnf_A7KwMYjB?fileCount=164&message= 
+[debug] Error: write ECONNRESET
+    at exports._errnoException (util.js:1036:11)
+    at WriteWrap.afterWrite (net.js:794:14)
+[error] 
+[error] Error: Server Error. write ECONNRESET
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase use default
+[debug] CLI Version:  3.2.0
+[debug] Platform:     win32
+[debug] Node Version: v6.6.0
+[debug] Time:         Mon Dec 26 2016 13:49:18 GMT+1100 (AUS Eastern Daylight Time)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects 
+[debug] Error: connect ETIMEDOUT 104.197.85.31:443
+    at Object.exports._errnoException (util.js:1036:11)
+    at exports._exceptionWithHostPort (util.js:1059:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 104.197.85.31:443

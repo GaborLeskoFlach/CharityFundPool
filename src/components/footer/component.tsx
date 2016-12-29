@@ -16,7 +16,7 @@ export class FooterComponent extends React.Component<IFooterComponentProps,{}>{
             <div className="container">
                 <div className="row">
                     <div className="col-sm-4">
-                        <a href="index.html"><img className="img-responsive" src="templates/images/logo_custom.png" alt="Custom Logo placeholder" /></a>
+                        <a href="index.html"><img className="img-responsive" src="" alt="Logo" /></a>
                     </div>
                     <div className="col-sm-4">
                         <div className="copyright-text">
