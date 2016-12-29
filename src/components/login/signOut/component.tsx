@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { signOut } from '../../firebaseAuth/component';
+import { _firebaseApp, signOut } from '../../firebaseAuth/component';
 import { browserHistory } from 'react-router';
 
 export class SignOut extends React.Component<any,any>{

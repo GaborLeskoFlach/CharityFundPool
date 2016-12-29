@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 import { Router, Route, browserHistory } from 'react-router';
-import { _firebaseApp, signIn } from '../firebaseAuth/component';
+import { _firebaseAuth, signIn } from '../firebaseAuth/component';
 import { Link } from 'react-router';
 
 import './styles.css';
@@ -12,11 +12,16 @@ export class LoginComponent extends React.Component<{}, {}>{
 
     constructor() {
         super();
+        this.signIn();
     }
-
+    
+    
     signIn = () => {
-        let email: string = (this.refs['email'] as HTMLInputElement).value;
-        let password: string = (this.refs['password'] as HTMLInputElement).value;     
+        //let email: string = (this.refs['email'] as HTMLInputElement).value;
+        //let password: string = (this.refs['password'] as HTMLInputElement).value;     
+
+        let email : string = 'lesko_gabor@hotmail.com';
+        let password: string = 'Csillagok1';
 
         signIn(email, password).then(response => {
             if(response){
@@ -43,7 +48,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                             <div className="card">
                                 <div className="face front">
                                     <div className="panel panel-default">
-                                        <form className="form-horizontal">
+                                        <form className="form-horizontal" >
                                             <br/>
                                             <div className="text-center">
                                                 <h3><i className="fa fa-sign-in fa-4x"></i></h3>

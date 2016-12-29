@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { _firebaseApp, resetPassword } from '../../firebaseAuth/component';
+import { resetPassword } from '../../firebaseAuth/component';
 import { browserHistory } from 'react-router';
 
 export class PasswordReset extends React.Component<any,any>{

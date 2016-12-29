@@ -20,7 +20,6 @@
 	<link href="templates/css/main.css" rel="stylesheet">
 	<link id="css-preset" href="templates/css/presets/preset1.css" rel="stylesheet">
 	<link href="templates/css/responsive.css" rel="stylesheet">	
-    <link href="templates/css/custom.menu.css" rel="stylesheet">
     <link href="templates/css/calendar.css" rel="stylesheet">
 	
 	<!--Google Fonts-->
@@ -50,7 +49,7 @@
     <script type="text/javascript" src="templates/js/bootstrap.min.js"></script>	
     <script type="text/javascript" src="templates/js/main.js"></script>
 
-
+<!--
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     // TODO: Implement getParameterByName()
@@ -129,6 +128,35 @@
         }
     }
 
+</script>-->
+
+<script>
+    /*
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configure the Firebase SDK.
+        // This is the minimum configuration required for the API to be used.
+        var config = {
+            apiKey: "AIzaSyA-Y-PwwThMfyUuQVIliAIU9JHsuQF03_k",
+            authDomain: "charityfundpool-staging.firebaseapp.com",
+            databaseURL: "https://charityfundpool-staging.firebaseio.com",
+            storageBucket: "charityfundpool-staging.appspot.com",
+            messagingSenderId: "692978726080"
+        };
+
+        var app = firebase.initializeApp(config);
+        var auth = app.auth();
+
+        auth.signInWithEmailAndPassword('lesko_gabor@hotmail.com', 'Csillagok1')
+        .then(response => {
+            console.log('Yeey {0}',response);
+        }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log('Ugh-oh {0},{1}',errorCode,errorMessage);
+        });
+
+    });*/
 </script>
 
 

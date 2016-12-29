@@ -21,7 +21,8 @@ import { RegisterWantToHelpComponent } from './components/register/WantToHelp/co
 import { PasswordReset } from './components/login/passwordReset/component';
 import { SignOut } from './components/login/signOut/component';
 
-import {requireAuth} from '../src/components/firebaseAuth/component';
+import { requireAuth } from '../src/components/firebaseAuth/component';
+
 
 ReactDOM.render(
     <Router history={browserHistory}>

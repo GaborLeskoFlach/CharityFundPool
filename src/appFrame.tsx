@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { isUserLoggedIn, signOut } from './components/firebaseAuth/component';
+import { isUserLoggedIn, signIn } from './components/firebaseAuth/component';
 
 interface INavigationComponentProps{
     children : any;
@@ -28,9 +28,11 @@ let tabList : Array<ITab>  = [
     { id: 5, name: 'Contact Us', to:'/contactUs', requiresAuthentication : false},      
     { id: 7, name: 'Search for Jobs',  to:'/jobs', requiresAuthentication : false},
     { id: 8, name: 'Administration',  to:'/administration', requiresAuthentication : false},
-    { id: 9, name: userLoggedIn(),  to:shouldSignOut(), requiresAuthentication : false},
+    { id: 9, name: 'Sign In',  to:'/login', requiresAuthentication : false},
+    { id: 9, name: 'Sign Out',  to:'/login/signout', requiresAuthentication : false},
 ];
 
+/*
 function userLoggedIn() : string{
     if(isUserLoggedIn()){
         return 'Sign Out';
@@ -46,7 +48,7 @@ function shouldSignOut(){
         return '/login';
     }
 }
-
+*/
 
 class Tab extends React.Component<ITabProps,{}>{
     
@@ -109,12 +111,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                 <ul className="nav navbar-nav">                                    
                                     
                                     {tabList.map((tab : ITab, index : number) => {
-
-                                        if(tab.requiresAuthentication && this.isUserAuthenticated){
-                                            return (<Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />)
-                                        }else if(!tab.requiresAuthentication){
-                                            return (<Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />)
-                                        }								
+                                        return (<Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />)
                                     })}
                                 </ul>		
                             </nav>      
