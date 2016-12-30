@@ -31,7 +31,7 @@ export class PasswordReset extends React.Component<any,any>{
                             <div className="card">
                                 <div className="face front">
                                     <div className="panel panel-default">
-                                        <form className="form-horizontal">
+                                        <div className="form">
                                             <br/>
                                             <div className="text-center">
                                                 <h3><i className="fa fa-lock fa-4x"></i></h3>
@@ -47,7 +47,7 @@ export class PasswordReset extends React.Component<any,any>{
                                                 <hr/>
                                             
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

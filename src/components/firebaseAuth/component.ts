@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import { browserHistory } from 'react-router';
-
+import { observable, action } from 'mobx';
 
 /*
 var firebaseConfig = {
@@ -115,6 +115,7 @@ var config = {
 
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);
 export const _firebaseAuth : firebase.Auth = _firebaseApp.auth();
+export const _isUserLoggedIn = observable(false);
 
 function requireAuth(nextState : any, replace : any) {
 
@@ -194,6 +195,11 @@ function isUserLoggedIn() : boolean{
 // Listen to auth state changes
 _firebaseApp.auth().onAuthStateChanged((user) => {
     console.log('AuthStateChanged => ' + JSON.stringify(user));
+    if(user){
+        this._isUserLoggedIn = true;
+    }else{
+        this._isUserLoggedIn = false;
+    }
 })
 
-export { requireAuth, register, signIn, signOut, resetPassword, isUserLoggedIn };
+export { requireAuth, register, signIn, signOut, resetPassword };

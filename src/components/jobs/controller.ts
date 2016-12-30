@@ -1,4 +1,4 @@
-import {observable, action, IObservableArray, computed} from 'mobx';
+import {observable, action } from 'mobx';
 import { _firebaseApp } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 

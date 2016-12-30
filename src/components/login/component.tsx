@@ -12,16 +12,11 @@ export class LoginComponent extends React.Component<{}, {}>{
 
     constructor() {
         super();
-        this.signIn();
     }
     
-    
-    signIn = () => {
-        //let email: string = (this.refs['email'] as HTMLInputElement).value;
-        //let password: string = (this.refs['password'] as HTMLInputElement).value;     
-
-        let email : string = 'lesko_gabor@hotmail.com';
-        let password: string = 'Csillagok1';
+    signInUser = () => {
+        let email: string = (this.refs['email'] as HTMLInputElement).value;
+        let password: string = (this.refs['password'] as HTMLInputElement).value;     
 
         signIn(email, password).then(response => {
             if(response){
@@ -48,7 +43,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                             <div className="card">
                                 <div className="face front">
                                     <div className="panel panel-default">
-                                        <form className="form-horizontal" >
+                                        <div className="form">
                                             <br/>
                                             <div className="text-center">
                                                 <h3><i className="fa fa-sign-in fa-4x"></i></h3>
@@ -67,13 +62,13 @@ export class LoginComponent extends React.Component<{}, {}>{
                                             </div>
                                             
                                             <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
-                                            <button className="btn btn-primary btn-block" onClick={this.signIn}>LOG IN</button>
+                                            <button className="btn btn-primary btn-block" onClick={this.signInUser}>LOG IN</button>
                                             <hr/>
 
                                             <p className="text-center">
                                                 <Link to='/Home' className="fliper-btn">Create new account? Register!</Link>
                                             </p>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>                                
                             </div>

@@ -1,6 +1,19 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { isUserLoggedIn, signIn } from './components/firebaseAuth/component';
+import { _isUserLoggedIn, signIn } from './components/firebaseAuth/component';
+import {observer} from 'mobx-react';
+import {observable, action } from 'mobx';
+
+enum TabType {
+    Home = 1,
+    AboutUs = 2,
+    Donate = 3,
+    ViewNeeds = 4,
+    ContactUs = 5,
+    SearchForJobs = 6,
+    Administration = 7,
+    SignInOut = 8
+}
 
 interface INavigationComponentProps{
     children : any;
@@ -17,38 +30,19 @@ interface ITab{
     id : number;
     name : string;
     to? : string;  
-    requiresAuthentication : boolean;  
+    tabType : TabType;
 }
 
 let tabList : Array<ITab>  = [
-    { id: 1, name: 'Home', to:'/home', requiresAuthentication : false},
-    { id: 2, name: 'About Us', to:'/aboutUs', requiresAuthentication : false},
-    { id: 3, name: 'Donate', to:'/donate', requiresAuthentication : false},
-    { id: 4, name: 'View Needs', to:'/viewNeeds', requiresAuthentication : false},   
-    { id: 5, name: 'Contact Us', to:'/contactUs', requiresAuthentication : false},      
-    { id: 7, name: 'Search for Jobs',  to:'/jobs', requiresAuthentication : false},
-    { id: 8, name: 'Administration',  to:'/administration', requiresAuthentication : false},
-    { id: 9, name: 'Sign In',  to:'/login', requiresAuthentication : false},
-    { id: 9, name: 'Sign Out',  to:'/login/signout', requiresAuthentication : false},
+    { id: 1, name: 'Home', to:'/home', tabType : TabType.Home },
+    { id: 2, name: 'About Us', to:'/aboutUs', tabType : TabType.AboutUs },
+    { id: 3, name: 'Donate', to:'/donate', tabType : TabType.Donate },
+    { id: 4, name: 'View Needs', to:'/viewNeeds', tabType : TabType.ViewNeeds },   
+    { id: 5, name: 'Contact Us', to:'/contactUs', tabType : TabType.ContactUs },      
+    { id: 6, name: 'Search for Jobs',  to:'/jobs', tabType : TabType.SearchForJobs },
+    { id: 7, name: 'Administration',  to:'/administration', tabType : TabType.Administration },
+    { id: 8, name: 'Sign In',  to:'/login', tabType : TabType.SignInOut },
 ];
-
-/*
-function userLoggedIn() : string{
-    if(isUserLoggedIn()){
-        return 'Sign Out';
-    }else{
-        return 'Sign In';
-    }
-}
-
-function shouldSignOut(){
-    if(isUserLoggedIn()){
-        return '/login/signout';
-    }else{
-        return '/login';
-    }
-}
-*/
 
 class Tab extends React.Component<ITabProps,{}>{
     
@@ -69,11 +63,9 @@ class Tab extends React.Component<ITabProps,{}>{
     }
 }
 
-
+@observer
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
     
-    private isUserAuthenticated : boolean = false;
-
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -85,6 +77,23 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
 
     durationFn(deltaTop : number) {
         return deltaTop;
+    }
+
+    renderTab = (index : number, tab : ITab) => {
+
+        if(tab.tabType === TabType.SignInOut){
+            if(_isUserLoggedIn){
+                tab.name = 'Sign Out';
+                tab.to = '/login/signout';                
+            }else{
+                tab.name = "Sign In";
+                tab.to = '/login';
+            }
+        }
+
+        return (
+            <Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />
+        )
     }
 
     render(){
@@ -111,7 +120,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                 <ul className="nav navbar-nav">                                    
                                     
                                     {tabList.map((tab : ITab, index : number) => {
-                                        return (<Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />)
+                                        return (this.renderTab(index, tab))
                                     })}
                                 </ul>		
                             </nav>      
@@ -119,10 +128,8 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                     </div>
                 </header>
                 
-
-               
-
                 {this.props.children}
+
             </div>
         )
     }
