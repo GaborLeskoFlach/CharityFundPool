@@ -6,7 +6,7 @@ import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
 import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg } from '../interfaces';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 
 interface IColumnData {
     title : string;
@@ -14,8 +14,6 @@ interface IColumnData {
     render? : (val,row) => void;
     className? : string;
 }
-
-
 
 @observer
 export class Administration extends React.Component<{},{}> {
@@ -31,11 +29,13 @@ export class Administration extends React.Component<{},{}> {
         this.controller = new AdministrationController();
 
         this.registrationNeedHelpIndColumns = [
-            { title: 'ID', prop: 'ID', render : this.renderEditRemoveUrl_RegNeedHelpInd, className : 'text-center'  },
-            { title: 'Name', prop: 'fullName'  },
-            { title: 'Phone No', prop: 'phoneNo'  },
-            { title: 'Email', prop: 'email'  },           
-            { title: 'Country', prop: 'country'  },
+            { title: '', prop: 'ID', render : this.render_Remove_Ind, className : 'text-center' },
+            { title: '', prop: 'ID', render : this.render_Edit_Ind, className : 'text-center' },
+            { title: '', prop: 'ID', render : this.render_User_Ind, className : 'text-center' },
+            { title: 'Email', prop: 'email' },
+            { title: 'Name', prop: 'fullName' },
+            { title: 'Phone No', prop: 'phoneNo' },
+            { title: 'Country', prop: 'country' },
             { title: 'Address Line1', prop: 'addressLine1'  },
             { title: 'Address Line2', prop: 'addressLine2'  },
             { title: 'City/Suburb', prop: 'citySuburb'  },
@@ -45,14 +45,19 @@ export class Administration extends React.Component<{},{}> {
         ];
 
         this.registrationNeedHelpOrgColumns = [
-            { title: 'ID', prop: 'ID', render : this.renderEditRemoveUrl_RegNeedHelpOrg, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_Remove_Org, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_Edit_Org, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_User_Org, className : 'text-center'  },
+            { title: 'Email', prop: 'email'  },
             { title: 'Name', prop: 'fullName'  },
-            { title: 'Phone No', prop: 'phoneNo'  },
-            { title: 'Email', prop: 'email'  },           
+            { title: 'Phone No', prop: 'phoneNo'  },            
         ];
 
         this.registrationWantToHelpColumns = [
-            { title: 'ID', prop: 'ID', render : this.renderEditRemoveUrl_RegWantHelp, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_Remove_WantToHelp, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_Edit_WantToHelp, className : 'text-center'  },
+            { title: '', prop: 'ID', render : this.render_User_WantToHelp, className : 'text-center'  },
+            { title: 'Email', prop: 'email' },
             { title: 'Name', prop: 'fullName' },
             { title: 'PhoneNo', prop: 'phoneNo' },
             { title: 'City/Suburb', prop: 'citySuburb' },
@@ -84,43 +89,73 @@ export class Administration extends React.Component<{},{}> {
         }        
     }
 
-    renderEditRemoveUrl_RegNeedHelpInd = (val : string, row : IRegistrationNeedHelpInd) => {
+    editItem = (id : string, regType : RegistrationType, event : React.FormEvent) => {
+        event.preventDefault();
+        switch(regType){
+                case RegistrationType.NeedHelpInd:
+                    browserHistory.push('/register/NeedHelp/Ind/ID=' + id);
+                    break;
+                case RegistrationType.NeedHelpOrg:
+                    browserHistory.push('/register/NeedHelp/Org/ID=' + id);
+                    break;
+                case RegistrationType.WantToHelp:
+                    browserHistory.push('/register/WantToHelp/ID=' + id);
+                    break;
+            }                
+    }
+
+    render_Remove_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <div>
-                <div>
-                    <Link to={'/register/NeedHelp/Ind/ID=' + val} >Edit</Link>
-                </div>
-                <div>
-                    <a href="#" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>Remove</a>
-                </div>
-            </div>
+            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>Remove</button>
         )
     }
 
-    renderEditRemoveUrl_RegNeedHelpOrg = (val : string, row : IRegistrationNeedHelpOrg) => {
+    render_Edit_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <div>
-                <div>
-                    <Link to={'/register/NeedHelp/Org/ID=' + val} >Edit</Link>
-                </div>
-                <div>
-                    <a href="#" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>Remove</a>
-                </div>
-            </div>
+             <button onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>Edit</button>
         )
     }
 
-    renderEditRemoveUrl_RegWantHelp = (val : string, row : IRegistrationWantToHelp) => {
+    render_User_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <div>
-                <div>
-                    <Link to={'/register/WantToHelp/ID=' + val} >Edit</Link>
-                </div>
-                <div>
-                    <a href="#" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>Remove</a>
-                </div>
-            </div>
+            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>User</button>
+        )    
+    }
+
+    render_Remove_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
+        return(
+            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>Remove</button>
         )
+    }
+
+    render_Edit_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
+        return(
+            <button onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpOrg )}>Edit</button>
+        )
+    }
+
+    render_User_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
+        return(
+            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>User</button>
+        ) 
+    }
+
+    render_Remove_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
+        return(
+            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>Remove</button>
+        )
+    }
+
+    render_Edit_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
+        return(
+            <button onClick={this.editItem.bind(this, row.ID, RegistrationType.WantToHelp )}>Edit</button>
+        )
+    }
+
+    render_User_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
+         return(
+            <button  onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>User</button>
+        )   
     }
 
     componentWillMount(){

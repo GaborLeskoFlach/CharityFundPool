@@ -194,7 +194,7 @@ function isUserLoggedIn() : boolean{
 
 // Listen to auth state changes
 _firebaseApp.auth().onAuthStateChanged((user) => {
-    console.log('AuthStateChanged => ' + JSON.stringify(user));
+    
     if(user){
         this._isUserLoggedIn = true;
     }else{

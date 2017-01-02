@@ -76,12 +76,13 @@ export class RegisterNeedHelpController {
         return new Promise((resolve) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(registration).then(result => {
                 console.log('New Registration as Individual has been successfully added');
+                /*
                 register(registration.email,generateTempPassword()).then(response => {                    
                     resolve(response);
                 }).catch(error => {
                     //TODO => handle exception
                     console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
-                })                              
+                })*/                              
             });
         });
     };
@@ -91,26 +92,15 @@ export class RegisterNeedHelpController {
         return new Promise((resolve) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(registration).then(result => {
                 console.log('New Registration as Organisation has been successfully added');
+                /*
                 register(registration.email,generateTempPassword()).then(response => {
                     resolve(response);
                 }).catch(error => {
                     //TODO => handle exception
                     console.log('Exception occured in addNewRegistrationNeedHelpOrg => ' + error);
                 })
-                
+                */
             });
         });
     };
-
-    /*
-    @action("Add new Registration -> Want to Help")
-    addNewRegistrationWantToHelp = (registration : IRegistrationWantToHelp) : Promise<any> => {
-        return new Promise((resolve) => {
-            _firebaseApp.database().ref('registrations/WantToHelp').push(registration).then(result => {
-                resolve();
-                console.log('New Registration has been successfully added');
-            });
-        });
-    };*/
-
 }

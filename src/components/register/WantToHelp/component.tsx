@@ -65,7 +65,9 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         // 1. Stop the form from submitting
         event.preventDefault();
 
-        let registration : IRegistrationWantToHelp = {            
+        let registration : IRegistrationWantToHelp = {
+            ID : null,
+            active : true,          
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
             phoneNo : this.resolveRefValue((this.refs[RegistrationFields.phoneNo])),
             email : this.resolveRefValue((this.refs[RegistrationFields.email])),

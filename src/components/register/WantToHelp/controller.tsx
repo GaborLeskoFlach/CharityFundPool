@@ -37,6 +37,7 @@ export class RegisterWantToHelpController {
             this.isLoading = true;
             _firebaseApp.database().ref('registrations/WantToHelp').push(registration).then(result => {
                 console.log('New Registration has been successfully added');
+                /*
                 register(registration.email, generateTempPassword()).then(response =>{
                     resolve(response);
                     this.isLoading = false;
@@ -44,6 +45,7 @@ export class RegisterWantToHelpController {
                     //TODO => handle exception
                     console.log('Exception occured in addNewRegistrationWantToHelp => ' + error);
                 });
+                */
             });
         });
     };

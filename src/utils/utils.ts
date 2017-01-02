@@ -5,5 +5,6 @@ export function addDays(date : Date, days:number) : Date {
 }
 
 export function generateTempPassword() : string {
-    return Date.now().toString();
+    const randomPassword2 = new RandomPassword();
+    return randomPassword2.create(8);
 }

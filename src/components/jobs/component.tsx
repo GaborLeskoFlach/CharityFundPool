@@ -25,7 +25,7 @@ export class Jobs extends React.Component<{},{}> {
         this.controller = new JobSearchController();
 
         this.registrationNeedHelpIndColumns = [
-            { title: 'ID', prop: 'ID', render : this.renderEditRemoveUrl_RegNeedHelpInd, className : 'text-center'  },    
+            { title: '', prop: 'ID', render : this.renderEditRemoveUrl_RegNeedHelpInd, className : 'text-center'  },    
             { title: 'Need Help With', prop: 'whatINeedHelpWith'  },
             { title: 'When I Need Help', prop: 'whenINeedHelp'  },  
             { title: 'Name', prop: 'fullName'  },
@@ -52,11 +52,7 @@ export class Jobs extends React.Component<{},{}> {
 
     renderEditRemoveUrl_RegNeedHelpInd = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <div>
-                <div>
-                    <a href="#" onClick={this.registerForJob.bind(this, row.ID)}>Register for job</a>
-                </div>
-            </div>
+            <button onClick={this.registerForJob.bind(this, row.ID)}>Register</button>
         )
     }
 

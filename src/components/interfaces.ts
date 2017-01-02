@@ -1,5 +1,5 @@
-export interface IRegistrationNeedHelpInd{
-    ID? : string;
+export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
+    ID : string;
     registrationType : string;
     fullName : string;
     phoneNo : string;    
@@ -11,10 +11,11 @@ export interface IRegistrationNeedHelpInd{
     postCode? : string;
     whatINeedHelpWith? : string;
     whenINeedHelp? : string;
+    active:boolean;
 }
 
-export interface IRegistrationNeedHelpOrg{
-    ID? : string;
+export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
+    ID : string;
     registrationType : string;
     fullName? : string;
     charityName : string;
@@ -23,10 +24,11 @@ export interface IRegistrationNeedHelpOrg{
     websiteLink? : string;
     whatWeDo: string;   
     whatWeNeed : string;
+    active:boolean;
 }
 
-export interface IRegistrationWantToHelp{
-    ID? : string;
+export interface IRegistrationWantToHelp extends IConvertDataConstraint{
+    ID : string;
     fullName : string;
     email:string;
     phoneNo : string;    
@@ -35,10 +37,11 @@ export interface IRegistrationWantToHelp{
     limitations? : string;
     hasTrade? :string;
     listOfTrades? : Array<IMultiSelect>;
+    active:boolean;
 }
 
-export interface ICause{
-    ID? : string;
+export interface ICause extends IConvertDataConstraint{
+    ID : string;
     title:string;
     description:string;
     createDate?:string;
@@ -47,6 +50,26 @@ export interface ICause{
     bestPrice : number;
     donated?:number;
     toGo?:number;
+    archiveDate?:string;
+    active : boolean;
+}
+
+ 
+export interface IDonation{
+
+    fullName : string;
+    emailAddress : string;
+    phoneNo : string;
+    zipCode : string; 
+
+    amountToDonate : string;
+
+    nameOnCard : string;
+    cardType? : string;
+    cardNumber? : string;
+    expiryDateMonth : string;
+    expiryDateYear : string;
+    securityCode : string;
 }
 
 export interface IMultiSelect{
@@ -59,7 +82,12 @@ export interface IWhatWeNeed {
     name : string;
 }
 
-export interface IWhatINeedHelpWith{
+export interface IWhatINeedHelpWith {
     id : number;
     name : string;
+}
+
+//Contstraint -> For Generic interfaces
+export interface IConvertDataConstraint {
+    ID: string;
 }

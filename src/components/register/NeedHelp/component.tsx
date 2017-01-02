@@ -81,6 +81,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
         // 2. Take the data from the form and create an object
         let registration : IRegistrationNeedHelpInd = {
+            ID:null,
+            active : true,
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
@@ -111,6 +113,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
         // 2. Take the data from the form and create an object
         let registration : IRegistrationNeedHelpOrg = {
+            ID : null,
+            active : true,
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             charityName : this.resolveRefValue((this.refs[RegistrationFields.charityName])),
