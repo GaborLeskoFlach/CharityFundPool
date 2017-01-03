@@ -67,7 +67,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
         let registration : IRegistrationWantToHelp = {
             ID : null,
-            active : true,          
+            active : true,
+            uid : null,        
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
             phoneNo : this.resolveRefValue((this.refs[RegistrationFields.phoneNo])),
             email : this.resolveRefValue((this.refs[RegistrationFields.email])),

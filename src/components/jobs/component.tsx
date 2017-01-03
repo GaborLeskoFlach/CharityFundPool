@@ -4,7 +4,8 @@ import { JobSearchController } from './controller';
 import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg } from '../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, DataFilter } from '../interfaces';
+import { convertData } from '../../utils/utils';
 import { Link } from 'react-router';
 
 interface IColumnData {
@@ -56,17 +57,6 @@ export class Jobs extends React.Component<{},{}> {
         )
     }
 
-    convertData1 = (dataToConvert : Array<IRegistrationNeedHelpInd>) : Array<IRegistrationNeedHelpInd> => {
-        let returnData : Array<IRegistrationNeedHelpInd> = [];
-                
-        map(toJS(dataToConvert), (data : IRegistrationNeedHelpInd, key) => (
-            data.ID = key,
-            returnData.push(data)
-        ));
-
-        return returnData;
-    }
-
     render() {
 
         if(this.controller.isLoading){
@@ -89,7 +79,7 @@ export class Jobs extends React.Component<{},{}> {
                                 <DataTable
                                     keys="ID"
                                     columns={this.registrationNeedHelpIndColumns}
-                                    initialData={this.convertData1(this.controller.registrationsForNeedHelp_Ind)}
+                                    initialData={convertData(this.controller.registrationsForNeedHelp_Ind, DataFilter.ActiveOnly)}
                                     initialPageLength={5}
                                     initialSortBy={{ prop: 'ID', order: 'descending' }}
                                 />                                                 

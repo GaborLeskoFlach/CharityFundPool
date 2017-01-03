@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { _firebaseApp } from '../firebaseAuth/component';
-import { ICause, IDonation, IConvertDataConstraint} from '../interfaces';
+import { _firebaseApp, _firebaseAuth } from '../firebaseAuth/component';
+import { ICause, IDonation, IConvertDataConstraint, DataFilter} from '../interfaces';
 import * as CauseFields from './formFields';
 import { DonationController } from './controller';
 import { browserHistory } from 'react-router';
 import * as DonationFields from './formFields';
+import { convertData } from '../../utils/utils';
 import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
@@ -28,28 +29,17 @@ enum DonationType{
 @observer
 export class DonateNowComponent extends React.Component<IDonateNowComponentProps,{}>{
     controller : DonationController;
-    causes : Array<ICause> = [];    
 
     constructor(props){
         super(props)
         this.controller = new DonationController();       
     }
 
-    convertData<T extends IConvertDataConstraint>(dataToConvert : Array<T>) : Array<T>{
-        let returnData : Array<T> = [];
-                
-        map(toJS(dataToConvert), (data : T, key) => (
-            data.ID = key,
-            returnData.push(data)
-        ));
 
-        return returnData;
-    }
 
     componentWillMount(){
         this.controller.isLoading = true;
-        this.controller.getCauses().then(response => {
-            this.causes = this.convertData(response);
+        this.controller.getCauses().then(response => {           
             this.controller.isLoading = false;
         })
     }
@@ -68,7 +58,8 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         event.preventDefault();
         
         // 2. Take the data from the form and create an object
-        let donation : IDonation = {            
+        let donation : IDonation = {
+            uid: _firebaseAuth.currentUser.uid !== null ? _firebaseAuth.currentUser.uid : null,
             fullName : this.resolveRefValue(this.refs[DonationFields.fullName]),
             emailAddress : this.resolveRefValue(this.refs[DonationFields.emailAddress]),
             phoneNo : this.resolveRefValue(this.refs[DonationFields.phoneNo]),
@@ -118,7 +109,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                             <select ref="needs" className="form-control" id="needs" defaultValue={causeId} >
                                                 <option value="undefined">Please select a value...</option>
 
-                                                    {map(this.causes, (need : ICause, key) => (
+                                                    {map(convertData(this.controller.causes, DataFilter.ActiveOnly), (need : ICause, key) => (
                                                         <option key={key} value={need.title}>{need.title}</option>
                                                     ))}
                                             

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { _firebaseApp } from '../firebaseAuth/component';
-import { ICause, IConvertDataConstraint } from '../interfaces';
+import { ICause, IConvertDataConstraint, DataFilter } from '../interfaces';
 import * as CauseFields from './formFields';
 import { CauseController } from './controller';
 import { browserHistory } from 'react-router';
+import { convertData } from '../../utils/utils';
+import { CauseCreateComponent } from './addNewCause/component'
 
 import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
@@ -22,8 +24,6 @@ interface IColumnData {
 @observer
 export class CauseListComponent extends React.Component<{}, {}>{
     controller: CauseController;
-    causes: Array<ICause> = [];
-    archivedCauses : Array<ICause> = [];
     causeColumns: Array<IColumnData> = [];
     archivedCauseColumns: Array<IColumnData> = [];
 
@@ -57,23 +57,10 @@ export class CauseListComponent extends React.Component<{}, {}>{
         ];        
     }
 
-    convertData<T extends IConvertDataConstraint>(dataToConvert: Array<T>): Array<T>{
-        let returnData: Array<T> = [];
-
-        map(toJS(dataToConvert), (data: T, key) => (
-            data.ID = key,
-            returnData.push(data)
-        ));
-
-        return returnData;
-    }
-
     componentWillMount() {
         this.controller.isLoading = true;
         this.controller.getCauses().then(response => {
-            this.causes = this.convertData(response);
             this.controller.getArchivedCauses().then(response => {
-                this.archivedCauses = this.convertData(response);
                 this.controller.isLoading = false;
             })            
         })
@@ -81,7 +68,9 @@ export class CauseListComponent extends React.Component<{}, {}>{
 
     archiveCause = (id: string) => {
         event.preventDefault();
-        console.log('Archiving Cause => {0}', id);
+        this.controller.archiveCause(id).then(response => {
+            console.log('Awesome');
+        })
     }
 
     editCause = (id: string) => {
@@ -139,142 +128,53 @@ export class CauseListComponent extends React.Component<{}, {}>{
                 </div>
             )
         } else {
-            return (
-                <div>
-                    <CauseCreateComponent controller={this.controller}/>
+            return (         
+                <div className="container">
+                    <div className="section-title">
+                        <h1>Needs</h1>
+                    </div>
+                    <div className="our-details-tab padding-bottom">
+                        <div className="row">
+                            <section className="content">
+                                <div className="col-sm-12 tab-section">
 
-                    <div className="container">
-                        <div className="section-title">
-                            <h1>Needs</h1>
-                        </div>
-                        <div className="our-details-tab padding-bottom">
-                            <div className="row">
-                                <section className="content">
-                                    <div className="col-sm-12 tab-section">
+                                    <ul className="nav nav-tabs nav-justified" role="tablist">
+                                        <li className="active"><a href="#Needs" role="tab" data-toggle="tab">Needs</a></li>
+                                        <li><a href="#ArchivedNeeds" role="tab" data-toggle="tab">Archived Needs</a></li>
+                                    </ul>
 
-                                        <ul className="nav nav-tabs nav-justified" role="tablist">
-                                            <li className="active"><a href="#Needs" role="tab" data-toggle="tab">Needs</a></li>
-                                            <li><a href="#ArchivedNeeds" role="tab" data-toggle="tab">Archived Needs</a></li>
-                                        </ul>
-
-                                        <div className="tab-content">
-                                            <div className="tab-pane fade in active" id="Needs">
-                                                <div className="table-responsive">
-                                                    <DataTable
-                                                        keys="ID"
-                                                        columns={this.causeColumns}
-                                                        initialData={this.convertData(this.controller.causes) }
-                                                        initialPageLength={5}
-                                                        initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                        />
-                                                </div>
+                                    <div className="tab-content">
+                                        <div className="tab-pane fade in active" id="Needs">
+                                            <div className="table-responsive">
+                                                <DataTable
+                                                    keys="ID"
+                                                    columns={this.causeColumns}
+                                                    initialData={convertData(this.controller.causes, DataFilter.ActiveOnly) }
+                                                    initialPageLength={5}
+                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
+                                                    />
                                             </div>
-                                            <div className="tab-pane fade" id="ArchivedNeeds">
-                                                <div className="table-responsive">
-                                                    <DataTable
-                                                        keys="ID"
-                                                        columns={this.archivedCauseColumns}
-                                                        initialData={this.convertData(this.controller.archivedCauses) }
-                                                        initialPageLength={5}
-                                                        initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                        />
-                                                </div>
+                                        </div>
+                                        <div className="tab-pane fade" id="ArchivedNeeds">
+                                            <div className="table-responsive">
+                                                <DataTable
+                                                    keys="ID"
+                                                    columns={this.archivedCauseColumns}
+                                                    initialData={convertData(this.controller.archivedCauses, DataFilter.InActiveOnly) }
+                                                    initialPageLength={5}
+                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
+                                                    />
                                             </div>
                                         </div>
                                     </div>
-                                </section>
-                            </div>
+                                </div>
+                            </section>
                         </div>
-                    </div >
-                </div>
+                    </div>
+                </div >
             )
         }
     }
 }
 
-interface ICauseCreateComponent {
-    controller: CauseController;
-}
 
-export class CauseCreateComponent extends React.Component<ICauseCreateComponent, {}>{
-
-    constructor(props) {
-        super(props);
-    }
-
-    resolveRefValue(element: React.ReactInstance): any {
-        if (element !== undefined) {
-            return (element as HTMLInputElement).value;
-        } else {
-            return '';
-        }
-    }
-
-    register = (event: React.FormEvent) => {
-        event.preventDefault();
-
-        let cause: ICause = {
-            ID: null,
-            active : true,
-            title: this.resolveRefValue((this.refs[CauseFields.title] as HTMLInputElement)),
-            description: this.resolveRefValue((this.refs[CauseFields.description] as HTMLInputElement)),
-            bestPrice: this.resolveRefValue((this.refs[CauseFields.bestPrice] as HTMLInputElement)),
-            estimatedValue: this.resolveRefValue((this.refs[CauseFields.estimatedValue] as HTMLInputElement)),
-            photoUrl: this.resolveRefValue((this.refs[CauseFields.photoUrl] as HTMLInputElement)),
-            createDate: new Date().toString(),
-            archiveDate : null
-        };
-
-        //Save into DB?
-
-        this.props.controller.addCause(cause).then(response => {
-            //browserHistory.push('/confirm');
-        });
-    }
-
-    render() {
-        //TODO -> implement and check is user is authorized to add new Need
-        if (_firebaseApp.auth().currentUser.emailVerified) {
-            return null;
-        } else {
-            return (
-                <div className="container">
-                    <div className="section-title">
-                        <h1>Create a new Need</h1>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="contact-form">
-                                <form ref="createCauseForm" onSubmit={this.register.bind(this) }>
-
-                                    <div className="form-group">
-                                        <label htmlFor="title">Title</label>
-                                        <input className="form-control" id="title" type="text" ref="title" placeholder="Title" />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="description">Description</label>
-                                        <textarea className="form-control" ref="description" rows={5} id="description"></textarea>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="estimatedValue">Estimated value</label>
-                                        <input className="form-control" id="estimatedValue" type="text" ref="estimatedValue" placeholder="Estimated value"/>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="bestPrice">Best price</label>
-                                        <input className="form-control" id="bestPrice" type="text" ref="bestPrice" placeholder="Best price"/>
-                                    </div>
-
-                                    <button className="btn btn-primary" type="submit">Add new Need</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-    }
-
-}

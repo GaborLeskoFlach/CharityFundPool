@@ -9,7 +9,7 @@ import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantTo
 export class RegisterNeedHelpController {
 
     registrations : IRegistrationNeedHelpInd;
-    whatWeNeed : Array<IWhatWeNeed>;
+    //whatWeNeed : Array<IWhatWeNeed>;
     whatINeedHelpWith : Array<IWhatINeedHelpWith>;
 
     constructor() {
@@ -34,6 +34,7 @@ export class RegisterNeedHelpController {
         _firebaseApp.database().ref('utils/whatINeedHelpWith').push(value);
     }
 
+    /*
     @action("get WhatWeNeed from DB")
     getWhatWeNeed = action(() => {
         return new Promise<Array<IWhatWeNeed>>((resolve) => {
@@ -43,7 +44,7 @@ export class RegisterNeedHelpController {
                 resolve(this.whatWeNeed);
             })  
         });
-    })
+    })*/
 
     @action("get WhatINeedHelpWith from DB")
     getWhatINeedHelpWith = action(() => {

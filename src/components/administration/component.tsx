@@ -5,8 +5,10 @@ import { AdministrationController, RegistrationType } from './controller';
 import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
-import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg } from '../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg, DataFilter } from '../interfaces';
 import { Link, browserHistory } from 'react-router';
+import { convertData } from '../../utils/utils';
+
 
 interface IColumnData {
     title : string;
@@ -169,28 +171,6 @@ export class Administration extends React.Component<{},{}> {
         });
     }
     
-    convertData1 = (dataToConvert : Array<IRegistrationNeedHelpInd>) : Array<IRegistrationNeedHelpInd> => {
-        let returnData : Array<IRegistrationNeedHelpInd> = [];
-                
-        map(toJS(dataToConvert), (data : IRegistrationNeedHelpInd, key) => (
-            data.ID = key,
-            returnData.push(data)
-        ));
-
-        return returnData;
-    }
-
-    convertData2 = (dataToConvert : Array<IRegistrationWantToHelp>) : Array<IRegistrationWantToHelp> => {
-        let returnData : Array<IRegistrationWantToHelp> = [];
-        
-        map(toJS(dataToConvert), (data : IRegistrationWantToHelp, key) => (
-            data.ID = key,
-            returnData.push(data)
-        ));
-
-        return returnData;
-    }
-
     render() {
 
         if(this.controller.isLoading){
@@ -214,38 +194,44 @@ export class Administration extends React.Component<{},{}> {
                                 <div className="col-sm-12 tab-section">
 
                                     <ul className="nav nav-tabs nav-justified" role="tablist">
-                                        <li className="active"><a href="#IndividualRegistrationNeedHelp" role="tab" data-toggle="tab">Registration Requests (Need help) - Individuals</a></li>
-                                        <li><a href="#OrganisationRegistrationNeedHelp" role="tab" data-toggle="tab">Registration Requests (Need help) - Organisations</a></li>
-                                        <li><a href="#registrationWantToHelp" role="tab" data-toggle="tab">Registration Requests (Want to help)</a></li>
+                                        <li className="active"><a href="#IndividualRegistrationNeedHelp" role="tab" data-toggle="tab">Registration (Need help) - Individuals</a></li>
+                                        <li><a href="#OrganisationRegistrationNeedHelp" role="tab" data-toggle="tab">Registration (Need help) - Organisations</a></li>
+                                        <li><a href="#registrationWantToHelp" role="tab" data-toggle="tab">Registration (Want to help)</a></li>
                                     </ul>
 
                                     <div className="tab-content">
                                         <div className="tab-pane fade in active" id="IndividualRegistrationNeedHelp">
-                                            <DataTable                                            
-                                                keys="ID"
-                                                columns={this.registrationNeedHelpIndColumns}
-                                                initialData={this.convertData1(this.controller.registrationsForNeedHelp_Ind)}
-                                                initialPageLength={5}
-                                                initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                            />
+                                            <div className="table-responsive">
+                                                <DataTable                                            
+                                                    keys="ID"
+                                                    columns={this.registrationNeedHelpIndColumns}
+                                                    initialData={convertData(this.controller.registrationsForNeedHelp_Ind, DataFilter.ActiveOnly)}
+                                                    initialPageLength={5}
+                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
+                                                />
+                                            </div>
                                         </div>
                                         <div className="tab-pane fade" id="OrganisationRegistrationNeedHelp">
-                                            <DataTable
-                                                keys="ID"
-                                                columns={this.registrationNeedHelpOrgColumns}
-                                                initialData={this.convertData1(this.controller.registrationsForNeedHelp_Org)}
-                                                initialPageLength={5}
-                                                initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                            />
+                                            <div className="table-responsive">
+                                                <DataTable
+                                                    keys="ID"
+                                                    columns={this.registrationNeedHelpOrgColumns}
+                                                    initialData={convertData(this.controller.registrationsForNeedHelp_Org, DataFilter.ActiveOnly)}
+                                                    initialPageLength={5}
+                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
+                                                />
+                                            </div>
                                         </div>                                    
                                         <div className="tab-pane fade " id="registrationWantToHelp">
-                                        <DataTable
-                                                keys="ID"
-                                                columns={this.registrationWantToHelpColumns}
-                                                initialData={this.convertData2(this.controller.registrationsForWantToHelp)}
-                                                initialPageLength={5}
-                                                initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                            />                                       
+                                            <div className="table-responsive">
+                                                <DataTable
+                                                    keys="ID"
+                                                    columns={this.registrationWantToHelpColumns}
+                                                    initialData={convertData(this.controller.registrationsForWantToHelp, DataFilter.ActiveOnly)}
+                                                    initialPageLength={5}
+                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
+                                                />
+                                            </div>       
                                         </div>                                                 
                                     </div>
                                 </div>

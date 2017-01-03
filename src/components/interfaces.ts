@@ -12,6 +12,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     whatINeedHelpWith? : string;
     whenINeedHelp? : string;
     active:boolean;
+    uid:string;
 }
 
 export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
@@ -25,6 +26,7 @@ export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
     whatWeDo: string;   
     whatWeNeed : string;
     active:boolean;
+    uid:string;
 }
 
 export interface IRegistrationWantToHelp extends IConvertDataConstraint{
@@ -38,6 +40,7 @@ export interface IRegistrationWantToHelp extends IConvertDataConstraint{
     hasTrade? :string;
     listOfTrades? : Array<IMultiSelect>;
     active:boolean;
+    uid:string;
 }
 
 export interface ICause extends IConvertDataConstraint{
@@ -52,6 +55,7 @@ export interface ICause extends IConvertDataConstraint{
     toGo?:number;
     archiveDate?:string;
     active : boolean;
+    uid:string;
 }
 
  
@@ -70,6 +74,7 @@ export interface IDonation{
     expiryDateMonth : string;
     expiryDateYear : string;
     securityCode : string;
+    uid:string;
 }
 
 export interface IMultiSelect{
@@ -90,4 +95,11 @@ export interface IWhatINeedHelpWith {
 //Contstraint -> For Generic interfaces
 export interface IConvertDataConstraint {
     ID: string;
+    active:boolean;
+}
+
+export enum DataFilter{
+    All,
+    ActiveOnly,
+    InActiveOnly
 }

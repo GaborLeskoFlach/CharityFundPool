@@ -28,7 +28,10 @@ export class AdministrationController {
     @action("get Registrations for NeedHelp from DB")
     getRegistrationsForNeedHelpInd = action(() => {
         return new Promise<Array<IRegistrationNeedHelpInd>>((resolve) => {
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').orderByChild('registrationType').equalTo('Individual').on('value', (snapshot) => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals')
+                .orderByChild('registrationType')
+                .equalTo('Individual')
+                .on('value', (snapshot) => {
                 this.registrationsForNeedHelp_Ind = snapshot.val();
                 resolve(this.registrationsForNeedHelp_Ind);
             });
@@ -38,7 +41,10 @@ export class AdministrationController {
     @action("get Registrations for NeedHelp from DB")
     getRegistrationsForNeedHelpOrg = action(() => {
         return new Promise<Array<IRegistrationNeedHelpInd>>((resolve) => {
-            _firebaseApp.database().ref('registrations/NeedHelp/Organisations').orderByChild('registrationType').equalTo('Org').on('value', (snapshot) => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations')
+                .orderByChild('registrationType')
+                .equalTo('Org')
+                .on('value', (snapshot) => {
                 this.registrationsForNeedHelp_Org = snapshot.val();
                 resolve(this.registrationsForNeedHelp_Org);
             });
@@ -48,7 +54,8 @@ export class AdministrationController {
     @action("get Registrations for Want to Help from DB")
     getRegistrationsForWantToHelp = action(() => {
         return new Promise<Array<IRegistrationWantToHelp>>((resolve) => {
-            _firebaseApp.database().ref('registrations/WantToHelp').on('value', (snapshot) => {
+            _firebaseApp.database().ref('registrations/WantToHelp')
+                .on('value', (snapshot) => {
                 this.registrationsForWantToHelp = snapshot.val();
                 resolve(this.registrationsForWantToHelp);
             }) 

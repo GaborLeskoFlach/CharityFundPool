@@ -6,6 +6,7 @@ import {observer} from 'mobx-react';
 import { map } from 'lodash';
 
 import { RegisterNeedHelpController } from './controller';
+import { CauseCreateComponent } from '../../causes/addNewCause/component';
 
 import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;
@@ -33,7 +34,7 @@ interface IRegisterNeedHelpComponentProps{
 @observer
 export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelpComponentProps,{}>{
     controller : RegisterNeedHelpController;
-    whatWeNeed : Array<IWhatWeNeed>;
+    //whatWeNeed : Array<IWhatWeNeed>;
     whatINeedHelpWith : Array<IWhatINeedHelpWith>;
 
     constructor(props){
@@ -44,15 +45,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
     componentWillMount(){
         this.controller.isLoading = true;
-        
-        this.controller.getWhatWeNeed().then(response => {
-            this.whatWeNeed = response;
-        }).then(response => {
-            this.controller.getWhatINeedHelpWith().then(response => {
-                this.whatINeedHelpWith = response;
-                this.controller.isLoading = false;
-            })
-        })                
+        this.controller.getWhatINeedHelpWith().then(response => {
+            this.whatINeedHelpWith = response;
+            this.controller.isLoading = false;
+        })                     
     }
 
     resolveRefValue(element : React.ReactInstance) : string{
@@ -83,6 +79,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         let registration : IRegistrationNeedHelpInd = {
             ID:null,
             active : true,
+            uid:null,
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
@@ -115,6 +112,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         let registration : IRegistrationNeedHelpOrg = {
             ID : null,
             active : true,
+            uid:null,
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             charityName : this.resolveRefValue((this.refs[RegistrationFields.charityName])),
@@ -216,14 +214,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             <div className="form-group">
                                                 <label htmlFor="whatWeNeed">What we need</label>
                                                 <div>
-                                                    <select className="form-control" ref="whatWeNeed" id="whatWeNeed" >
-                                                        <option value="undefined">Please select a value...</option>
-
-                                                            {map(this.whatWeNeed, (need : IWhatWeNeed, key) => (
-                                                                <option key={key} value={need.name}>{need.name}</option>
-                                                            ))}
-                                                        
-                                                    </select>
+                                                    <CauseCreateComponent  />
                                                 </div>     
                                             </div>
                                         </div>
