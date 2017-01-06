@@ -27,7 +27,7 @@ export class RegistrationConfirmation extends React.Component<{},{}>{
                     <div className="row">
                         <div className="col-sm-12">
                             <h1>Bringing the community together</h1>
-                            <h2>We have sent you an email with login details.</h2>
+                            <h2>A CFP Consultant will let you know when you can log in</h2>
                         </div>        
                     </div>
                 </div>       

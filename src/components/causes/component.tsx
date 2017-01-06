@@ -1,25 +1,16 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { _firebaseApp } from '../firebaseAuth/component';
-import { ICause, IConvertDataConstraint, DataFilter } from '../interfaces';
+import { ICause, IConvertDataConstraint, DataFilter, IColumnData } from '../interfaces';
 import * as CauseFields from './formFields';
 import { CauseController } from './controller';
 import { browserHistory } from 'react-router';
 import { convertData } from '../../utils/utils';
 import { CauseCreateComponent } from './addNewCause/component'
 
-import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
-import { map } from 'lodash';
 
 let DataTable = require('react-data-components').DataTable;
-
-interface IColumnData {
-    title: string;
-    prop: string;
-    render?: (val, row) => void;
-    className?: string;
-}
 
 @observer
 export class CauseListComponent extends React.Component<{}, {}>{
@@ -100,20 +91,26 @@ export class CauseListComponent extends React.Component<{}, {}>{
 
     renderArchive = (val: string, row: ICause) => {
         return (
-            <button onClick={this.archiveCause.bind(this, row.ID) }>Archive</button>
+            <button className="btn btn-danger" onClick={this.archiveCause.bind(this, row.ID) }>
+                <span className="glyphicon glyphicon-remove"></span> Archive
+            </button>
         )
     }
 
     renderEdit = (val: string, row: ICause) => {
         return (
-            <button onClick={this.editCause.bind(this, row.ID) }>Edit</button>
+            <button className="btn btn-default" onClick={this.editCause.bind(this, row.ID) }>
+                <span className="glyphicon glyphicon-edit"></span> Edit
+            </button>
         )
     }
 
     renderDonate = (val: string, row: ICause) => {
         let donateUrl: string = '/donate/' + row.ID;
         return (
-            <button onClick={this.goToDonate.bind(this, donateUrl) }>Donate</button>
+            <button className="btn btn-default" onClick={this.goToDonate.bind(this, donateUrl) }> 
+                <span className="glyphicon glyphicon-gift"></span> Donate
+            </button>
         )
     }
 

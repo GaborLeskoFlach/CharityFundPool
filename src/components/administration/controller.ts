@@ -2,7 +2,7 @@ import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 
-import { IRegistrationNeedHelpInd, IRegistrationWantToHelp } from '../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp } from '../interfaces';
 
 export enum RegistrationType{
     NeedHelpInd,
@@ -20,7 +20,7 @@ export class AdministrationController {
     }
 
     @observable registrationsForNeedHelp_Ind : Array<IRegistrationNeedHelpInd>;
-    @observable registrationsForNeedHelp_Org : Array<IRegistrationNeedHelpInd>;
+    @observable registrationsForNeedHelp_Org : Array<IRegistrationNeedHelpOrg>;
     @observable registrationsForWantToHelp : Array<IRegistrationWantToHelp>;
     @observable isLoading : boolean;
 
@@ -40,7 +40,7 @@ export class AdministrationController {
 
     @action("get Registrations for NeedHelp from DB")
     getRegistrationsForNeedHelpOrg = action(() => {
-        return new Promise<Array<IRegistrationNeedHelpInd>>((resolve) => {
+        return new Promise<Array<IRegistrationNeedHelpOrg>>((resolve) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Organisations')
                 .orderByChild('registrationType')
                 .equalTo('Org')
@@ -63,7 +63,7 @@ export class AdministrationController {
     });
 
     
-    @action("Add new Registration -> Need Help")
+    @action("Archive a Registration -> Need Help")
     deleteRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
         
         let dbRef : string = 'registrations';

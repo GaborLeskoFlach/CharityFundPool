@@ -175,7 +175,7 @@ h1, h2, h3, h4, h5, h6 {
 #video-section .nav-tabs>li >a:hover  {
 	color:#fff;
 }
-
+/*
 .btn-default {
 	border: 2px solid #fff;
 	border-radius: 0;
@@ -184,7 +184,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-top: 20px;
 	padding: 10px 18px;
 }
-
+*/
 .lead {
 	font-size:18px;
 }

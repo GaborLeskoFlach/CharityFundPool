@@ -80,6 +80,8 @@ export interface IDonation{
 export interface IMultiSelect{
     label : string;
     value : string;
+    ID : string;
+    active : boolean;
 }
 
 export interface IWhatWeNeed {
@@ -102,4 +104,17 @@ export enum DataFilter{
     All,
     ActiveOnly,
     InActiveOnly
+}
+
+//For DataTables (defining structure for Rows)
+export interface IColumnData {
+    title: string;
+    prop: string;
+    render?: (val, row) => void;
+    className?: string;
+}
+
+export enum DataSource {
+    Firebase,
+    LocalStorage
 }

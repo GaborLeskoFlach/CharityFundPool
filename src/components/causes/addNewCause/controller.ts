@@ -2,6 +2,8 @@ import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp } from '../../firebaseAuth/component'
 import { map, toJS } from 'mobx';
 import { ICause } from '../../interfaces';
+import { StorageClass } from '../../../utils/storage';
+import { Constants } from '../../constants';
 
 export class AddNewCauseController {
     
@@ -22,4 +24,5 @@ export class AddNewCauseController {
             });
         });
     };
+
 }

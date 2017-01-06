@@ -7,7 +7,6 @@ import { DonationController } from './controller';
 import { browserHistory } from 'react-router';
 import * as DonationFields from './formFields';
 import { convertData } from '../../utils/utils';
-import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
 

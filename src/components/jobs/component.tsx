@@ -1,9 +1,7 @@
 import * as React from 'react';
 let DataTable = require('react-data-components').DataTable;
 import { JobSearchController } from './controller';
-import { toJS } from 'mobx';
 import {observer} from 'mobx-react';
-import { map } from 'lodash';
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, DataFilter } from '../interfaces';
 import { convertData } from '../../utils/utils';
 import { Link } from 'react-router';
@@ -53,7 +51,9 @@ export class Jobs extends React.Component<{},{}> {
 
     renderEditRemoveUrl_RegNeedHelpInd = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <button onClick={this.registerForJob.bind(this, row.ID)}>Register</button>
+            <button className="btn btn-default" onClick={this.registerForJob.bind(this, row.ID)}>
+                <span className="glyphicon glyphicon-home"></span> Register
+            </button>
         )
     }
 

@@ -37,6 +37,7 @@ export class RegisterWantToHelpController {
             this.isLoading = true;
             _firebaseApp.database().ref('registrations/WantToHelp').push(registration).then(result => {
                 console.log('New Registration has been successfully added');
+                resolve(result);
                 /*
                 register(registration.email, generateTempPassword()).then(response =>{
                     resolve(response);
@@ -53,12 +54,10 @@ export class RegisterWantToHelpController {
     @action("Fetch TradeOptions")
     getTradeOptions = () : Promise<Array<IMultiSelect>> => {
         return new Promise<Array<IMultiSelect>>((resolve) => {
-            this.isLoading = true;
             _firebaseApp.database().ref('utils/tradeOptions').once('value', (snapshot) => {
                 this.tradeOptions = snapshot.val();
             }).then(response => {
                 resolve(this.tradeOptions);
-                this.isLoading = false;
             })  
         });        
     }

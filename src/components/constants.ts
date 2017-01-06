@@ -1,6 +1,6 @@
 export module Constants{
     
-    export const someConstant : string = 'ThisIsSomeConstant';
+    export const newCauseLocalStorageID : string = 'newCauseLocalStorageID';
 
 
 

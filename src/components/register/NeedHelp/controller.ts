@@ -1,15 +1,15 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { _firebaseApp, register } from '../../firebaseAuth/component';
+import { _firebaseApp, _firebaseAuth, register } from '../../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 import { generateTempPassword } from '../../../utils/utils';
-
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith } from '../../interfaces';
-
+import { StorageClass } from '../../../utils/storage';
+import { Constants } from '../../constants';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause } from '../../interfaces';
+import { List } from 'linqts';
 
 export class RegisterNeedHelpController {
 
     registrations : IRegistrationNeedHelpInd;
-    //whatWeNeed : Array<IWhatWeNeed>;
     whatINeedHelpWith : Array<IWhatINeedHelpWith>;
 
     constructor() {
@@ -18,6 +18,7 @@ export class RegisterNeedHelpController {
         this.hasTrade = false;
         this.hasRegistered = false;
         this.isLoading = false;      
+        this.causes = [];
     }
 
     @observable registrationType : string;
@@ -25,6 +26,8 @@ export class RegisterNeedHelpController {
     @observable hasTrade : boolean;
     @observable hasRegistered : boolean;
     @observable isLoading : boolean;
+    
+    @observable causes : Array<ICause>;
 
     addNeed1 = (value : IWhatWeNeed) => {
         _firebaseApp.database().ref('utils/whatWeNeed').push(value);
@@ -34,17 +37,41 @@ export class RegisterNeedHelpController {
         _firebaseApp.database().ref('utils/whatINeedHelpWith').push(value);
     }
 
-    /*
-    @action("get WhatWeNeed from DB")
-    getWhatWeNeed = action(() => {
-        return new Promise<Array<IWhatWeNeed>>((resolve) => {
-            _firebaseApp.database().ref('utils/whatWeNeed').once('value', (snapshot) => {
-                this.whatWeNeed = snapshot.val();
-            }).then(response => {
-                resolve(this.whatWeNeed);
-            })  
+    @action("Retrieve Causes for current user")
+    getWhatWeNeedForUser = action(() : Promise<Array<ICause>> => {
+        return new Promise<Array<ICause>>((resolve) => {     
+            _firebaseApp.database().ref('needs').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
+                this.causes = snapshot.val();
+                resolve(this.causes);
+            })
+        })
+    })
+
+    @action("get a single Cause from DB by id")
+    getCause = (id:string) : Promise<ICause> => {
+        return new Promise<ICause>((resolve) => {     
+            _firebaseApp.database().ref('needs/' + id).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            })
+        })
+    };
+    
+    @action("Archive a Cause")
+    archiveCause = (id:string) : Promise<any> =>{
+        return new Promise((resolve) => {
+            
+            this.getCause(id).then(response => {
+                
+                if(response){
+                    response.archiveDate = new Date().toString();
+                    response.active = false;
+                    _firebaseApp.database().ref('needs/' + id).update(response).then(result => {                
+                        resolve();
+                    });
+                }
+            })
         });
-    })*/
+    }
 
     @action("get WhatINeedHelpWith from DB")
     getWhatINeedHelpWith = action(() => {
@@ -77,6 +104,7 @@ export class RegisterNeedHelpController {
         return new Promise((resolve) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(registration).then(result => {
                 console.log('New Registration as Individual has been successfully added');
+                resolve(result);
                 /*
                 register(registration.email,generateTempPassword()).then(response => {                    
                     resolve(response);
@@ -91,8 +119,10 @@ export class RegisterNeedHelpController {
     @action("Add new Registration -> Need Help - for Organsiations")
     addNewRegistrationNeedHelpOrg = (registration : IRegistrationNeedHelpOrg) : Promise<any> => {
         return new Promise((resolve) => {
+
             _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(registration).then(result => {
                 console.log('New Registration as Organisation has been successfully added');
+                resolve(result);
                 /*
                 register(registration.email,generateTempPassword()).then(response => {
                     resolve(response);

@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { _firebaseApp, _firebaseAuth } from '../../firebaseAuth/component';
-import { ICause, IConvertDataConstraint } from '../../interfaces';
+import { ICause, IConvertDataConstraint, DataSource } from '../../interfaces';
 import * as CauseFields from '../formFields';
 import { AddNewCauseController } from './controller';
 import { browserHistory } from 'react-router';
+import { StorageClass } from '../../../utils/storage';
+import { Constants } from '../../constants';
 
+export interface ICauseCreateComponent{
+    saveCauseTo : DataSource;
+    onChanged : (cause:ICause) => void;
+}
 
-export class CauseCreateComponent extends React.Component<any, any>{
+export class CauseCreateComponent extends React.Component<ICauseCreateComponent, any>{
     controller : AddNewCauseController;
 
     constructor(props) {
@@ -39,21 +45,27 @@ export class CauseCreateComponent extends React.Component<any, any>{
             archiveDate : null
         };
 
-        //Save into DB?
-        this.controller.addCause(cause).then(response => {
-            (this.refs[CauseFields.title] as HTMLInputElement).value = '';
-            (this.refs[CauseFields.description] as HTMLInputElement).value = '';
-            (this.refs[CauseFields.bestPrice] as HTMLInputElement).value = '';
-            (this.refs[CauseFields.estimatedValue] as HTMLInputElement).value = '';
-            (this.refs[CauseFields.photoUrl] as HTMLInputElement).value = '';
-        });
+        //Save into DB or LocalStorage
+        if(this.props.saveCauseTo == DataSource.Firebase){
+            this.controller.addCause(cause).then(response => {
+                (this.refs[CauseFields.title] as HTMLInputElement).value = '';
+                (this.refs[CauseFields.description] as HTMLInputElement).value = '';
+                (this.refs[CauseFields.bestPrice] as HTMLInputElement).value = '';
+                (this.refs[CauseFields.estimatedValue] as HTMLInputElement).value = '';
+                //(this.refs[CauseFields.photoUrl] as HTMLInputElement).value = '';
+            });
+        }        
     }
 
     render() {
         
+        const style : React.CSSProperties = {
+            textAlign : 'center'
+        }
+
         if (_firebaseAuth.currentUser === null) {
             return(
-                <div className="">
+                <div className="well" style={style}>
                     <h1>You need to be registered to be able create a new Need</h1>
                     <p>Please come back after you've received your registration from CFP</p>
                 </div>

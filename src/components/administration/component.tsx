@@ -51,6 +51,7 @@ export class Administration extends React.Component<{},{}> {
             { title: '', prop: 'ID', render : this.render_Edit_Org, className : 'text-center'  },
             { title: '', prop: 'ID', render : this.render_User_Org, className : 'text-center'  },
             { title: 'Email', prop: 'email'  },
+            { title: 'Charity', prop: 'charityName'},
             { title: 'Name', prop: 'fullName'  },
             { title: 'Phone No', prop: 'phoneNo'  },            
         ];
@@ -108,55 +109,73 @@ export class Administration extends React.Component<{},{}> {
 
     render_Remove_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>Remove</button>
+            <button className="btn btn-danger" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>
+                <span className="glyphicon glyphicon-remove"></span> Remove
+            </button>
         )
     }
 
     render_Edit_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-             <button onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>Edit</button>
+             <button className="btn btn-default" onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}> 
+                <span className="glyphicon glyphicon-edit"></span> Edit
+             </button>
         )
     }
 
     render_User_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}>User</button>
+            <button className="btn btn-default" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpInd )}> 
+                <span className="glyphicon glyphicon-cog"></span> User
+            </button>
         )    
     }
 
     render_Remove_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
         return(
-            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>Remove</button>
+            <button className="btn btn-danger" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>
+                <span className="glyphicon glyphicon-remove"></span> Remove
+            </button>
         )
     }
 
     render_Edit_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
         return(
-            <button onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpOrg )}>Edit</button>
+            <button className="btn btn-default" onClick={this.editItem.bind(this, row.ID, RegistrationType.NeedHelpOrg )}>
+                <span className="glyphicon glyphicon-edit"></span> Edit
+            </button>
         )
     }
 
     render_User_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
         return(
-            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>User</button>
+            <button className="btn btn-default" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>
+                <span className="glyphicon glyphicon-cog"></span> User
+            </button>
         ) 
     }
 
     render_Remove_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
         return(
-            <button onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>Remove</button>
+            <button className="btn btn-danger" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>
+                <span className="glyphicon glyphicon-remove"></span> Remove
+            </button>
         )
     }
 
     render_Edit_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
         return(
-            <button onClick={this.editItem.bind(this, row.ID, RegistrationType.WantToHelp )}>Edit</button>
+            <button className="btn btn-default" onClick={this.editItem.bind(this, row.ID, RegistrationType.WantToHelp )}>
+                <span className="glyphicon glyphicon-edit"></span> Edit
+            </button>
         )
     }
 
     render_User_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
          return(
-            <button  onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>User</button>
+            <button className="btn btn-default" onClick={this.deleteItem.bind(this, row.ID, RegistrationType.WantToHelp)}>
+                <span className="glyphicon glyphicon-cog"></span> User
+            </button>
         )   
     }
 

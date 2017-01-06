@@ -4,13 +4,14 @@ import { Constants } from '../../constants';
 import { browserHistory } from 'react-router';
 import {observer} from 'mobx-react';
 
-import { map } from 'lodash';
+
 import { toJS } from 'mobx';
 
 import { RegisterWantToHelpController } from './controller';
 import { MultiSelectComponent } from '../../common/multiselect/component';
 
-import { IRegistrationWantToHelp, IMultiSelect } from '../../interfaces';
+import { IRegistrationWantToHelp, IMultiSelect, DataFilter } from '../../interfaces';
+import { convertData } from '../../../utils/utils';
 
 import { Link } from 'react-router';
 
@@ -28,7 +29,6 @@ interface IRegisterWantToHelpComponent{
 @observer
 export class RegisterWantToHelpComponent extends React.Component<IRegisterWantToHelpComponent,{}>{
     controller : RegisterWantToHelpController;
-    _tradeOptions : Array<IMultiSelect> = [];
     
     constructor(props){
         super(props);
@@ -36,22 +36,13 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         this.controller = new RegisterWantToHelpController();
     }
 
-    componentWillMount(){        
+    componentWillMount(){
+        this.controller.isLoading = true;    
         this.controller.getTradeOptions().then(response => {
-            this._tradeOptions = response;
+            this.controller.isLoading = false;
         });
     }
     
-    convertData = (dataToConvert : Array<IMultiSelect>) : Array<IMultiSelect> => {
-        let returnData : Array<IMultiSelect> = [];
-                
-        map(toJS(dataToConvert), (data : IMultiSelect, key) => (
-            returnData.push(data)
-        ));
-
-        return returnData;
-    }
-
     resolveRefValue(element : React.ReactInstance) : string{
         if(element !== undefined){
            return (element as HTMLInputElement).value;
@@ -167,7 +158,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     { this.controller.hasTrade ? 
                                         <div className="form-group">
                                             <label htmlFor="listOfTrades">List options:</label>
-                                            <MultiSelectComponent data={this.convertData(this._tradeOptions)} onChange={this.onTradeSelectionHasChanged}/>
+                                            <MultiSelectComponent data={convertData(this.controller.tradeOptions,DataFilter.All)} onChange={this.onTradeSelectionHasChanged}/>
                                         </div>
 
                                     :

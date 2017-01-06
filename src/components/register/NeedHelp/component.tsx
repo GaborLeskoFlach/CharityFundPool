@@ -4,13 +4,13 @@ import { Constants } from '../../constants';
 import { browserHistory } from 'react-router';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
-
 import { RegisterNeedHelpController } from './controller';
 import { CauseCreateComponent } from '../../causes/addNewCause/component';
-
+import { convertData } from '../../../utils/utils';
 import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;
 import { Link } from 'react-router';
+import { _firebaseAuth } from '../../firebaseAuth/component';
 
 import './styles.css';
 
@@ -19,7 +19,9 @@ import DateRange from '../../common/dateComponents/dateRange';
 
 import { MultiSelectComponent } from '../../common/multiselect/component';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, IColumnData, ICause, DataSource, DataFilter } from '../../interfaces';
+
+let DataTable = require('react-data-components').DataTable;
 
 interface IRouteParams{
     requestType : string;
@@ -34,20 +36,42 @@ interface IRegisterNeedHelpComponentProps{
 @observer
 export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelpComponentProps,{}>{
     controller : RegisterNeedHelpController;
-    //whatWeNeed : Array<IWhatWeNeed>;
-    whatINeedHelpWith : Array<IWhatINeedHelpWith>;
+    causeColumns: Array<IColumnData> = [];
 
     constructor(props){
         super(props);
 
         this.controller = new RegisterNeedHelpController();
+
+        this.causeColumns = [
+            { title: 'Remove', prop: 'ID', render: this.renderRemove, className: 'text-center' },
+            { title: 'Title', prop: 'title' },
+            { title: 'Description', prop: 'description' },
+            { title: 'Estimate Value', prop: 'estimatedValue' },
+            { title: 'Best price', prop: 'bestPrice' },
+        ];        
+    }
+
+    removeCause = (id : string) => {
+        //TODO -> implement remove for LocalStorage
+    }
+
+    renderRemove = (val: string, row: ICause) => {
+        return (
+            <button onClick={this.removeCause.bind(this, row.ID) }>Remove</button>
+        )        
     }
 
     componentWillMount(){
         this.controller.isLoading = true;
         this.controller.getWhatINeedHelpWith().then(response => {
-            this.whatINeedHelpWith = response;
-            this.controller.isLoading = false;
+            if(_firebaseAuth.currentUser !== null){
+                this.controller.getWhatWeNeedForUser().then(response => {
+                    this.controller.isLoading = false;
+                })
+            }else{
+                this.controller.isLoading = false;
+            }
         })                     
     }
 
@@ -139,6 +163,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         this.controller.setRegistrationType(e.target.value);
     }
 
+    newCauseAdded = (cause:ICause) => {
+        this.controller.getWhatWeNeedForUser();
+    }
+
     render(){
 
         if(this.controller.isLoading)
@@ -214,9 +242,48 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             <div className="form-group">
                                                 <label htmlFor="whatWeNeed">What we need</label>
                                                 <div>
-                                                    <CauseCreateComponent  />
+                                                    <CauseCreateComponent saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
                                                 </div>     
                                             </div>
+
+                                            {(_firebaseAuth.currentUser !== null) &&
+                                                <div className="form-group">
+                                                    <div className="table-responsive">
+                                                        <table className="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th className="text-center">Title</th>
+                                                                    <th className="text-center">Description</th>
+                                                                    <th className="text-center">Estimated Value</th>
+                                                                    <th className="text-center">Best Price</th>
+                                                                    <th> </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbody">
+
+                                                                {
+                                                                    map(convertData(this.controller.causes,DataFilter.ActiveOnly),((cause : ICause, index) => {
+                                                                        return(
+                                                                            <tr key={index}>
+                                                                                <td className="col-sm-1 col-md-1 text-center">{cause.title}</td>
+                                                                                <td className="col-sm-1 col-md-1 text-center">{cause.description}</td>
+                                                                                <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
+                                                                                <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
+                                                                                <td className="col-sm-1 col-md-1">
+                                                                                    <button type="button" className="btn btn-danger" id="remove" onClick={this.controller.archiveCause.bind(this,cause.ID)}>
+                                                                                        <span className="glyphicon glyphicon-remove"></span> Remove
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        )
+                                                                    })
+                                                                )}
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>                                     
+                                                </div>
+                                            }
                                         </div>
                                     :
                                         null
@@ -525,7 +592,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                                     <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith">
                                                         <option value="undefined">Please select an option...</option>
                                                         
-                                                            {map(this.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
+                                                            {map(this.controller.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
                                                                 <option key={key} value={need.name}>{need.name}</option>
                                                             ))}
 
