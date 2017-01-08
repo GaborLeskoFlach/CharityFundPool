@@ -26,15 +26,6 @@ export class CauseController {
         })
     };
 
-    @action("get a single Cause from DB by id")
-    getCause = (id:string) : Promise<ICause> => {
-        return new Promise<ICause>((resolve) => {     
-            _firebaseApp.database().ref('needs/' + id).once('value', (snapshot) => {
-                resolve(snapshot.val());
-            })
-        })
-    };    
-
     @action("get archived causes from DB")
     getArchivedCauses = () : Promise<Array<ICause>> => {
         return new Promise<Array<ICause>>((resolve) => {
@@ -55,6 +46,15 @@ export class CauseController {
             });
         });
     };
+
+    @action("get a single Cause from DB by id")
+    getCause = (id:string) : Promise<ICause> => {
+        return new Promise<ICause>((resolve) => {     
+            _firebaseApp.database().ref('needs/' + id).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            })
+        })
+    };  
 
     @action("Archive a Cause")
     archiveCause = (id:string) : Promise<any> =>{

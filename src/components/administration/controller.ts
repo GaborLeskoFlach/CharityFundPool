@@ -16,12 +16,14 @@ export class AdministrationController {
         this.registrationsForNeedHelp_Ind = [];
         this.registrationsForNeedHelp_Org = [];
         this.registrationsForWantToHelp = [];
+        this.archivedRegistrations = [];
         this.isLoading = false;      
     }
 
     @observable registrationsForNeedHelp_Ind : Array<IRegistrationNeedHelpInd>;
     @observable registrationsForNeedHelp_Org : Array<IRegistrationNeedHelpOrg>;
     @observable registrationsForWantToHelp : Array<IRegistrationWantToHelp>;
+    @observable archivedRegistrations : Array<any>;
     @observable isLoading : boolean;
 
 
@@ -62,31 +64,103 @@ export class AdministrationController {
         });
     });
 
-    
-    @action("Archive a Registration -> Need Help")
-    deleteRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
-        
-        let dbRef : string = 'registrations';
+    @action("get archived Registrations from DB")
+    getArchivedRegistrations = action((registrationType : RegistrationType) => {
+       return new Promise<any>((resolve) => {      
+            let dbRef : string = 'registrations';
 
-        switch(registrationType){
-            case RegistrationType.NeedHelpInd:
-            dbRef += '/NeedHelp/Individuals/' + key;
-            break;
-            case RegistrationType.NeedHelpOrg:
-            dbRef += '/NeedHelp/Organisations/' + key;
-            break;
-            case RegistrationType.WantToHelp:
-            dbRef += '/WantToHelp/' + key;
-            break;
-        }        
+            switch(registrationType){
+                case RegistrationType.NeedHelpInd:
+                dbRef += '/NeedHelp/Individuals';
+                break;
+                case RegistrationType.NeedHelpOrg:
+                dbRef += '/NeedHelp/Organisations';
+                break;
+                case RegistrationType.WantToHelp:
+                dbRef += '/WantToHelp';
+                break;
+            }
 
-        return new Promise((resolve) => {
-            _firebaseApp.database().ref(dbRef).remove().then(result => {
+            this.getRegistrationsByType(dbRef).then(response => {
+               resolve(response);
+            }) 
+        });       
+    });    
+
+    @action("get Registrations by Type from DB")
+    getRegistrationsByType = action((dbRef : string) => {
+        return new Promise<Array<IRegistrationWantToHelp>>((resolve) => {
+            _firebaseApp.database().ref(dbRef).orderByChild('active').equalTo(false).on('value', (snapshot) => {
+                this.archivedRegistrations = snapshot.val();
                 resolve();
-                console.log('Registration has been successfully deleted');
-            });
+            }) 
         });
-    };
-    
+    });
 
+    @action("Archive a Registration -> Need Help")
+    archiveRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {      
+            let dbRef : string = 'registrations';
+
+            switch(registrationType){
+                case RegistrationType.NeedHelpInd:
+                dbRef += '/NeedHelp/Individuals/' + key;
+                break;
+                case RegistrationType.NeedHelpOrg:
+                dbRef += '/NeedHelp/Organisations/' + key;
+                break;
+                case RegistrationType.WantToHelp:
+                dbRef += '/WantToHelp/' + key;
+                break;
+            }        
+
+            this.getRegistration(dbRef).then(response => {
+                if(response){
+                    response.archiveDate = new Date().toString();
+                    response.active = false;
+                    _firebaseApp.database().ref(dbRef).update(response).then(result => {                
+                        resolve();
+                    });
+                }
+            }) 
+        });       
+    };
+
+    @action("Re-Activate a Registration -> Need Help")
+    activateRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {      
+            let dbRef : string = 'registrations';
+
+            switch(registrationType){
+                case RegistrationType.NeedHelpInd:
+                dbRef += '/NeedHelp/Individuals/' + key;
+                break;
+                case RegistrationType.NeedHelpOrg:
+                dbRef += '/NeedHelp/Organisations/' + key;
+                break;
+                case RegistrationType.WantToHelp:
+                dbRef += '/WantToHelp/' + key;
+                break;
+            }        
+
+            this.getRegistration(dbRef).then(response => {
+                if(response){
+                    response.archiveDate = '';
+                    response.active = true;
+                    _firebaseApp.database().ref(dbRef).update(response).then(result => {                
+                        resolve();
+                    });
+                }
+            }) 
+        });       
+    };
+
+    @action("get a single Cause from DB by id")
+    getRegistration = (ref : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {     
+            _firebaseApp.database().ref(ref).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            })
+        })
+    };   
 }
