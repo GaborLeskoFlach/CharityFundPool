@@ -113,6 +113,9 @@ export class Administration extends React.Component<{},{}> {
         this.registrationsDynamic = [];
     }
 
+    ///
+    /// DeActivating a User (should not be already registered) setting Active and ArchiveDate Flags
+    ///
     archiveRegistration = (id : string, regType:RegistrationType, event : React.FormEvent) => {
         event.preventDefault();
 
@@ -134,6 +137,9 @@ export class Administration extends React.Component<{},{}> {
         }        
     }
 
+    ///
+    /// Activating a previously disabled Registration (setting Active and ArchivedDate flags)
+    ///
     activateRegistration = (id : string, regType:RegistrationType, event : React.FormEvent) => {
         event.preventDefault();
 
@@ -144,15 +150,40 @@ export class Administration extends React.Component<{},{}> {
             break;
             case RegistrationType.NeedHelpOrg:
             console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.NeedHelpOrg,id);
+            this.controller.activateRegistration(RegistrationType.NeedHelpOrg, id);
             break;
             case RegistrationType.WantToHelp:
             console.log('Activating WantToHelp Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.WantToHelp,id);
+            this.controller.activateRegistration(RegistrationType.WantToHelp, id);
             break;
         }               
     }
 
+    /// 
+    /// Register User first time (creating user profile)
+    ///
+    registerUser = (id : string, regType : RegistrationType, event : React.FormEvent) => {
+        event.preventDefault();
+
+        switch(regType){
+            case RegistrationType.NeedHelpInd:
+            console.log('Activating NeedHelpInd Item => ' + id);
+            this.controller.registerUser(RegistrationType.NeedHelpInd, id);
+            break;
+            case RegistrationType.NeedHelpOrg:
+            console.log('Activating NeedHelpOrg Item => ' + id);
+            this.controller.registerUser(RegistrationType.NeedHelpOrg,id);
+            break;
+            case RegistrationType.WantToHelp:
+            console.log('Activating WantToHelp Item => ' + id);
+            this.controller.registerUser(RegistrationType.WantToHelp,id);
+            break;
+        }   
+    }
+
+    ///
+    /// Redirects to particular Registation page to edit details and Save
+    ///
     editRegistration = (id : string, regType : RegistrationType, event : React.FormEvent) => {
         event.preventDefault();
         switch(regType){
@@ -186,7 +217,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <button className="btn btn-default" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.NeedHelpInd )}> 
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.email, RegistrationType.NeedHelpInd )}> 
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         )    
@@ -210,7 +241,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
         return(
-            <button className="btn btn-default" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row, RegistrationType.NeedHelpOrg)}>
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         ) 
@@ -234,7 +265,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
          return(
-            <button className="btn btn-default" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.WantToHelp)}>
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row, RegistrationType.WantToHelp)}>
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         )   

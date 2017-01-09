@@ -1,6 +1,7 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { _firebaseApp } from '../firebaseAuth/component';
+import { _firebaseApp, register } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
+import { generateTempPassword } from '../../utils/utils';
 
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp } from '../interfaces';
 
@@ -93,7 +94,7 @@ export class AdministrationController {
             _firebaseApp.database().ref(dbRef).orderByChild('active').equalTo(false).on('value', (snapshot) => {
                 this.archivedRegistrations = snapshot.val();
                 resolve();
-            }) 
+            }); 
         });
     });
 
@@ -155,6 +156,19 @@ export class AdministrationController {
         });       
     };
 
+    @action("Register User for the first time for allow them to log into app")
+    registerUser = (registrationType : RegistrationType, email : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {          
+            //TODO => implement generate Template Password
+            register(email,'1234567890', true).then(response => {                    
+                resolve(response);
+            }).catch(error => {
+                //TODO => handle exception
+                console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
+            })
+        });
+    }
+
     @action("get a single Cause from DB by id")
     getRegistration = (ref : string) : Promise<any> => {
         return new Promise<any>((resolve) => {     
@@ -162,5 +176,8 @@ export class AdministrationController {
                 resolve(snapshot.val());
             })
         })
-    };   
+    };
+
+
+
 }

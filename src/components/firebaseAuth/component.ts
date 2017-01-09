@@ -127,7 +127,7 @@ function requireAuth(nextState : any, replace : any) {
     }
 }
 
-function register(email: string, password: string) : Promise<boolean>{
+function register(email: string, password: string, shouldSendVerificationEmail : boolean) : Promise<boolean>{
     return new Promise((resolve, reject) => {
         if (!email || !password) {
             resolve(false);
@@ -135,7 +135,19 @@ function register(email: string, password: string) : Promise<boolean>{
         }
         // Register user
         _firebaseAuth.createUserWithEmailAndPassword(email, password).then((response => {
-            resolve(true);
+            if(shouldSendVerificationEmail){
+                if(response){
+                    response.sendEmailVerification().then(response => {
+                        //Email sent
+                        resolve(true);
+                    }).catch(error => {
+                        console.log('Verifiction Email was not sent due to error: {0}', error);
+                        reject();
+                    })
+                }
+            }else{            
+                resolve(true);
+            }
         }))
         .catch(function (error) {
             console.log('register error', error);

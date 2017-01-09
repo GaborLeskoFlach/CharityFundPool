@@ -111,7 +111,7 @@ export class RegisterNeedHelpController {
                 }).catch(error => {
                     //TODO => handle exception
                     console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
-                })*/                              
+                })*/                         
             });
         });
     };
