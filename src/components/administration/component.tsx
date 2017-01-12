@@ -162,21 +162,21 @@ export class Administration extends React.Component<{},{}> {
     /// 
     /// Register User first time (creating user profile)
     ///
-    registerUser = (id : string, regType : RegistrationType, event : React.FormEvent) => {
+    registerUser = (id : string, email:string, regType : RegistrationType, event : React.FormEvent) => {
         event.preventDefault();
 
         switch(regType){
             case RegistrationType.NeedHelpInd:
             console.log('Activating NeedHelpInd Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpInd, id);
+            this.controller.registerUser(RegistrationType.NeedHelpInd, id, email);
             break;
             case RegistrationType.NeedHelpOrg:
             console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpOrg,id);
+            this.controller.registerUser(RegistrationType.NeedHelpOrg, id, email);
             break;
             case RegistrationType.WantToHelp:
             console.log('Activating WantToHelp Item => ' + id);
-            this.controller.registerUser(RegistrationType.WantToHelp,id);
+            this.controller.registerUser(RegistrationType.WantToHelp, id, email);
             break;
         }   
     }
@@ -196,7 +196,7 @@ export class Administration extends React.Component<{},{}> {
                 case RegistrationType.WantToHelp:
                     browserHistory.push('/register/WantToHelp/ID=' + id);
                     break;
-            }                
+            }    
     }
 
     render_Remove_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
@@ -217,7 +217,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
         return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.email, RegistrationType.NeedHelpInd )}> 
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.NeedHelpInd )}> 
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         )    
@@ -241,7 +241,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
         return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row, RegistrationType.NeedHelpOrg)}>
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.NeedHelpOrg)}>
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         ) 
@@ -265,7 +265,7 @@ export class Administration extends React.Component<{},{}> {
 
     render_User_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
          return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row, RegistrationType.WantToHelp)}>
+            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.WantToHelp)}>
                 <span className="glyphicon glyphicon-cog"></span> User
             </button>
         )   

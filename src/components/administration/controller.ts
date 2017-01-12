@@ -68,19 +68,7 @@ export class AdministrationController {
     @action("get archived Registrations from DB")
     getArchivedRegistrations = action((registrationType : RegistrationType) => {
        return new Promise<any>((resolve) => {      
-            let dbRef : string = 'registrations';
-
-            switch(registrationType){
-                case RegistrationType.NeedHelpInd:
-                dbRef += '/NeedHelp/Individuals';
-                break;
-                case RegistrationType.NeedHelpOrg:
-                dbRef += '/NeedHelp/Organisations';
-                break;
-                case RegistrationType.WantToHelp:
-                dbRef += '/WantToHelp';
-                break;
-            }
+            const dbRef : string = this.getDBRefByRegistrationType(registrationType, '');
 
             this.getRegistrationsByType(dbRef).then(response => {
                resolve(response);
@@ -101,19 +89,7 @@ export class AdministrationController {
     @action("Archive a Registration -> Need Help")
     archiveRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
         return new Promise<any>((resolve) => {      
-            let dbRef : string = 'registrations';
-
-            switch(registrationType){
-                case RegistrationType.NeedHelpInd:
-                dbRef += '/NeedHelp/Individuals/' + key;
-                break;
-                case RegistrationType.NeedHelpOrg:
-                dbRef += '/NeedHelp/Organisations/' + key;
-                break;
-                case RegistrationType.WantToHelp:
-                dbRef += '/WantToHelp/' + key;
-                break;
-            }        
+            const dbRef = this.getDBRefByRegistrationType(registrationType, key);
 
             this.getRegistration(dbRef).then(response => {
                 if(response){
@@ -130,20 +106,8 @@ export class AdministrationController {
     @action("Re-Activate a Registration -> Need Help")
     activateRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
         return new Promise<any>((resolve) => {      
-            let dbRef : string = 'registrations';
-
-            switch(registrationType){
-                case RegistrationType.NeedHelpInd:
-                dbRef += '/NeedHelp/Individuals/' + key;
-                break;
-                case RegistrationType.NeedHelpOrg:
-                dbRef += '/NeedHelp/Organisations/' + key;
-                break;
-                case RegistrationType.WantToHelp:
-                dbRef += '/WantToHelp/' + key;
-                break;
-            }        
-
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key);
+            
             this.getRegistration(dbRef).then(response => {
                 if(response){
                     response.archiveDate = '';
@@ -157,15 +121,23 @@ export class AdministrationController {
     };
 
     @action("Register User for the first time for allow them to log into app")
-    registerUser = (registrationType : RegistrationType, email : string) : Promise<any> => {
+    registerUser = (registrationType : RegistrationType, key : string, email : string) : Promise<any> => {
         return new Promise<any>((resolve) => {          
-            //TODO => implement generate Template Password
-            register(email,'1234567890', true).then(response => {                    
-                resolve(response);
-            }).catch(error => {
-                //TODO => handle exception
-                console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
-            })
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key);            
+            this.getRegistration(dbRef).then(registration => {
+                if(registration){
+                    register(email,'1234567890', true).then(userRef => {                                                
+                        //Update UID field
+                        registration.uid = userRef.uid;
+                        this.updateRegistration(dbRef,registration).then(response => {
+                            resolve();
+                        });
+                    }).catch(error => {
+                        //TODO => handle exception
+                        console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
+                    })
+                }
+            });            
         });
     }
 
@@ -178,6 +150,33 @@ export class AdministrationController {
         })
     };
 
+    ///
+    /// Private Methods
+    ///
 
+    private getDBRefByRegistrationType = (registrationType : RegistrationType, key : string) : string => {
+        let dbRef : string = 'registrations';
+
+        switch(registrationType){
+            case RegistrationType.NeedHelpInd:
+            dbRef += '/NeedHelp/Individuals/' + key;
+            break;
+            case RegistrationType.NeedHelpOrg:
+            dbRef += '/NeedHelp/Organisations/' + key;
+            break;
+            case RegistrationType.WantToHelp:
+            dbRef += '/WantToHelp/' + key;
+            break;
+        }
+        return dbRef;    
+    }
+
+    private updateRegistration = (dbRef : string, registration : any) : Promise<any> => {
+        return new Promise((resolve) => {
+            _firebaseApp.database().ref(dbRef).update(registration).then(result => {                
+                resolve();                       
+            });
+        });
+    };
 
 }
