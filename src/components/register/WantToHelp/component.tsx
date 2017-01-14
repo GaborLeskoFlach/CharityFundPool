@@ -10,36 +10,46 @@ import { toJS } from 'mobx';
 import { RegisterWantToHelpController } from './controller';
 import { MultiSelectComponent } from '../../common/multiselect/component';
 
-import { IRegistrationWantToHelp, IMultiSelect, DataFilter } from '../../interfaces';
+import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registrations } from '../../interfaces';
 import { convertData } from '../../../utils/utils';
 
 import { Link } from 'react-router';
 
 import './styles.css';
 
-interface IRouteParams{
-    requestType : string;
-}
-
 interface IRegisterWantToHelpComponent{
-    params : IRouteParams;
+    params : IRouteParams_Registrations;
     history : any;
 }
 
 @observer
 export class RegisterWantToHelpComponent extends React.Component<IRegisterWantToHelpComponent,{}>{
     controller : RegisterWantToHelpController;
-    
+    requestURL_ID : string;
+
     constructor(props){
         super(props);
 
         this.controller = new RegisterWantToHelpController();
+
+        //check URL Query
+        if(this.props.params){
+            this.requestURL_ID = this.props.params.ID;
+        }        
     }
 
     componentWillMount(){
         this.controller.isLoading = true;    
         this.controller.getTradeOptions().then(response => {
-            this.controller.isLoading = false;
+            if(this.requestURL_ID){
+                this.controller.getRegistrationByID(this.requestURL_ID).then(response => {
+                    //TODO -> response here will hold the particular Registration Record which we can load to populate fields on Form
+                    this.controller.isLoading = false;
+                });
+                
+            }else{
+                this.controller.isLoading = false;
+            }
         });
     }
     
@@ -59,7 +69,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         let registration : IRegistrationWantToHelp = {
             ID : null,
             active : true,
-            uid : null,        
+            uid : 'null',        
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
             phoneNo : this.resolveRefValue((this.refs[RegistrationFields.phoneNo])),
             email : this.resolveRefValue((this.refs[RegistrationFields.email])),

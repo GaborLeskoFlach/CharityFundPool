@@ -1,12 +1,12 @@
 import * as React from 'react';
 let DataTable = require('react-data-components').DataTable;
 
-import { AdministrationController, RegistrationType } from './controller';
+import { AdministrationController } from './controller';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { map } from 'lodash';
-import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg, DataFilter } from '../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg, DataFilter, RegistrationType } from '../interfaces';
 import { Link, browserHistory } from 'react-router';
 import { convertData } from '../../utils/utils';
 
@@ -40,6 +40,7 @@ export class Administration extends React.Component<{},{}> {
             { title: '', prop: 'ID', render : this.render_Remove_Ind, className : 'text-center' },
             { title: '', prop: 'ID', render : this.render_Edit_Ind, className : 'text-center' },
             { title: '', prop: 'ID', render : this.render_User_Ind, className : 'text-center' },
+            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
             { title: 'Email', prop: 'email' },
             { title: 'Name', prop: 'fullName' },
             { title: 'Phone No', prop: 'phoneNo' },
@@ -56,6 +57,7 @@ export class Administration extends React.Component<{},{}> {
             { title: '', prop: 'ID', render : this.render_Remove_Org, className : 'text-center'  },
             { title: '', prop: 'ID', render : this.render_Edit_Org, className : 'text-center'  },
             { title: '', prop: 'ID', render : this.render_User_Org, className : 'text-center'  },
+            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
             { title: 'Email', prop: 'email'  },
             { title: 'Charity', prop: 'charityName'},
             { title: 'Name', prop: 'fullName'  },
@@ -66,6 +68,7 @@ export class Administration extends React.Component<{},{}> {
             { title: '', prop: 'ID', render : this.render_Remove_WantToHelp, className : 'text-center'  },
             { title: '', prop: 'ID', render : this.render_Edit_WantToHelp, className : 'text-center'  },
             { title: '', prop: 'ID', render : this.render_User_WantToHelp, className : 'text-center'  },
+            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
             { title: 'Email', prop: 'email' },
             { title: 'Name', prop: 'fullName' },
             { title: 'PhoneNo', prop: 'phoneNo' },
@@ -188,13 +191,13 @@ export class Administration extends React.Component<{},{}> {
         event.preventDefault();
         switch(regType){
                 case RegistrationType.NeedHelpInd:
-                    browserHistory.push('/register/NeedHelp/Ind/ID=' + id);
+                    browserHistory.push('/register/NeedHelp/Ind/' + id);
                     break;
                 case RegistrationType.NeedHelpOrg:
-                    browserHistory.push('/register/NeedHelp/Org/ID=' + id);
+                    browserHistory.push('/register/NeedHelp/Org/' + id);
                     break;
                 case RegistrationType.WantToHelp:
-                    browserHistory.push('/register/WantToHelp/ID=' + id);
+                    browserHistory.push('/register/WantToHelp/' + id);
                     break;
             }    
     }
@@ -293,6 +296,21 @@ export class Administration extends React.Component<{},{}> {
                 <span className="glyphicon glyphicon-ok"></span> Activate
             </button>
         )
+    }
+
+    renderRegisteredFlag = (val : string) => {
+        let glyphiconColor : React.CSSProperties = null;
+        if(val && val !== 'null'){
+            glyphiconColor = { color : 'green'};     
+            return(                
+                <span className="glyphicon glyphicon-ok fa-2x" style={glyphiconColor}></span>
+            ) 
+        }else{
+            glyphiconColor = { color : 'red'}
+            return(
+                <span className="glyphicon glyphicon-remove fa-2x" style={glyphiconColor}></span>
+            ) 
+        }       
     }
 
     componentWillMount(){

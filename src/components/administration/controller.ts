@@ -3,13 +3,7 @@ import { _firebaseApp, register } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 import { generateTempPassword } from '../../utils/utils';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp } from '../interfaces';
-
-export enum RegistrationType{
-    NeedHelpInd,
-    NeedHelpOrg,
-    WantToHelp
-}
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, RegistrationType } from '../interfaces';
 
 export class AdministrationController {
 
@@ -141,18 +135,17 @@ export class AdministrationController {
         });
     }
 
-    @action("get a single Cause from DB by id")
-    getRegistration = (ref : string) : Promise<any> => {
-        return new Promise<any>((resolve) => {     
-            _firebaseApp.database().ref(ref).once('value', (snapshot) => {
-                resolve(snapshot.val());
-            })
-        })
-    };
-
     ///
     /// Private Methods
     ///
+
+    private getRegistration = (ref : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {     
+            _firebaseApp.database().ref(ref).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            });
+        });
+    };
 
     private getDBRefByRegistrationType = (registrationType : RegistrationType, key : string) : string => {
         let dbRef : string = 'registrations';

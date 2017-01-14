@@ -19,17 +19,14 @@ import DateRange from '../../common/dateComponents/dateRange';
 
 import { MultiSelectComponent } from '../../common/multiselect/component';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, IColumnData, ICause, DataSource, DataFilter } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
+            IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
+            IColumnData, ICause, DataSource, DataFilter, RegistrationType, IRouteParams_Registrations } from '../../interfaces';
 
 let DataTable = require('react-data-components').DataTable;
 
-interface IRouteParams{
-    requestType : string;
-}
-
-
 interface IRegisterNeedHelpComponentProps{
-    params : IRouteParams;
+    params : IRouteParams_Registrations;
     history : any;
 }
 
@@ -37,6 +34,9 @@ interface IRegisterNeedHelpComponentProps{
 export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelpComponentProps,{}>{
     controller : RegisterNeedHelpController;
     causeColumns: Array<IColumnData> = [];
+    requestURL_ID : string;
+    requestURL_type : string;
+    requestURL_requestType : string;
 
     constructor(props){
         super(props);
@@ -49,7 +49,14 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
             { title: 'Description', prop: 'description' },
             { title: 'Estimate Value', prop: 'estimatedValue' },
             { title: 'Best price', prop: 'bestPrice' },
-        ];        
+        ];   
+
+        //check URL Query
+        if(this.props.params){
+            this.requestURL_ID = this.props.params.ID;
+            this.requestURL_type = this.props.params.Type;
+            this.requestURL_requestType = this.props.params.requestType;
+        }
     }
 
     removeCause = (id : string) => {
@@ -62,12 +69,31 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         )        
     }
 
+    getRegistrationType = () : RegistrationType => {
+        const urlQuery : string = this.props.params.requestType + '/' + this.props.params.Type;
+        if(urlQuery){
+            switch(urlQuery){
+                case 'NeedHelp/Ind':
+                    return RegistrationType.NeedHelpInd;
+                case 'NeedHelp/Org':
+                    return RegistrationType.NeedHelpOrg;
+            }
+        }
+    }
+
     componentWillMount(){
         this.controller.isLoading = true;
-        this.controller.getWhatINeedHelpWith().then(response => {
+        this.controller.getWhatINeedHelpWith().then(response => {                
             if(_firebaseAuth.currentUser !== null){
                 this.controller.getWhatWeNeedForUser().then(response => {
-                    this.controller.isLoading = false;
+                    if(this.requestURL_ID){
+                        this.controller.getRegistrationByID(this.getRegistrationType(),this.requestURL_ID).then(response => {                
+                            //TODO -> response here will hold the particular Registration Record which we can load to populate fields on Form
+                            this.controller.isLoading = false;
+                        });
+                    }else{
+                        this.controller.isLoading = false;
+                    }
                 })
             }else{
                 this.controller.isLoading = false;
@@ -103,7 +129,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         let registration : IRegistrationNeedHelpInd = {
             ID:null,
             active : true,
-            uid:null,
+            uid:'null',
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
@@ -136,7 +162,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         let registration : IRegistrationNeedHelpOrg = {
             ID : null,
             active : true,
-            uid:null,
+            uid : null,
             registrationType : (this.refs[RegistrationFields.registrationType] as HTMLInputElement).value,
             
             charityName : this.resolveRefValue((this.refs[RegistrationFields.charityName])),

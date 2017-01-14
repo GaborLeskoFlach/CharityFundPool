@@ -29,7 +29,7 @@ ReactDOM.render(
             <IndexRoute component={HomeComponent} />
             <Route path="/home" component={HomeComponent} />
             <Route path="/register/howToHelp" component={HowToHelpComponent} />
-            <Route path="/register/WantToHelp(/:ID)" component={RegisterWantToHelpComponent} />
+            <Route path="/register/WantToHelp(/:ID)" component={RegisterWantToHelpComponent} /> 
             <Route path="/register/:requestType(/:Type)(/:ID)" component={RegisterNeedHelpComponent} />                    
             <Route path="/confirm" component={RegistrationConfirmation } />    
             <Route path="/aboutUs" component={WhoWeAreComponent} />

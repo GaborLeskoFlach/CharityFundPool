@@ -4,7 +4,7 @@ import { map, toJS } from 'mobx';
 import { generateTempPassword } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
 import { List } from 'linqts';
 
 export class RegisterNeedHelpController {
@@ -118,4 +118,36 @@ export class RegisterNeedHelpController {
             });
         });
     };
+
+    @action("get a registration by type and id")
+    getRegistrationByID = (registrationType : RegistrationType, key : string) => {
+        return new Promise<any>((resolve) => {
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key); 
+            _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            });
+        });   
+    }
+
+    ///
+    /// Private Methods
+    ///
+
+    private getDBRefByRegistrationType = (registrationType : RegistrationType, key : string) : string => {
+        let dbRef : string = 'registrations';
+
+        switch(registrationType){
+            case RegistrationType.NeedHelpInd:
+            dbRef += '/NeedHelp/Individuals/' + key;
+            break;
+            case RegistrationType.NeedHelpOrg:
+            dbRef += '/NeedHelp/Organisations/' + key;
+            break;
+            case RegistrationType.WantToHelp:
+            dbRef += '/WantToHelp/' + key;
+            break;
+        }
+        return dbRef;    
+    }
+
 }

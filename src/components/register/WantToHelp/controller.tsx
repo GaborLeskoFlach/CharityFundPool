@@ -62,4 +62,12 @@ export class RegisterWantToHelpController {
         return this.tradeOptionsSelected;
     }
 
+    @action("get a registration by id")
+    getRegistrationByID = (key : string) => {
+        return new Promise<any>((resolve) => {            
+            _firebaseApp.database().ref('registrations/WantToHelp/' + key).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            });
+        });   
+    }  
 }
