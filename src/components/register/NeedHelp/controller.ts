@@ -5,7 +5,40 @@ import { generateTempPassword } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
-import { List } from 'linqts';
+
+class RegistrationNeedHelpInd implements IRegistrationNeedHelpInd{
+    constructor(
+            public ID: string,
+            public active : boolean,
+            public uid: string,
+            public registrationType : string,
+            public fullName : string,
+            public phoneNo : string,
+            public email : string,
+            public whatINeedHelpWith : string,
+            public country: string,
+            public state:string,
+            public addressLine1: string,
+            public addressLine2: string,
+            public citySuburb : string,
+            public postCode : string){}
+}
+
+class RegistrationNeedHelpOrg implements IRegistrationNeedHelpOrg{
+    constructor(
+            public ID : string,
+            public active : boolean,
+            public uid: string,
+            public registrationType : string,            
+            public charityName : string,
+            public fullName : string,
+            public phoneNo : string,
+            public email : string,
+            public websiteLink : string,
+            public whatWeDo : string,
+            public whatWeNeed : string){}
+}
+
 
 export class RegisterNeedHelpController {
 
@@ -19,6 +52,9 @@ export class RegisterNeedHelpController {
         this.hasRegistered = false;
         this.isLoading = false;      
         this.causes = [];
+        this.registrationNeedHelpInd = new RegistrationNeedHelpInd('',false,'','','','','','','','','','','','');
+        this.registrationNeedHelpOrg = new RegistrationNeedHelpOrg('',false,'','','','','','','','','');
+        this.submitBtnCaption = 'Register';
     }
 
     @observable registrationType : string;
@@ -26,8 +62,10 @@ export class RegisterNeedHelpController {
     @observable hasTrade : boolean;
     @observable hasRegistered : boolean;
     @observable isLoading : boolean;
-    
+    @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
+    @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
     @observable causes : Array<ICause>;
+    @observable submitBtnCaption : string;
 
     addNeed1 = (value : IWhatWeNeed) => {
         _firebaseApp.database().ref('utils/whatWeNeed').push(value);
@@ -113,7 +151,6 @@ export class RegisterNeedHelpController {
     addNewRegistrationNeedHelpOrg = (registration : IRegistrationNeedHelpOrg) : Promise<any> => {
         return new Promise((resolve) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(registration).then(result => {
-                console.log('New Registration as Organisation has been successfully added');
                 resolve(result);
             });
         });
@@ -124,7 +161,21 @@ export class RegisterNeedHelpController {
         return new Promise<any>((resolve) => {
             const dbRef = this.getDBRefByRegistrationType(registrationType,key); 
             _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
-                resolve(snapshot.val());
+                
+                switch(registrationType){
+                    case RegistrationType.NeedHelpInd:
+                        this.registrationNeedHelpInd = snapshot.val();
+                        this.registrationType = 'Individual';
+                        break;
+                    case RegistrationType.NeedHelpOrg:
+                        this.registrationNeedHelpOrg = snapshot.val();
+                        this.registrationType = 'Org';
+                        break;
+                }
+
+                this.submitBtnCaption = 'Save';
+
+                resolve();
             });
         });   
     }

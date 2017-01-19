@@ -8,7 +8,6 @@ import {observer} from 'mobx-react';
 import { toJS } from 'mobx';
 
 import { RegisterWantToHelpController } from './controller';
-import { MultiSelectComponent } from '../../common/multiselect/component';
 
 import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registrations } from '../../interfaces';
 import { convertData } from '../../../utils/utils';
@@ -42,8 +41,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         this.controller.isLoading = true;    
         this.controller.getTradeOptions().then(response => {
             if(this.requestURL_ID){
-                this.controller.getRegistrationByID(this.requestURL_ID).then(response => {
-                    //TODO -> response here will hold the particular Registration Record which we can load to populate fields on Form
+                this.controller.getRegistrationByID(this.requestURL_ID).then(response => {                    
                     this.controller.isLoading = false;
                 });
                 
@@ -124,34 +122,34 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className="form-group">
                                         <label htmlFor="fullName">Name</label>
-                                        <input className="form-control" id="fullName" type="text" ref="fullName" placeholder="Full Name"/>                         
+                                        <input className="form-control" id="fullName" type="text" ref="fullName" placeholder="Full Name" value={this.controller.registerWantToHelp.fullName}/>                         
                                     </div>                             
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email address</label>
-                                        <input className="form-control" id="email" type="text" ref="email" placeholder="Email"/>                         
+                                        <input className="form-control" id="email" type="text" ref="email" placeholder="Email" value={this.controller.registerWantToHelp.email}/>                         
                                     </div>     
 
                                     <div className="form-group">
                                         <label htmlFor="phoneNo">Phone No</label>
-                                        <input className="form-control" id="phoneNo" type="text" ref="phoneNo" placeholder="Phone no" />
+                                        <input className="form-control" id="phoneNo" type="text" ref="phoneNo" placeholder="Phone no" value={this.controller.registerWantToHelp.phoneNo}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="citySuburb">City</label>
-                                        <input className="form-control" id="citySuburb" type="text" ref="citySuburb" placeholder="City/Suburb" />
+                                        <input className="form-control" id="citySuburb" type="text" ref="citySuburb" placeholder="City/Suburb" value={this.controller.registerWantToHelp.citySuburb}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="postCode">Postcode</label>
-                                        <input className="form-control" id="postCode" type="text" ref="postCode" placeholder="Postcode" />
+                                        <input className="form-control" id="postCode" type="text" ref="postCode" placeholder="Postcode" value={this.controller.registerWantToHelp.postCode} />
                                     </div>           
 
                                     <div className="form-group">
                                         <label htmlFor="limitations">Limitations</label>
                                         <div>
-                                            <select className="form-control" ref="limitations" id="limitations" >
-                                                <option value="undefined">Please select a value...</option>
+                                            <select className="form-control" ref="limitations" id="limitations" value={this.controller.registerWantToHelp.limitations} >
+                                                <option value="">Please select an option...</option>
                                                 <option value="lightDutyWork">Light duty work</option>
                                                 <option value="mediumDutyWork">Medium duty work</option>
                                                 <option value="heavyDutyWork">Heavy duty work</option>
@@ -168,7 +166,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     { this.controller.hasTrade ? 
                                         <div className="form-group">
                                             <label htmlFor="listOfTrades">List options:</label>
-                                            <MultiSelectComponent data={convertData(this.controller.tradeOptions,DataFilter.All)} onChange={this.onTradeSelectionHasChanged}/>
+                                            {/*<MultiSelectComponent data={convertData(this.controller.tradeOptions,DataFilter.All)} onChange={this.onTradeSelectionHasChanged}/>*/}
                                         </div>
 
                                     :
@@ -191,7 +189,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     </div>
                                     */}
 
-                                    <button className="btn btn-primary" type="submit">Save</button>
+                                    <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
                                     <button className="btn btn-secondary" type="submit">Cancel</button>
                                 </form>
                             </div>

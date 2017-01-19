@@ -13,6 +13,7 @@ export const addressLine1 : string = 'addressLine1';
 export const addressLine2 : string = 'addressLine2';
 export const citySuburb : string = 'citySuburb';
 export const postCode : string = 'postCode';
+export const state : string = 'state';
 export const whatINeedHelpWith : string = 'whatINeedHelpWith';
 export const whenINeedHelp : string = 'whenINeedHelp';
 export const registrationCodeNo : string = 'registrationCodeNo';

@@ -17,8 +17,6 @@ import './styles.css';
 import SingleDate from '../../common/dateComponents/singleDate';
 import DateRange from '../../common/dateComponents/dateRange';
 
-import { MultiSelectComponent } from '../../common/multiselect/component';
-
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
             IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
             IColumnData, ICause, DataSource, DataFilter, RegistrationType, IRouteParams_Registrations } from '../../interfaces';
@@ -88,7 +86,6 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 this.controller.getWhatWeNeedForUser().then(response => {
                     if(this.requestURL_ID){
                         this.controller.getRegistrationByID(this.getRegistrationType(),this.requestURL_ID).then(response => {                
-                            //TODO -> response here will hold the particular Registration Record which we can load to populate fields on Form
                             this.controller.isLoading = false;
                         });
                     }else{
@@ -136,7 +133,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
             phoneNo : this.resolveRefValue((this.refs[RegistrationFields.phoneNo])),
             email : this.resolveRefValue((this.refs[RegistrationFields.email])),
             whatINeedHelpWith : this.resolveRefValue((this.refs[RegistrationFields.whatINeedHelpWith])),     
-            
+            state: this.resolveRefValue((this.refs[RegistrationFields.state] as HTMLInputElement)),
             country: this.resolveRefValue((this.refs[RegistrationFields.country] as HTMLInputElement)),
             addressLine1: this.resolveRefValue((this.refs[RegistrationFields.addressLine1] as HTMLInputElement)),
             addressLine2: this.resolveRefValue((this.refs[RegistrationFields.addressLine2] as HTMLInputElement)),
@@ -221,7 +218,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                         <label htmlFor="registrationTion">Registration Type</label>
                                         <div>
                                             <select className="form-control" ref="registrationType" id="registrationType" 
-                                                    defaultValue={this.controller.registrationType}                                                     
+                                                    value={this.controller.registrationType}                                                     
                                                     onChange={this.handleRegistrationTypeChange.bind(this)}>                                                
                                                 <option value="Org">I need help for my charity</option>
                                                 <option value="Individual">I need help for myself</option>
@@ -232,7 +229,13 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                     {this.controller.registrationType === 'Org' ? 
                                         <div className="form-group">
                                             <label htmlFor="charityName">Charity Name</label>
-                                            <input className="form-control" id="charityName" type="text" ref="charityName" placeholder="Charity Name"/>
+                                            <input 
+                                                className="form-control" 
+                                                id="charityName" 
+                                                type="text" 
+                                                ref="charityName" 
+                                                placeholder="Charity Name" 
+                                                value={this.controller.registrationNeedHelpOrg.charityName}/>
                                         </div>
                                         :
                                         null
@@ -240,29 +243,47 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
                                     <div className="form-group">
                                         <label htmlFor="fullName">Your Name</label>
-                                        <input className="form-control" id="fullName" type="text" ref="fullName" placeholder="Full Name"/>
+                                        <input 
+                                            className="form-control" 
+                                            id="fullName" 
+                                            type="text" 
+                                            ref="fullName" 
+                                            placeholder="Full Name" 
+                                            value={this.controller.registrationNeedHelpInd.fullName === '' ? this.controller.registrationNeedHelpOrg.fullName : this.controller.registrationNeedHelpInd.fullName}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="phoneNo">Phone No</label>
-                                        <input className="form-control" id="phoneNo" type="text" ref="phoneNo" placeholder="Phone no" />
+                                        <input 
+                                            className="form-control" 
+                                            id="phoneNo" 
+                                            type="text" 
+                                            ref="phoneNo" 
+                                            placeholder="Phone no" 
+                                            value={this.controller.registrationNeedHelpInd.phoneNo === '' ? this.controller.registrationNeedHelpOrg.phoneNo : this.controller.registrationNeedHelpInd.phoneNo}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email</label>
-                                        <input className="form-control" id="email" type="text" ref="email" placeholder="Email" />
+                                        <input 
+                                            className="form-control" 
+                                            id="email" 
+                                            type="text" 
+                                            ref="email" 
+                                            placeholder="Email" 
+                                            value={this.controller.registrationNeedHelpInd.email === '' ? this.controller.registrationNeedHelpOrg.email : this.controller.registrationNeedHelpInd.email}/>
                                     </div>
 
                                     {this.controller.registrationType === 'Org' ? 
                                         <div>
                                             <div className="form-group">
                                                 <label htmlFor="websiteLink">Website Link</label>
-                                                <input className="form-control" id="websiteLink" type="text" ref="websiteLink" placeholder="Website Link" />
+                                                <input className="form-control" id="websiteLink" type="text" ref="websiteLink" placeholder="Website Link" value={this.controller.registrationNeedHelpOrg.websiteLink}/>
                                             </div>
 
                                             <div className="form-group">
                                                 <label htmlFor="whatWeDo">What we do</label>
-                                                <textarea className="form-control" ref="whatWeDo" rows={5} id="whatWeDo"></textarea>
+                                                <textarea className="form-control" ref="whatWeDo" rows={5} id="whatWeDo" value={this.controller.registrationNeedHelpOrg.whatWeDo}></textarea>
                                             </div>
 
                                             <div className="form-group">
@@ -322,7 +343,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                                 <div className="form-group">
                                                     <label htmlFor="country">Country</label>
                                                     <div>
-                                                        <select ref="country" className="form-control" id="country" defaultValue="Australia" >
+                                                        <select ref="country" className="form-control" id="country" value={this.controller.registrationNeedHelpInd.country} >
+                                                            <option value=''>Please select an option...</option>
                                                             <option value="Afganistan">Afghanistan</option>
                                                             <option value="Albania">Albania</option>
                                                             <option value="Algeria">Algeria</option>
@@ -333,7 +355,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                                             <option value="Argentina">Argentina</option>
                                                             <option value="Armenia">Armenia</option>
                                                             <option value="Aruba">Aruba</option>
-                                                            <option defaultValue="Australia">Australia</option>
+                                                            <option value="Australia">Australia</option>
                                                             <option value="Austria">Austria</option>
                                                             <option value="Azerbaijan">Azerbaijan</option>
                                                             <option value="Bahamas">Bahamas</option>
@@ -575,23 +597,24 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
                                                 <div className="form-group">
                                                     <label htmlFor="addressLine1">Address Line 1</label>
-                                                    <input className="form-control" id="addressLine1" type="text" ref="addressLine1" placeholder="Address Line 1"/>
+                                                    <input className="form-control" id="addressLine1" type="text" ref="addressLine1" placeholder="Address Line 1" value={this.controller.registrationNeedHelpInd.addressLine1}/>
                                                 </div>
 
                                                 <div className="form-group">
                                                     <label htmlFor="addressLine2">Address Line 2</label>
-                                                    <input className="form-control" id="addressLine2" type="text" ref="addressLine2" placeholder="Address Line 2"/>
+                                                    <input className="form-control" id="addressLine2" type="text" ref="addressLine2" placeholder="Address Line 2" value={this.controller.registrationNeedHelpInd.addressLine2}/>
                                                 </div>
 
                                                 <div className="form-group">
                                                     <label htmlFor="citySuburb">City/Suburb</label>
-                                                    <input className="form-control" id="citySuburb" type="text" ref="citySuburb" placeholder="City/Suburb"/>
+                                                    <input className="form-control" id="citySuburb" type="text" ref="citySuburb" placeholder="City/Suburb" value={this.controller.registrationNeedHelpInd.citySuburb}/>
                                                 </div>
 
                                                 <div className="form-group">
                                                     <label htmlFor="state">State/Province</label>
                                                     <div>
-                                                        <select className="form-control" ref="state" id="state">
+                                                        <select className="form-control" ref="state" id="state" value={this.controller.registrationNeedHelpInd.state}>
+                                                            <option value=''>Please select an option..</option>
                                                             <option value="VIC">VIC</option>
                                                             <option value="NSW">NSW</option>
                                                             <option value="QLD">QLD</option>
@@ -607,7 +630,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
                                                 <div className="form-group">
                                                     <label htmlFor="postCode">Zip/Postcode</label>
-                                                    <input className="form-control" id="postCode" type="text" ref="postCode" placeholder="PostCode/postCode"/>
+                                                    <input className="form-control" id="postCode" type="text" ref="postCode" placeholder="PostCode/postCode" value={this.controller.registrationNeedHelpInd.postCode}/>
                                                 </div>  
 
                                             </div>
@@ -615,8 +638,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             <div className="form-group">
                                                 <label htmlFor="whatINeedHelpWith">What I need help with</label>
                                                 <div>
-                                                    <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith">
-                                                        <option value="undefined">Please select an option...</option>
+                                                    <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith" value={this.controller.registrationNeedHelpInd.whatINeedHelpWith}>
+                                                        <option value="">Please select an option...</option>
                                                         
                                                             {map(this.controller.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
                                                                 <option key={key} value={need.name}>{need.name}</option>
@@ -672,7 +695,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                         </div>
                                     }
 
-                                    <button className="btn btn-primary" type="submit">Register</button>
+                                    <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
                                     <button className="btn btn-secondary" type="submit">Cancel</button>
                                 </form>
                             </div>

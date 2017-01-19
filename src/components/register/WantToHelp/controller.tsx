@@ -5,6 +5,23 @@ import { map, toJS } from 'mobx';
 
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect } from '../../interfaces';
 
+class RegisterWantToHelp implements IRegistrationWantToHelp{
+    constructor(
+        public ID : string,
+        public active : boolean,
+        public uid : string,        
+        public fullName : string,
+        public phoneNo : string,
+        public email : string,
+        public citySuburb : string,
+        public postCode : string,
+        public limitations : string,
+        public hasTrade : string,
+        public listOfTrades : Array<IMultiSelect>
+    )
+    {}
+}
+
 export class RegisterWantToHelpController {
 
     constructor() {
@@ -12,13 +29,8 @@ export class RegisterWantToHelpController {
         this.hasRegistered = false;
         this.isLoading = false;    
         this.tradeOptionsSelected = [];  
-
-        /*
-        this.addTradeOptions({label:'Plumbing', value:'0'});
-        this.addTradeOptions({label:'Cleaning', value:'1'});
-        this.addTradeOptions({label:'Cooking', value:'2'});
-        this.addTradeOptions({label:'Shopping', value:'3'});
-        this.addTradeOptions({label:'Garden work', value:'4'});   */     
+        this.registerWantToHelp = new RegisterWantToHelp('',false,'','','','','','','','',[]);
+        this.submitBtnCaption = 'Register';
     }
 
     @observable hasTrade : boolean;
@@ -26,11 +38,9 @@ export class RegisterWantToHelpController {
     @observable isLoading : boolean;
     @observable tradeOptions : Array<IMultiSelect>;
     @observable tradeOptionsSelected : Array<IMultiSelect>;
+    @observable registerWantToHelp : IRegistrationWantToHelp;
+    @observable submitBtnCaption : string;
  
-    addTradeOptions = (value : IMultiSelect) => {
-        _firebaseApp.database().ref('utils/tradeOptions').push(value);
-    }
-
     @action("Add new Registration -> Want to Help")
     addNewRegistrationWantToHelp = (registration : IRegistrationWantToHelp) : Promise<any> => {
         return new Promise((resolve) => {
@@ -66,7 +76,8 @@ export class RegisterWantToHelpController {
     getRegistrationByID = (key : string) => {
         return new Promise<any>((resolve) => {            
             _firebaseApp.database().ref('registrations/WantToHelp/' + key).once('value', (snapshot) => {
-                resolve(snapshot.val());
+                this.registerWantToHelp = snapshot.val();
+                resolve();
             });
         });   
     }  

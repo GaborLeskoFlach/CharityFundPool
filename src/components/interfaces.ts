@@ -5,6 +5,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     phoneNo : string;    
     email : string;
     country? : string;
+    state? :string;
     addressLine1? : string;
     addressLine2? : string;
     citySuburb? : string;

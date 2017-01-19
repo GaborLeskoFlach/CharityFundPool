@@ -64,9 +64,7 @@
     "react-event-calendar": "^0.3.0",
     "react-input-calendar": "^0.3.14",
     "react-router": "^2.8.1",
-    "react-scroll": "^1.4.0",
     "react-select-box": "^3.0.1",
-    "react-select-popover": "^0.1.1",
     "require": "^2.4.20"
   }
 }
