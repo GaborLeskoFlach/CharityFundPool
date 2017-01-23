@@ -11,7 +11,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     citySuburb? : string;
     postCode? : string;
     whatINeedHelpWith? : string;
-    whenINeedHelp? : string;
+    whenINeedHelp? : INeedHelpDateConfig
     active:boolean;
     uid:string;
 }
@@ -27,7 +27,18 @@ export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
     whatWeDo: string;   
     whatWeNeed : string;
     active:boolean;
-    uid:string;
+    uid:string;    
+}
+
+export interface INeedHelpDateConfig{
+    singleDate : string;
+    dateRange : IDateRange,
+    flexible  : boolean;
+}
+
+export interface IDateRange{
+    from : string,
+    to : string
 }
 
 export interface IRegistrationWantToHelp extends IConvertDataConstraint{
@@ -78,11 +89,11 @@ export interface IDonation{
     uid:string;
 }
 
-export interface IMultiSelect{
+export interface IMultiSelect extends IConvertDataConstraint{
     label : string;
     value : string;
     ID : string;
-    active : boolean;
+    checked : boolean;
 }
 
 export interface IWhatWeNeed {

@@ -21,4 +21,6 @@ export const limitations : string = 'limitations';
 export const hasTrade : string = 'hasTrade';
 export const listOfTrades : string = 'listOfTrades'
 
+export const whenINeedHelpFlexible : string = 'flexibleDates';
+
 export const registrationForm : string = "registrationForm";

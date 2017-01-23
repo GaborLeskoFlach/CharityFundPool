@@ -2,11 +2,9 @@ import * as React from 'react';
 import * as RegistrationFields from '../formFields';
 import { Constants } from '../../constants';
 import { browserHistory } from 'react-router';
-import {observer} from 'mobx-react';
-
-
+import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
-
+import { MultiSelectComponent } from '../../common/multiselect/component';
 import { RegisterWantToHelpController } from './controller';
 
 import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registrations } from '../../interfaces';
@@ -34,7 +32,9 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         //check URL Query
         if(this.props.params){
             this.requestURL_ID = this.props.params.ID;
-        }        
+        }
+
+        this.handleChange = this.handleChange.bind(this);   
     }
 
     componentWillMount(){
@@ -60,41 +60,43 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
     }
 
     register(event:React.FormEvent){
-
-        // 1. Stop the form from submitting
         event.preventDefault();
-
-        let registration : IRegistrationWantToHelp = {
-            ID : null,
-            active : true,
-            uid : 'null',        
-            fullName : this.resolveRefValue((this.refs[RegistrationFields.fullName])),
-            phoneNo : this.resolveRefValue((this.refs[RegistrationFields.phoneNo])),
-            email : this.resolveRefValue((this.refs[RegistrationFields.email])),
-            citySuburb : this.resolveRefValue((this.refs[RegistrationFields.citySuburb] as HTMLInputElement)),
-            postCode : this.resolveRefValue((this.refs[RegistrationFields.postCode] as HTMLInputElement)),
-
-            limitations : this.resolveRefValue((this.refs[RegistrationFields.limitations])),
-            hasTrade : this.controller.hasTrade.toString(),
-
-            listOfTrades : toJS(this.controller.getCurrentTradeOptions())
-
-        };
-        
-        this.controller.addNewRegistrationWantToHelp(registration).then(response => {            
+        this.controller.addNewRegistrationWantToHelp().then(response => {            
             browserHistory.push('/confirm');
         });    
     }
 
     handleTradeSelection(value : boolean){
-       
        this.controller.hasTrade = value;
     }
 
-    onTradeSelectionHasChanged = (obj : any) => {        
-        this.controller.setCurrentTradeOptions(obj.value);
+    onTradeSelectionHasChanged = (obj : Array<IMultiSelect>) => {     
+        this.controller.setCurrentTradeOptions(obj);
     }
 
+    handleChange(event : any){
+        switch(event.target.id)
+        {
+            case RegistrationFields.email:   
+                this.controller.registerWantToHelp.email = event.target.value;
+                break;
+            case RegistrationFields.fullName:
+                this.controller.registerWantToHelp.fullName = event.target.value;
+                break;
+            case RegistrationFields.phoneNo:
+                this.controller.registerWantToHelp.phoneNo = event.target.value;
+                break;
+            case RegistrationFields.citySuburb:
+                this.controller.registerWantToHelp.citySuburb = event.target.value;
+                break;
+            case RegistrationFields.postCode:
+                this.controller.registerWantToHelp.postCode = event.target.value;
+                break;
+            case RegistrationFields.limitations:
+                this.controller.registerWantToHelp.limitations = event.target.value;
+                break;                           
+        }
+    }
 
     render(){
         let styleTemporary : React.CSSProperties = { color: "black" };
@@ -122,33 +124,68 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className="form-group">
                                         <label htmlFor="fullName">Name</label>
-                                        <input className="form-control" id="fullName" type="text" ref="fullName" placeholder="Full Name" value={this.controller.registerWantToHelp.fullName}/>                         
+                                        <input 
+                                            className="form-control" 
+                                            id="fullName" 
+                                            type="text" 
+                                            ref="fullName" 
+                                            placeholder="Full Name" 
+                                            onChange={this.handleChange}
+                                            value={this.controller.registerWantToHelp.fullName}/>                         
                                     </div>                             
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email address</label>
-                                        <input className="form-control" id="email" type="text" ref="email" placeholder="Email" value={this.controller.registerWantToHelp.email}/>                         
+                                        <input 
+                                            className="form-control" 
+                                            id="email" 
+                                            type="text" 
+                                            ref="email" 
+                                            placeholder="Email"
+                                            onChange={this.handleChange}
+                                            value={this.controller.registerWantToHelp.email}/>                         
                                     </div>     
 
                                     <div className="form-group">
                                         <label htmlFor="phoneNo">Phone No</label>
-                                        <input className="form-control" id="phoneNo" type="text" ref="phoneNo" placeholder="Phone no" value={this.controller.registerWantToHelp.phoneNo}/>
+                                        <input 
+                                            className="form-control" 
+                                            id="phoneNo" 
+                                            type="text" 
+                                            ref="phoneNo" 
+                                            placeholder="Phone no" 
+                                            onChange={this.handleChange}
+                                            value={this.controller.registerWantToHelp.phoneNo}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="citySuburb">City</label>
-                                        <input className="form-control" id="citySuburb" type="text" ref="citySuburb" placeholder="City/Suburb" value={this.controller.registerWantToHelp.citySuburb}/>
+                                        <input 
+                                            className="form-control"
+                                            id="citySuburb" 
+                                            type="text" 
+                                            ref="citySuburb" 
+                                            placeholder="City/Suburb" 
+                                            onChange={this.handleChange}
+                                            value={this.controller.registerWantToHelp.citySuburb}/>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="postCode">Postcode</label>
-                                        <input className="form-control" id="postCode" type="text" ref="postCode" placeholder="Postcode" value={this.controller.registerWantToHelp.postCode} />
+                                        <input 
+                                            className="form-control" 
+                                            id="postCode" 
+                                            type="text" 
+                                            ref="postCode" 
+                                            placeholder="Postcode" 
+                                            onChange={this.handleChange}
+                                            value={this.controller.registerWantToHelp.postCode} />
                                     </div>           
 
                                     <div className="form-group">
                                         <label htmlFor="limitations">Limitations</label>
                                         <div>
-                                            <select className="form-control" ref="limitations" id="limitations" value={this.controller.registerWantToHelp.limitations} >
+                                            <select className="form-control" ref="limitations" id="limitations" onChange={this.handleChange} value={this.controller.registerWantToHelp.limitations} >
                                                 <option value="">Please select an option...</option>
                                                 <option value="lightDutyWork">Light duty work</option>
                                                 <option value="mediumDutyWork">Medium duty work</option>
@@ -159,14 +196,14 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className="form-group">
                                         <label htmlFor="hasTrade" ref="hasTrade">Do you have trade/trades: </label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" onClick={this.handleTradeSelection.bind(this, true)} />Yes</label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" defaultChecked onClick={this.handleTradeSelection.bind(this, false)} />No</label>                                            
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeYes" onClick={this.handleTradeSelection.bind(this, true)} />Yes</label>
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeNo" defaultChecked onClick={this.handleTradeSelection.bind(this, false)} />No</label>                                            
                                     </div>
 
                                     { this.controller.hasTrade ? 
                                         <div className="form-group">
                                             <label htmlFor="listOfTrades">List options:</label>
-                                            {/*<MultiSelectComponent data={convertData(this.controller.tradeOptions,DataFilter.All)} onChange={this.onTradeSelectionHasChanged}/>*/}
+                                            <MultiSelectComponent defaultData={convertData(this.controller.tradeOptions,DataFilter.All)} userSetOptions={this.controller.registerWantToHelp.listOfTrades} onChange={this.onTradeSelectionHasChanged}/>
                                         </div>
 
                                     :

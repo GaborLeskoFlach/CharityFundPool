@@ -5,47 +5,46 @@ import { map, toJS } from 'mobx';
 
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect } from '../../interfaces';
 
-class RegisterWantToHelp implements IRegistrationWantToHelp{
-    constructor(
-        public ID : string,
-        public active : boolean,
-        public uid : string,        
-        public fullName : string,
-        public phoneNo : string,
-        public email : string,
-        public citySuburb : string,
-        public postCode : string,
-        public limitations : string,
-        public hasTrade : string,
-        public listOfTrades : Array<IMultiSelect>
-    )
-    {}
-}
-
 export class RegisterWantToHelpController {
 
     constructor() {
         this.hasTrade = false;
         this.hasRegistered = false;
         this.isLoading = false;    
-        this.tradeOptionsSelected = [];  
-        this.registerWantToHelp = new RegisterWantToHelp('',false,'','','','','','','','',[]);
+        this.tradeOptionsSelected = [];         
+        
+        this.registerWantToHelp = {
+            ID : '',
+            active : true,
+            uid : '',        
+            fullName : '',
+            phoneNo : '',
+            email :'',
+            citySuburb : '',
+            postCode : '',
+            limitations : '',
+            hasTrade : '',
+            listOfTrades : []
+        };
+        
         this.submitBtnCaption = 'Register';
     }
 
     @observable hasTrade : boolean;
     @observable hasRegistered : boolean;
     @observable isLoading : boolean;
-    @observable tradeOptions : Array<IMultiSelect>;
-    @observable tradeOptionsSelected : Array<IMultiSelect>;
+    @observable tradeOptions : Array<IMultiSelect>;    
     @observable registerWantToHelp : IRegistrationWantToHelp;
     @observable submitBtnCaption : string;
  
+    tradeOptionsSelected : Array<IMultiSelect>;
+
     @action("Add new Registration -> Want to Help")
-    addNewRegistrationWantToHelp = (registration : IRegistrationWantToHelp) : Promise<any> => {
+    addNewRegistrationWantToHelp = () : Promise<any> => {
         return new Promise((resolve) => {
-            this.isLoading = true;
-            _firebaseApp.database().ref('registrations/WantToHelp').push(registration).then(result => {
+            this.registerWantToHelp.hasTrade = this.hasTrade.toString(),
+            this.registerWantToHelp.listOfTrades = this.getCurrentTradeOptions();
+            _firebaseApp.database().ref('registrations/WantToHelp').push(toJS(this.registerWantToHelp)).then(result => {
                 resolve(result);
             });
         });
@@ -62,16 +61,6 @@ export class RegisterWantToHelpController {
         });        
     }
 
-    @action("set currently selected Trade Options")
-    setCurrentTradeOptions = (items : Array<IMultiSelect>) : void => {
-        this.tradeOptionsSelected = items;
-    }
-
-    @action("get currently selected Trade Options")
-    getCurrentTradeOptions = () : Array<IMultiSelect> => {
-        return this.tradeOptionsSelected;
-    }
-
     @action("get a registration by id")
     getRegistrationByID = (key : string) => {
         return new Promise<any>((resolve) => {            
@@ -80,5 +69,20 @@ export class RegisterWantToHelpController {
                 resolve();
             });
         });   
-    }  
+    }
+
+    //
+    // Private Methods
+    //
+    
+    //set currently selected Trade Options")
+    setCurrentTradeOptions = (items : Array<IMultiSelect>) : void => {
+        this.tradeOptionsSelected = items;
+    }
+
+    //get currently selected Trade Options")
+    getCurrentTradeOptions = () : Array<IMultiSelect> => {
+        return this.tradeOptionsSelected;
+    }
+
 }

@@ -1,6 +1,17 @@
 {
   "rules": {
-    ".read": "auth != null",
+		"utils": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "registrations" : {
+      ".read" : "auth != null",
+      ".write": true
+    },
+    "needs" : {
+      ".read" : true,
+      ".write": "auth != null"
+    },      
     ".write": "auth != null"
   }
 }

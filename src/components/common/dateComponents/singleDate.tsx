@@ -3,7 +3,12 @@ import * as DayPicker from 'react-day-picker';
 import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-export default class SingleDate extends React.Component<{},{}> {
+interface ISingleDateProps{
+  onDayClick : (selectedDay : string) => void;
+  setSingleDate : string;
+}
+
+export default class SingleDate extends React.Component<ISingleDateProps,{}> {
   
   constructor(props) {
     super(props);
@@ -14,17 +19,20 @@ export default class SingleDate extends React.Component<{},{}> {
     selectedDay: null,
   };
 
-  handleDayClick(e, day, { selected }) {
+  handleDayClick(e, day){
     this.setState({
-      selectedDay: selected ? null : day,
+      selectedDay: day,
     });
+
+    this.props.onDayClick(day.toString());
   }
+
   render() {
     const { selectedDay } = this.state;
     return (
       <div>
         <DayPicker
-          selectedDays={ day => DateUtils.isSameDay(selectedDay, day) } onDayClick={() => this.handleDayClick }
+          selectedDays={ day => DateUtils.isSameDay(selectedDay, day) } onDayClick={this.handleDayClick}
         />
         <p>
           { selectedDay ? selectedDay.toLocaleDateString() : 'Please select a day 👻' }

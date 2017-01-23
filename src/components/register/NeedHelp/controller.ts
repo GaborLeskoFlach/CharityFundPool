@@ -1,44 +1,10 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp, _firebaseAuth, register } from '../../firebaseAuth/component';
 import { map, toJS } from 'mobx';
-import { generateTempPassword } from '../../../utils/utils';
+import { generateTempPassword, convertData } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
-
-class RegistrationNeedHelpInd implements IRegistrationNeedHelpInd{
-    constructor(
-            public ID: string,
-            public active : boolean,
-            public uid: string,
-            public registrationType : string,
-            public fullName : string,
-            public phoneNo : string,
-            public email : string,
-            public whatINeedHelpWith : string,
-            public country: string,
-            public state:string,
-            public addressLine1: string,
-            public addressLine2: string,
-            public citySuburb : string,
-            public postCode : string){}
-}
-
-class RegistrationNeedHelpOrg implements IRegistrationNeedHelpOrg{
-    constructor(
-            public ID : string,
-            public active : boolean,
-            public uid: string,
-            public registrationType : string,            
-            public charityName : string,
-            public fullName : string,
-            public phoneNo : string,
-            public email : string,
-            public websiteLink : string,
-            public whatWeDo : string,
-            public whatWeNeed : string){}
-}
-
+import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
 
 export class RegisterNeedHelpController {
 
@@ -52,8 +18,43 @@ export class RegisterNeedHelpController {
         this.hasRegistered = false;
         this.isLoading = false;      
         this.causes = [];
-        this.registrationNeedHelpInd = new RegistrationNeedHelpInd('',false,'','','','','','','','','','','','');
-        this.registrationNeedHelpOrg = new RegistrationNeedHelpOrg('',false,'','','','','','','','','');
+        
+        this.registrationNeedHelpInd = {
+            ID: '',
+            active : true,
+            uid: '',
+            registrationType : '',
+            fullName : '',
+            phoneNo : '',
+            email : '',
+            whatINeedHelpWith : '',
+            country: '',
+            state: '',
+            addressLine1: '',
+            addressLine2: '',
+            citySuburb : '',
+            postCode : '',
+            whenINeedHelp : {
+                singleDate : null,
+                dateRange : { from : null, to : null},
+                flexible : false
+            }
+        }
+
+        this.registrationNeedHelpOrg = {
+            ID : '',
+            active : true,
+            uid: '',
+            registrationType : '',            
+            charityName : '',
+            fullName : '',
+            phoneNo : '',
+            email : '',
+            websiteLink : '',
+            whatWeDo : '',
+            whatWeNeed : ''
+        }
+        
         this.submitBtnCaption = 'Register';
     }
 
@@ -138,26 +139,27 @@ export class RegisterNeedHelpController {
     })
 
     @action("Add new Registration -> Need Help - for Individuals")
-    addNewRegistrationNeedHelpInd = (registration : IRegistrationNeedHelpInd) : Promise<any> => {
+    addNewRegistrationNeedHelpInd = () : Promise<any> => {
         return new Promise((resolve) => {
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(registration).then(result => {
-                console.log('New Registration as Individual has been successfully added');
+            this.registrationNeedHelpInd.registrationType = this.registrationType;
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(toJS(this.registrationNeedHelpInd)).then(result => {
                 resolve(result);                       
             });
         });
     };
 
     @action("Add new Registration -> Need Help - for Organsiations")
-    addNewRegistrationNeedHelpOrg = (registration : IRegistrationNeedHelpOrg) : Promise<any> => {
+    addNewRegistrationNeedHelpOrg = () : Promise<any> => {
         return new Promise((resolve) => {
-            _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(registration).then(result => {
+            this.registrationNeedHelpOrg.registrationType = this.registrationType;
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(this.registrationNeedHelpOrg).then(result => {
                 resolve(result);
             });
         });
     };
 
     @action("get a registration by type and id")
-    getRegistrationByID = (registrationType : RegistrationType, key : string) => {
+    getRegistrationByTypeAndID = (registrationType : RegistrationType, key : string) => {
         return new Promise<any>((resolve) => {
             const dbRef = this.getDBRefByRegistrationType(registrationType,key); 
             _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
@@ -175,6 +177,35 @@ export class RegisterNeedHelpController {
 
                 this.submitBtnCaption = 'Save';
 
+                resolve();
+            });
+        });   
+    }
+
+    @action("get a registration by type and id")
+    getRegistrationByID = (registrationType : string, key : string) => {
+        return new Promise<any>((resolve) => {
+            const dbRef : string = 'registrations/' + registrationType
+            _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
+                let individualRegistration : any;
+                let organisationRegistration : any;
+                let individuals : any = convertData(snapshot.val().Individuals, DataFilter.ActiveOnly);
+                let organisations : any = convertData(snapshot.val().Organisations, DataFilter.ActiveOnly);
+
+                individualRegistration = individuals.filter(x => x.uid === key)[0];
+                if(!individualRegistration){
+                    organisationRegistration = organisations.filter(x => x.uid === key)[0];
+                }
+
+                if(individualRegistration){
+                    this.submitBtnCaption = 'Save';
+                    this.registrationNeedHelpInd = individualRegistration;
+                }
+
+                if(organisationRegistration){
+                    this.submitBtnCaption = 'Save';
+                    this.registrationNeedHelpOrg = organisationRegistration;
+                }
                 resolve();
             });
         });   
