@@ -127,6 +127,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
     render(){
 
+        const myStyle : React.CSSProperties = {
+            float : 'right'
+        }
+
         if(this.controller.isLoading)
         {
             return ( 
@@ -171,9 +175,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             <h3>As you are now registered as someone needing help, you are also eligible to help if you would like</h3>
                                         </div>
                                     }
-
-                                    <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
-                                    <button className="btn btn-secondary" type="submit">Cancel</button>
+                                    <div className="form-group">
+                                        <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
+                                        <button style={myStyle} className="btn btn-secondary" type="submit">Cancel</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -227,17 +232,40 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 break;
             case RegistrationFields.whenINeedHelpFlexible:
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.flexible = event.target.checked;
+                break;
+            case RegistrationFields.singleDateReoccurring:
+                this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring = event.target.checked;
+                break;
+            case RegistrationFields.dateRangeReoccurring:
+                this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring = event.target.checked;
         }
     }
 
-    handleDaySelection = (day : string) => {
-        console.log('Day selected => {0}', day);
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate = day;
+    handleDaySelection = (day : Date) => {
+        this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate = { 
+            day : day.toString(), 
+            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring 
+        };
     }
 
     handleDateRangeSelection = (dateRange : IDateRange ) => {
-        console.log('Date Range selected => {0}', dateRange);
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange = dateRange;
+        this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange = { 
+            from : dateRange.from.toString(), 
+            to : dateRange.to.toString(), 
+            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring 
+        };
+    }
+
+    convertSingleDate = (day : string) : Date => {
+        return new Date(day);
+    }
+
+    convertDateRange = (dateRange : { from : string, to : string}) : IDateRange => {
+        let value : IDateRange = {
+            from : dateRange.from ? new Date(dateRange.from) : null,
+            to : dateRange.to ? new Date(dateRange.to) : null
+        }
+        return value;
     }
 
     render(){
@@ -625,13 +653,16 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
                                     <div className="tab-content">
                                         <div className="tab-pane fade in active" id="singleDate">
-                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={controller.registrationNeedHelpInd.whenINeedHelp.singleDate}/>
+                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.registrationNeedHelpInd.whenINeedHelp.singleDate.day) }/>
+                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
                                         </div>
                                         <div className="tab-pane fade " id="dateRange">								
-                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={controller.registrationNeedHelpInd.whenINeedHelp.dateRange}/>
+                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.registrationNeedHelpInd.whenINeedHelp.dateRange) }/>
+                                            <br />
+                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
                                         </div>
                                         <div className="tab-pane fade" id="flexible">
-                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} value={controller.registrationNeedHelpInd.whenINeedHelp.flexible}/> Flexible</label>			                                                                       
+                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.flexible}/> Flexible</label>
                                         </div>                                
                                     </div>
                                 </div>

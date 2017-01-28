@@ -31,14 +31,14 @@ export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
 }
 
 export interface INeedHelpDateConfig{
-    singleDate : string;
-    dateRange : IDateRange,
+    singleDate : { day : string, reoccurring : boolean }
+    dateRange : { from : string, to : string, reoccurring : boolean},
     flexible  : boolean;
 }
 
 export interface IDateRange{
-    from : string,
-    to : string
+    from : Date,
+    to : Date
 }
 
 export interface IRegistrationWantToHelp extends IConvertDataConstraint{
@@ -49,7 +49,7 @@ export interface IRegistrationWantToHelp extends IConvertDataConstraint{
     citySuburb? : string;
     postCode? : string;
     limitations? : string;
-    hasTrade? :string;
+    hasTrade? :boolean;
     listOfTrades? : Array<IMultiSelect>;
     active:boolean;
     uid:string;

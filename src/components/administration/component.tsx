@@ -50,7 +50,7 @@ export class Administration extends React.Component<{},{}> {
             { title: 'City/Suburb', prop: 'citySuburb'  },
             { title: 'PostCode', prop: 'postCode'  },
             { title: 'Need Help With', prop: 'whatINeedHelpWith'  },
-            { title: 'When I Need Help', prop: 'whenINeedHelp'  }
+            { title: 'When I Need Help', prop: 'whenINeedHelp', render : this.render_WhenINeedHelp   }
         ];
 
         this.registrationNeedHelpOrgColumns = [
@@ -76,7 +76,7 @@ export class Administration extends React.Component<{},{}> {
             { title: 'Postcode', prop: 'postCode'  },
             { title: 'Limitations', prop: 'limitations' },
             { title: 'HasTrade', prop: 'hasTrade' },
-            //{ title: 'ListOfTrades', prop: 'listOfTrades' }            
+            { title: 'ListOfTrades', prop: 'listOfTrades', render : this.render_ListOfTrades }            
         ];
 
         this.registrationNeedHelpIndColumnsArc = [
@@ -90,7 +90,7 @@ export class Administration extends React.Component<{},{}> {
             { title: 'City/Suburb', prop: 'citySuburb'  },
             { title: 'PostCode', prop: 'postCode'  },
             { title: 'Need Help With', prop: 'whatINeedHelpWith'  },
-            { title: 'When I Need Help', prop: 'whenINeedHelp'  }
+            { title: 'When I Need Help', prop: 'whenINeedHelp', render : this.render_WhenINeedHelp  }
         ];
 
         this.registrationNeedHelpOrgColumnsArc = [
@@ -110,7 +110,7 @@ export class Administration extends React.Component<{},{}> {
             { title: 'Postcode', prop: 'postCode'  },
             { title: 'Limitations', prop: 'limitations' },
             { title: 'HasTrade', prop: 'hasTrade' },
-            //{ title: 'ListOfTrades', prop: 'listOfTrades' }            
+            { title: 'ListOfTrades', prop: 'listOfTrades', render : this.render_ListOfTrades }
         ];
 
         this.registrationsDynamic = [];
@@ -200,6 +200,18 @@ export class Administration extends React.Component<{},{}> {
                     browserHistory.push('/register/WantToHelp/' + id);
                     break;
             }    
+    }
+
+    render_WhenINeedHelp = (val : string, row : IRegistrationNeedHelpInd) => {
+        return (
+            <div>To be implemented</div>
+        )
+    }
+
+    render_ListOfTrades = (val : string, row : IRegistrationWantToHelp) => {
+        return(
+            <div>To be implemented</div>
+        )
     }
 
     render_Remove_Ind = (val : string, row : IRegistrationNeedHelpInd) => {

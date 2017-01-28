@@ -8,7 +8,7 @@ import { MultiSelectComponent } from '../../common/multiselect/component';
 import { RegisterWantToHelpController } from './controller';
 
 import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registrations } from '../../interfaces';
-import { convertData } from '../../../utils/utils';
+import { convertData, convertFromObservable } from '../../../utils/utils';
 
 import { Link } from 'react-router';
 
@@ -94,12 +94,20 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                 break;
             case RegistrationFields.limitations:
                 this.controller.registerWantToHelp.limitations = event.target.value;
-                break;                           
+                break;
+            case RegistrationFields.hasTradeYes:
+                this.controller.hasTrade = true;
+                this.controller.registerWantToHelp.hasTrade = true;
+                break;
+            case RegistrationFields.hasTradeNo:
+                this.controller.hasTrade = false;
+                this.controller.registerWantToHelp.hasTrade = false;            
         }
     }
 
     render(){
         let styleTemporary : React.CSSProperties = { color: "black" };
+        let btnFloatRight : React.CSSProperties = { float : 'right'}
 
         if(this.controller.isLoading)
         {
@@ -194,13 +202,13 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                         </div>     
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group" onChange={this.handleChange}>
                                         <label htmlFor="hasTrade" ref="hasTrade">Do you have trade/trades: </label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeYes" onClick={this.handleTradeSelection.bind(this, true)} />Yes</label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeNo" defaultChecked onClick={this.handleTradeSelection.bind(this, false)} />No</label>                                            
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeYes"  checked={this.controller.registerWantToHelp.hasTrade == true} />Yes</label>
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeNo"   checked={this.controller.registerWantToHelp.hasTrade == false}/>No</label>                                            
                                     </div>
 
-                                    { this.controller.hasTrade ? 
+                                    { this.controller.hasTrade || this.controller.registerWantToHelp.hasTrade ? 
                                         <div className="form-group">
                                             <label htmlFor="listOfTrades">List options:</label>
                                             <MultiSelectComponent defaultData={convertData(this.controller.tradeOptions,DataFilter.All)} userSetOptions={this.controller.registerWantToHelp.listOfTrades} onChange={this.onTradeSelectionHasChanged}/>
@@ -227,7 +235,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     */}
 
                                     <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
-                                    <button className="btn btn-secondary" type="submit">Cancel</button>
+                                    <button style={btnFloatRight} className="btn btn-secondary" type="submit">Cancel</button>
                                 </form>
                             </div>
                         </div>

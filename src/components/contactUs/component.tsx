@@ -51,7 +51,7 @@ export class ContactUsComponent extends React.Component<IContactUsComponentProps
                                     </div> 
                                 </div>				                                   
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary">Send Your Message</button>
+                                    <button type="submit" className="btn btn-default">Send Your Message</button>
                                 </div>
                             </form>	
                         </div>

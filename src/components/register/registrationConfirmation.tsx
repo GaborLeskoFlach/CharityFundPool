@@ -35,7 +35,7 @@ export class RegistrationConfirmation extends React.Component<{},{}>{
 			    <div className="row">
                     <div className="col-sm-4" />
 				    <div className="col-sm-4" style={style2}>
-                         <Link to='/' activeClassName='btn btn-primary'>Home</Link>
+                         <Link to='/' activeClassName='btn btn-default'>Home</Link>
                     </div>
                     <div className="col-sm-4" />
                 </div>

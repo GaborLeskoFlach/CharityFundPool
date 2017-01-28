@@ -95,7 +95,7 @@ export class CauseCreateComponent extends React.Component<ICauseCreateComponent,
                             <input className="form-control" id="bestPrice" type="text" ref="bestPrice" placeholder="Best price"/>
                         </div>
 
-                        <button className="btn btn-primary" onClick={this.register}>Add new Need</button>
+                        <button className="btn btn-default" onClick={this.register}>Add new Need</button>
 
                     </div>
                 </div>

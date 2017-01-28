@@ -43,7 +43,7 @@ export class PasswordReset extends React.Component<any,any>{
                                                     <input id="email" ref="email" name="email" placeholder="Email" className="form-control"  type="email"/>
                                                 </div>
                                                 <br/>
-                                                <button className="btn btn-primary btn-block" onClick={this.resetPassword}>RESET</button>
+                                                <button className="btn btn-default btn-block" onClick={this.resetPassword}>RESET</button>
                                                 <hr/>
                                             
                                             </div>

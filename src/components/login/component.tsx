@@ -62,7 +62,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                                             </div>
                                             
                                             <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
-                                            <button className="btn btn-primary btn-block" onClick={this.signInUser}>LOG IN</button>
+                                            <button className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
                                             <hr/>
 
                                             <p className="text-center">

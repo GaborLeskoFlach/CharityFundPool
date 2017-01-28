@@ -35,8 +35,8 @@ export class RegisterNeedHelpController {
             citySuburb : '',
             postCode : '',
             whenINeedHelp : {
-                singleDate : null,
-                dateRange : { from : null, to : null},
+                singleDate : { day : '', reoccurring : false},
+                dateRange : { from : '', to : '' , reoccurring : false},
                 flexible : false
             }
         }

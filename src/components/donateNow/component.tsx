@@ -215,7 +215,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                         </div>
                                     </div>
 
-                                    <button className="btn btn-primary" type="submit">Donate</button>
+                                    <button className="btn btn-default" type="submit">Donate</button>
                                 </form>
                             </div>
                         </div>

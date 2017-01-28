@@ -18,9 +18,10 @@ export const whatINeedHelpWith : string = 'whatINeedHelpWith';
 export const whenINeedHelp : string = 'whenINeedHelp';
 export const registrationCodeNo : string = 'registrationCodeNo';
 export const limitations : string = 'limitations';
-export const hasTrade : string = 'hasTrade';
+export const hasTradeYes : string = 'hasTradeYes';
+export const hasTradeNo : string = 'hasTradeNo';
 export const listOfTrades : string = 'listOfTrades'
-
 export const whenINeedHelpFlexible : string = 'flexibleDates';
-
+export const singleDateReoccurring : string = 'singleDateReoccurring';
+export const dateRangeReoccurring : string = 'dateRangeReoccurring';
 export const registrationForm : string = "registrationForm";

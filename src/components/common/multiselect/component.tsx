@@ -21,10 +21,6 @@ export class MultiSelectComponent extends React.Component<IMultiSelectComponentP
 		this.allChecked = this.data.filter(x => x.checked).length == this.data.length;
     }
 
-	componentDidMount = () => {
-		console.log('component did mount');
-	}
-
 	handleItemChange = (e) => {
 		var selectedValues = [],
 			newData = [];
@@ -70,7 +66,7 @@ export class MultiSelectComponent extends React.Component<IMultiSelectComponentP
 		}
 	}
 	
-	shouldSet = (item : IMultiSelect) => {
+	shouldSet = (item : IMultiSelect) : boolean => {
 		const userHasSavedOption  = this.props.userSetOptions.filter(x => x.value === item.value);
 
 		if(this.props.userSetOptions){
@@ -89,15 +85,15 @@ export class MultiSelectComponent extends React.Component<IMultiSelectComponentP
 		return(
 			this.data.map((item : IMultiSelect, index) => {
 				return(
-				<div key={'chk-' + index} className="checkbox">
-					<label>
-						<input
-							type="checkbox"
-							value={item.value}
-							onChange={this.handleItemChange}
-							checked={item.checked ? true : false} /> {item.label}
-					</label>
-				</div>
+					<div key={'chk-' + index} className="checkbox">
+						<label>
+							<input
+								type="checkbox"
+								value={item.value}
+								onChange={this.handleItemChange}
+								checked={this.shouldSet(item)} /> {item.label}
+						</label>
+					</div>
 				)
 			})
 		);

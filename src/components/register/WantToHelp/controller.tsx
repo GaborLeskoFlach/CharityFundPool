@@ -23,7 +23,7 @@ export class RegisterWantToHelpController {
             citySuburb : '',
             postCode : '',
             limitations : '',
-            hasTrade : '',
+            hasTrade : false,
             listOfTrades : []
         };
         
@@ -42,7 +42,7 @@ export class RegisterWantToHelpController {
     @action("Add new Registration -> Want to Help")
     addNewRegistrationWantToHelp = () : Promise<any> => {
         return new Promise((resolve) => {
-            this.registerWantToHelp.hasTrade = this.hasTrade.toString(),
+            this.registerWantToHelp.hasTrade = this.hasTrade,
             this.registerWantToHelp.listOfTrades = this.getCurrentTradeOptions();
             _firebaseApp.database().ref('registrations/WantToHelp').push(toJS(this.registerWantToHelp)).then(result => {
                 resolve(result);
