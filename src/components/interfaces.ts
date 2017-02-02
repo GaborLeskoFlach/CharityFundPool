@@ -142,3 +142,8 @@ export enum DataSource {
     Firebase,
     LocalStorage
 }
+
+export interface IAuthValidationError{
+    code : string;
+    message : string;
+}
