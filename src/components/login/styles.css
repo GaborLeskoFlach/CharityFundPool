@@ -88,3 +88,7 @@ i{
 input.error {
   border-color: red;
 }
+
+p.validationErrorMsg {
+  color : red;
+}

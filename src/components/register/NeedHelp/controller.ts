@@ -6,6 +6,36 @@ import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
 
+interface IFieldValidation{
+    fieldValidationError : string;
+    touched : boolean;
+}
+
+interface IRegisterIndividualFormFields{
+    fullName : IFieldValidation;
+    phoneNo : IFieldValidation;
+    email : IFieldValidation;
+    country : IFieldValidation;
+    addressLine1 : IFieldValidation;
+    addressLine2 : IFieldValidation;
+    citySuburb : IFieldValidation;
+    state : IFieldValidation;
+    postCode : IFieldValidation;
+    whatINeedHelpWith : IFieldValidation;
+    validationError : string;
+}
+
+interface IRegisterOrganisationFormFields{
+    fullName : IFieldValidation;
+    phoneNo : IFieldValidation;
+    email : IFieldValidation;
+    charityName : IFieldValidation;
+    websiteLink : IFieldValidation;
+    whatWeDo : IFieldValidation;
+    whatWeNeed : IFieldValidation;
+    validationError : string;
+}
+
 export class RegisterNeedHelpController {
 
     registrations : IRegistrationNeedHelpInd;
@@ -56,6 +86,82 @@ export class RegisterNeedHelpController {
         }
         
         this.submitBtnCaption = 'Register';
+
+        this.registerIndividualFormState = {
+            fullName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            phoneNo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            email : {
+                fieldValidationError : '',
+                touched : false
+            },
+            country : {
+                fieldValidationError : '',
+                touched : false
+            },
+            addressLine1 : {
+                fieldValidationError : '',
+                touched : false
+            },
+            addressLine2 : {
+                fieldValidationError : '',
+                touched : false
+            },
+            citySuburb : {
+                fieldValidationError : '',
+                touched : false
+            },
+            state : {
+                fieldValidationError : '',
+                touched : false
+            },
+            postCode : {
+                fieldValidationError : '',
+                touched : false
+            },
+            whatINeedHelpWith : {
+                fieldValidationError : '',
+                touched : false
+            },                                                
+            validationError : ''            
+        }      
+
+        this.registerOrganisationFormState = {
+            fullName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            phoneNo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            email : {
+                fieldValidationError : '',
+                touched : false
+            },
+            charityName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            websiteLink : {
+                fieldValidationError : '',
+                touched : false
+            },
+            whatWeDo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            whatWeNeed : {
+                fieldValidationError : '',
+                touched : false
+            },                                     
+            validationError : ''            
+        }             
     }
 
     @observable registrationType : string;
@@ -67,6 +173,8 @@ export class RegisterNeedHelpController {
     @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
     @observable causes : Array<ICause>;
     @observable submitBtnCaption : string;
+    @observable registerIndividualFormState : IRegisterIndividualFormFields;
+    @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
 
     addNeed1 = (value : IWhatWeNeed) => {
         _firebaseApp.database().ref('utils/whatWeNeed').push(value);

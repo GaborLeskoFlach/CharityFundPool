@@ -2,7 +2,8 @@ import * as React from 'react';
 import * as RegistrationFields from '../formFields';
 import { Constants } from '../../constants';
 import { browserHistory } from 'react-router';
-import {observer} from 'mobx-react';
+import { observer} from 'mobx-react';
+import { observable } from 'mobx';
 import { map } from 'lodash';
 import { RegisterNeedHelpController } from './controller';
 import { CauseCreateComponent } from '../../causes/addNewCause/component';
@@ -94,19 +95,57 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         }
     }
 
+    validate = (registrationType : string) => {
+        const emailPattern = /(.+)@(.+){2,}\.(.+){2,}/;
+        
+        switch(registrationType){
+            case "Individual":
+
+                this.controller.registerIndividualFormState.email.touched = true;
+
+
+                if(this.controller.registrationNeedHelpInd.email.length == 0){
+                    this.controller.registerIndividualFormState.email.fieldValidationError = 'Email is mandatory';
+                }else if (!emailPattern.test(this.controller.registrationNeedHelpInd.email)) {
+                    this.controller.registerIndividualFormState.email.fieldValidationError = 'Invalid email address';
+                }else{
+                    this.controller.registerIndividualFormState.email.fieldValidationError = '';
+                }
+            break;
+            case "Org":
+
+                this.controller.registerOrganisationFormState.email.touched = true;
+
+                if(this.controller.registrationNeedHelpOrg.email.length == 0){
+                    this.controller.registerOrganisationFormState.email.fieldValidationError = 'Email is mandatory';
+                }else if (!emailPattern.test(this.controller.registrationNeedHelpOrg.email)) {
+                    this.controller.registerOrganisationFormState.email.fieldValidationError = 'Invalid email address';
+                }else{
+                    this.controller.registerOrganisationFormState.email.fieldValidationError = '';
+                }            
+            break;
+        }
+    }
+
     register = (event:React.FormEvent) => {
+        event.preventDefault();
+        this.validate(this.controller.registrationType);
+        
         switch(this.controller.registrationType){
             case "Individual":
-                this.registerIndividual(event);
+                if(this.controller.registerIndividualFormState.email.fieldValidationError.length == 0){       
+                    this.registerIndividual(event);
+                }
                 break;
             case "Org":
-                this.registerOrganisation(event);
+                if(this.controller.registerOrganisationFormState.email.fieldValidationError.length == 0){
+                    this.registerOrganisation(event);
+                }
                 break;
         }
     }
 
     registerIndividual = (event:React.FormEvent) => {
-        event.preventDefault();
         this.controller.addNewRegistrationNeedHelpInd().then(response => {
             (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
             browserHistory.push('/confirm');
@@ -114,7 +153,6 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
     }
 
     registerOrganisation = (event:React.FormEvent) => {
-        event.preventDefault();
         this.controller.addNewRegistrationNeedHelpOrg().then(response => {
             (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
             browserHistory.push('/confirm');
@@ -202,33 +240,43 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
         {
             case RegistrationFields.fullName:
                 this.props.controller.registrationNeedHelpInd.fullName = event.target.value;
+                this.props.controller.registerIndividualFormState.fullName.fieldValidationError = '';
                 break;
             case RegistrationFields.phoneNo:
                 this.props.controller.registrationNeedHelpInd.phoneNo = event.target.value;
+                this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError = '';
                 break;
             case RegistrationFields.email:
                 this.props.controller.registrationNeedHelpInd.email = event.target.value;
+                this.props.controller.registerIndividualFormState.email.fieldValidationError = '';
                 break;
             case RegistrationFields.whatINeedHelpWith:
                 this.props.controller.registrationNeedHelpInd.whatINeedHelpWith = event.target.value;
+                this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError = '';
                 break;
             case RegistrationFields.state:
                 this.props.controller.registrationNeedHelpInd.state = event.target.value;
+                this.props.controller.registerIndividualFormState.state.fieldValidationError = '';
                 break;
             case RegistrationFields.country:
                 this.props.controller.registrationNeedHelpInd.country = event.target.value;
+                this.props.controller.registerIndividualFormState.country.fieldValidationError = '';
                 break;
             case RegistrationFields.addressLine1:
                 this.props.controller.registrationNeedHelpInd.addressLine1 = event.target.value;
+                this.props.controller.registerIndividualFormState.addressLine1.fieldValidationError = '';
                 break;
             case RegistrationFields.addressLine2:
                 this.props.controller.registrationNeedHelpInd.addressLine2 = event.target.value;
+                this.props.controller.registerIndividualFormState.addressLine2.fieldValidationError = '';
                 break;
             case RegistrationFields.citySuburb:
                 this.props.controller.registrationNeedHelpInd.citySuburb = event.target.value;
+                this.props.controller.registerIndividualFormState.citySuburb.fieldValidationError = '';
                 break;
             case RegistrationFields.postCode:
                 this.props.controller.registrationNeedHelpInd.postCode = event.target.value;
+                this.props.controller.registerIndividualFormState.postCode.fieldValidationError = '';
                 break;
             case RegistrationFields.whenINeedHelpFlexible:
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.flexible = event.target.checked;
@@ -240,6 +288,91 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring = event.target.checked;
         }
     }
+
+    handleBlur = (event) => {
+        switch(event.target.id)
+        {
+            case RegistrationFields.fullName:
+                this.props.controller.registerIndividualFormState.fullName.touched = true;
+                break;
+            case RegistrationFields.phoneNo:
+                this.props.controller.registerIndividualFormState.phoneNo.touched = true;
+                break;
+            case RegistrationFields.email:
+                this.props.controller.registerIndividualFormState.email.touched = true;
+                break;
+            case RegistrationFields.whatINeedHelpWith:
+                this.props.controller.registerIndividualFormState.whatINeedHelpWith.touched = true;
+                break;
+            case RegistrationFields.state:
+                this.props.controller.registerIndividualFormState.state.touched = true;
+                break;
+            case RegistrationFields.country:
+                this.props.controller.registerIndividualFormState.country.touched = true;
+                break;
+            case RegistrationFields.addressLine1:
+                this.props.controller.registerIndividualFormState.addressLine1.touched = true;
+                break;
+            case RegistrationFields.addressLine2:
+                this.props.controller.registerIndividualFormState.addressLine2.touched = true;
+                break;
+            case RegistrationFields.citySuburb:
+                this.props.controller.registerIndividualFormState.citySuburb.touched = true;
+                break;
+            case RegistrationFields.postCode:
+                this.props.controller.registerIndividualFormState.postCode.touched = true;
+        }
+    }
+
+    shouldMarkError = (control:string) => {
+        let hasError : boolean = false;
+        let shouldShow : boolean = false;
+
+        switch(control)
+        {
+            case RegistrationFields.fullName:
+                hasError = this.props.controller.registerIndividualFormState.fullName.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.fullName.touched;
+                break;
+            case RegistrationFields.phoneNo:
+                hasError  = this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.phoneNo.touched;
+                break;
+            case RegistrationFields.email:
+                hasError  = this.props.controller.registerIndividualFormState.email.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.email.touched;
+                break;
+            case RegistrationFields.whatINeedHelpWith:
+                hasError  = this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.whatINeedHelpWith.touched;
+                break;
+            case RegistrationFields.state:
+                hasError  = this.props.controller.registerIndividualFormState.state.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.state.touched;
+                break;
+            case RegistrationFields.country:
+                hasError  = this.props.controller.registerIndividualFormState.country.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.country.touched;
+                break;
+            case RegistrationFields.addressLine1:
+                hasError  = this.props.controller.registerIndividualFormState.addressLine1.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.addressLine1.touched;
+                break;
+            case RegistrationFields.addressLine2:
+                hasError  = this.props.controller.registerIndividualFormState.addressLine2.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.addressLine2.touched;
+                break;
+            case RegistrationFields.citySuburb:
+                hasError  = this.props.controller.registerIndividualFormState.citySuburb.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.citySuburb.touched;
+                break;
+            case RegistrationFields.postCode:
+                hasError  = this.props.controller.registerIndividualFormState.postCode.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerIndividualFormState.postCode.touched;
+                break;
+        }    
+        return hasError ? shouldShow : false;
+    };
 
     handleDaySelection = (day : Date) => {
         this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate = { 
@@ -278,40 +411,46 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <div className="form-group">
                     <label htmlFor="fullName">Your Name</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                         id="fullName" 
                         type="text" 
                         ref="fullName" 
                         placeholder="Full Name"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.fullName === '' ? controller.registrationNeedHelpOrg.fullName : controller.registrationNeedHelpInd.fullName}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.fullName.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="phoneNo">Phone No</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                         id="phoneNo" 
                         type="text" 
                         ref="phoneNo" 
                         placeholder="Phone no"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
                         type="text" 
                         ref="email" 
                         placeholder="Email"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.email === '' ? controller.registrationNeedHelpOrg.email : controller.registrationNeedHelpInd.email}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.email.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="country">Country</label>
                     <div>
-                        <select ref="country" className="form-control" id="country" onChange={this.handleChange} value={controller.registrationNeedHelpInd.country} >
+                        <select ref="country" className={this.shouldMarkError('country') ? "form-control error" : "form-control"} id="country" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.country} >
                             <option value=''>Please select an option...</option>
                             <option value="Afganistan">Afghanistan</option>
                             <option value="Albania">Albania</option>
@@ -562,43 +701,50 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         </select>
                     </div>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.country.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="addressLine1">Address Line 1</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('addressLine1') ? "form-control error" : "form-control"}
                         id="addressLine1" 
                         type="text" 
                         ref="addressLine1" 
                         placeholder="Address Line 1" 
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.addressLine1}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine1.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="addressLine2">Address Line 2</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('addressLine2') ? "form-control error" : "form-control"}
                         id="addressLine2" 
                         type="text" 
                         ref="addressLine2" 
                         placeholder="Address Line 2" 
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.addressLine2}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine2.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="citySuburb">City/Suburb</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('citySuburb') ? "form-control error" : "form-control"}
                         id="citySuburb" 
                         type="text" 
                         ref="citySuburb" 
                         placeholder="City/Suburb" 
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.citySuburb}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.citySuburb.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="state">State/Province</label>
                     <div>
-                        <select className="form-control" ref="state" id="state" onChange={this.handleChange} value={controller.registrationNeedHelpInd.state}>
+                        <select className={this.shouldMarkError('state') ? "form-control error" : "form-control"} ref="state" id="state" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.state}>
                             <option value=''>Please select an option..</option>
                             <option value="VIC">VIC</option>
                             <option value="NSW">NSW</option>
@@ -612,21 +758,24 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         </select>
                     </div>                                
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.state.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="postCode">Zip/Postcode</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
                         id="postCode"
                         type="text" 
                         ref="postCode" 
                         placeholder="PostCode/postCode" 
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.postCode}/>
                 </div>  
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.postCode.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="whatINeedHelpWith">What I need help with</label>
                     <div>
-                        <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} value={controller.registrationNeedHelpInd.whatINeedHelpWith}>
+                        <select className={this.shouldMarkError('whatINeedHelpWith') ? "form-control error" : "form-control"} ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.whatINeedHelpWith}>
                             <option value="">Please select an option...</option>
                             
                                 {map(controller.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
@@ -636,6 +785,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         </select>                                                
                     </div>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="whenINeedHelp">When I need help</label>
 
@@ -677,9 +827,9 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
 @observer
 export class RegisterOrganisationComponent extends React.Component<IRegistrationProps, {}>{
-
+      
     constructor(props){
-        super(props);
+        super(props);     
     }
 
     newCauseAdded = (cause:ICause) => {
@@ -691,27 +841,99 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
         {
             case RegistrationFields.charityName: 
                 this.props.controller.registrationNeedHelpOrg.charityName = event.target.value;
+                this.props.controller.registerOrganisationFormState.charityName.fieldValidationError = '';
                 break;
             case RegistrationFields.fullName:
                 this.props.controller.registrationNeedHelpOrg.fullName = event.target.value;
+                this.props.controller.registerOrganisationFormState.fullName.fieldValidationError = '';
                 break;
             case RegistrationFields.phoneNo:
                 this.props.controller.registrationNeedHelpOrg.phoneNo = event.target.value;
+                this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError = '';
                 break;
             case RegistrationFields.email:
                 this.props.controller.registrationNeedHelpOrg.email = event.target.value;
+                this.props.controller.registerOrganisationFormState.email.fieldValidationError = '';
                 break;
             case RegistrationFields.websiteLink:
                 this.props.controller.registrationNeedHelpOrg.websiteLink = event.target.value;
+                this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError = '';
                 break;
             case RegistrationFields.whatWeDo:
                 this.props.controller.registrationNeedHelpOrg.whatWeDo = event.target.value;
+                this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError = '';
                 break;
             case RegistrationFields.whatWeNeed:
                 this.props.controller.registrationNeedHelpOrg.whatWeNeed = event.target.value;
+                this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError = '';
                 break;
         }
     }
+
+    handleBlur = (event) => {
+       switch(event.target.id)
+        {
+            case RegistrationFields.charityName: 
+                this.props.controller.registerOrganisationFormState.charityName.touched = true;
+                break;
+            case RegistrationFields.fullName:
+                this.props.controller.registerOrganisationFormState.fullName.touched = true;
+                break;
+            case RegistrationFields.phoneNo:
+                this.props.controller.registerOrganisationFormState.phoneNo.touched = true;
+                break;
+            case RegistrationFields.email:
+                this.props.controller.registerOrganisationFormState.email.touched = true;
+                break;
+            case RegistrationFields.websiteLink:
+                this.props.controller.registerOrganisationFormState.websiteLink.touched = true;
+                break;
+            case RegistrationFields.whatWeDo:
+                this.props.controller.registerOrganisationFormState.whatWeDo.touched = true;
+                break;
+            case RegistrationFields.whatWeNeed:
+                this.props.controller.registerOrganisationFormState.whatWeNeed.touched = true;
+                break;
+        }
+    }
+
+    shouldMarkError = (control:string) => {
+        let hasError : boolean = false;
+        let shouldShow : boolean = false;
+        
+        switch(control){
+            case RegistrationFields.charityName: 
+                hasError = this.props.controller.registerOrganisationFormState.charityName.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.charityName.touched;
+                break;
+            case RegistrationFields.fullName:
+                hasError = this.props.controller.registerOrganisationFormState.fullName.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.fullName.touched;
+                break;
+            case RegistrationFields.phoneNo:
+                hasError = this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.phoneNo.touched;
+                break;
+            case RegistrationFields.email:
+                hasError = this.props.controller.registerOrganisationFormState.email.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.email.touched;
+                break;
+            case RegistrationFields.websiteLink:
+                hasError = this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.websiteLink.touched;
+                break;
+            case RegistrationFields.whatWeDo:
+                hasError = this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.whatWeDo.touched;
+                break;
+            case RegistrationFields.whatWeNeed:
+                hasError = this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError.length > 0;
+                shouldShow = this.props.controller.registerOrganisationFormState.whatWeNeed.touched;
+                break;            
+        }
+
+        return hasError ? shouldShow : false;
+    };
 
     render(){
 
@@ -723,117 +945,130 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 <div className="form-group">
                     <label htmlFor="fullName">Your Name</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                         id="fullName" 
                         type="text" 
                         ref="fullName" 
                         placeholder="Full Name"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.fullName === '' ? controller.registrationNeedHelpOrg.fullName : controller.registrationNeedHelpInd.fullName}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.fullName.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="phoneNo">Phone No</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                         id="phoneNo" 
                         type="text" 
                         ref="phoneNo" 
                         placeholder="Phone no"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
                         type="text" 
                         ref="email" 
                         placeholder="Email"
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.email === '' ? controller.registrationNeedHelpOrg.email : controller.registrationNeedHelpInd.email}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.email.fieldValidationError}</p>
                 <div className="form-group">
                     <label htmlFor="charityName">Charity Name</label>
                     <input 
-                        className="form-control" 
+                        className={this.shouldMarkError('charityName') ? "form-control error" : "form-control"}
                         id="charityName" 
                         type="text" 
                         ref="charityName" 
                         placeholder="Charity Name" 
                         onChange={this.handleChange}
+                        onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpOrg.charityName}/>
                 </div>
-                <div>
-                    <div className="form-group">
-                        <label htmlFor="websiteLink">Website Link</label>
-                        <input 
-                            className="form-control" 
-                            id="websiteLink" 
-                            type="text" 
-                            ref="websiteLink" 
-                            placeholder="Website Link" 
-                            onChange={this.handleChange}
-                            value={controller.registrationNeedHelpOrg.websiteLink}/>
-                    </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.charityName.fieldValidationError}</p>
 
-                    <div className="form-group">
-                        <label htmlFor="whatWeDo">What we do</label>
-                        <textarea 
-                            className="form-control" 
-                            ref="whatWeDo" 
-                            rows={5} 
-                            id="whatWeDo"
-                            onChange={this.handleChange} 
-                            value={controller.registrationNeedHelpOrg.whatWeDo}></textarea>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="whatWeNeed">What we need</label>
-                        <div>
-                            <CauseCreateComponent saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
-                        </div>     
-                    </div>
-
-                    {(_firebaseAuth.currentUser !== null) &&
-                        <div className="form-group">
-                            <div className="table-responsive">
-                                <table className="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th className="text-center">Title</th>
-                                            <th className="text-center">Description</th>
-                                            <th className="text-center">Estimated Value</th>
-                                            <th className="text-center">Best Price</th>
-                                            <th> </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-
-                                        {
-                                            map(convertData(controller.causes,DataFilter.ActiveOnly),((cause : ICause, index) => {
-                                                return(
-                                                    <tr key={index}>
-                                                        <td className="col-sm-1 col-md-1 text-center">{cause.title}</td>
-                                                        <td className="col-sm-1 col-md-1 text-center">{cause.description}</td>
-                                                        <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
-                                                        <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
-                                                        <td className="col-sm-1 col-md-1">
-                                                            <button type="button" className="btn btn-danger" id="remove" onClick={controller.archiveCause.bind(this,cause.ID)}>
-                                                                <span className="glyphicon glyphicon-remove"></span> Remove
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        )}
-
-                                    </tbody>
-                                </table>
-                            </div>                                     
-                        </div>
-                    }
+                <div className="form-group">
+                    <label htmlFor="websiteLink">Website Link</label>
+                    <input 
+                        className={this.shouldMarkError('websiteLink') ? "form-control error" : "form-control"}
+                        id="websiteLink" 
+                        type="text" 
+                        ref="websiteLink" 
+                        placeholder="Website Link" 
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        value={controller.registrationNeedHelpOrg.websiteLink}/>
                 </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError}</p>
+
+                <div className="form-group">
+                    <label htmlFor="whatWeDo">What we do</label>
+                    <textarea 
+                        className={this.shouldMarkError('whatWeDo') ? "form-control error" : "form-control"}
+                        ref="whatWeDo" 
+                        rows={5} 
+                        id="whatWeDo"
+                        onChange={this.handleChange} 
+                        onBlur={this.handleBlur}
+                        value={controller.registrationNeedHelpOrg.whatWeDo}></textarea>
+                </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError}</p>
+
+                <div className="form-group">
+                    <label htmlFor="whatWeNeed">What we need</label>
+                    <div>
+                        <CauseCreateComponent saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
+                    </div>     
+                </div>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>
+
+                {(_firebaseAuth.currentUser !== null) &&
+                    <div className="form-group">
+                        <div className="table-responsive">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="text-center">Title</th>
+                                        <th className="text-center">Description</th>
+                                        <th className="text-center">Estimated Value</th>
+                                        <th className="text-center">Best Price</th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+
+                                    {
+                                        map(convertData(controller.causes,DataFilter.ActiveOnly),((cause : ICause, index) => {
+                                            return(
+                                                <tr key={index}>
+                                                    <td className="col-sm-1 col-md-1 text-center">{cause.title}</td>
+                                                    <td className="col-sm-1 col-md-1 text-center">{cause.description}</td>
+                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
+                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
+                                                    <td className="col-sm-1 col-md-1">
+                                                        <button type="button" className="btn btn-danger" id="remove" onClick={controller.archiveCause.bind(this,cause.ID)}>
+                                                            <span className="glyphicon glyphicon-remove"></span> Remove
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    )}
+
+                                </tbody>
+                            </table>
+                        </div>                                     
+                    </div>
+                }
+
             </div>                          
         )
     }

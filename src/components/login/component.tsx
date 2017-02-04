@@ -72,6 +72,8 @@ export class LoginComponent extends React.Component<{}, {}>{
             this.formState.password.fieldValue = e.target.value;
             this.formState.password.fieldValidationError = '';            
         }
+
+        this.formState.validationError = '';
     }
 
     handleBlur = (e) => {
@@ -154,7 +156,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                                                     value={this.formState.email.fieldValue}
                                                     className={this.shouldMarkError('email') ? "form-control error" : "form-control"} /> 
                                             </div>
-                                            <p>{this.formState.email.fieldValidationError}</p>
+                                            <p className='validationErrorMsg'>{this.formState.email.fieldValidationError}</p>
 
                                             <div className="input-group">
                                                 <span className="input-group-addon"><i className="glyphicon glyphicon-lock color-blue"></i></span>
@@ -168,13 +170,13 @@ export class LoginComponent extends React.Component<{}, {}>{
                                                     value={this.formState.password.fieldValue}
                                                     className={this.shouldMarkError('password') ? "form-control error" : "form-control"} />                                                     
                                             </div>
-                                            <p>{this.formState.password.fieldValidationError}</p>
+                                            <p className='validationErrorMsg'>{this.formState.password.fieldValidationError}</p>
                                             
                                             <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
                                             <button className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
                                             <hr/>
 
-                                            <p>{this.formState.validationError}</p>
+                                            <p className='validationErrorMsg'>{this.formState.validationError}</p>
 
                                             <p className="text-center">
                                                 <Link to='/Home' className="fliper-btn">Create new account? Register!</Link>

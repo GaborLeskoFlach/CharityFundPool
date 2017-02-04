@@ -158,3 +158,11 @@
   color: #F39C12;
 }
 
+input.error {
+  border-color: red;
+}
+
+p.validationErrorMsg {
+  color : red;
+  text-align: left;
+}

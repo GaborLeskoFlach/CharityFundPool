@@ -165,7 +165,7 @@ const PasswordResetForm = (props : IPasswordResetForm) => {
                         value={props.email}
                         className={props.shouldMarkError() ? "form-control error" : "form-control"} />                                                        
                 </div>
-                <p>{props.emailValidationError}</p>
+                <p className='validationErrorMsg'>{props.emailValidationError}</p>
                 <br/>
                 <button className="btn btn-default btn-block" onClick={props.resetPassword} >RESET</button>
                 <hr/>
