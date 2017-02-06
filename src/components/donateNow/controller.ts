@@ -3,6 +3,10 @@ import { _firebaseApp } from '../firebaseAuth/component'
 import { map, toJS } from 'mobx';
 import { ICause, IDonation } from '../interfaces';
 
+interface IDonationFields{
+    
+}
+
 export class DonationController {
     
     constructor() {
@@ -12,6 +16,11 @@ export class DonationController {
 
     @observable causes : Array<ICause>;
     @observable isLoading : boolean;
+
+    @action("reset form(state)")
+    resetForm = () => {
+
+    }
 
     @action("Add new Donation")
     addNewDonation = (donation : IDonation) : Promise<any> => {

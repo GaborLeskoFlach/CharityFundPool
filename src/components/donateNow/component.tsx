@@ -51,6 +51,149 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         }
     }
 
+    handleChange(event : any){
+        switch(event.target.id)
+        {
+            case DonationFields.email:   
+                this.controller.registerWantToHelp.email = event.target.value;
+                this.controller.registerWantToHelpFormState.email.fieldValidationError = '';
+                break;
+            case DonationFields.fullName:
+                this.controller.registerWantToHelp.fullName = event.target.value;
+                this.controller.registerWantToHelpFormState.fullName.fieldValidationError = '';
+                break;
+            case DonationFields.phoneNo:
+                this.controller.registerWantToHelp.phoneNo = event.target.value;
+                this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = '';
+                break;
+            case DonationFields.postCode:
+                this.controller.registerWantToHelp.postCode = event.target.value;
+                this.controller.registerWantToHelpFormState.postCode.fieldValidationError = '';
+                break;
+            case DonationFields.amountToDonate:
+                this.controller.registerWantToHelp.limitations = event.target.value;
+                this.controller.registerWantToHelpFormState.limitations.fieldValidationError = '';
+                break;                  
+        }
+    }
+
+    validate = () => {
+        const emailPattern = /(.+)@(.+){2,}\.(.+){2,}/;
+        const lettersOnlyPatter = /[a-zA-Z]+/;
+        const numericOnlyPatter = /^[0-9]*$/;
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        
+        this.controller.registerWantToHelpFormState.email.touched = true;
+        this.controller.registerWantToHelpFormState.fullName.touched = true;
+        this.controller.registerWantToHelpFormState.phoneNo.touched = true;
+        this.controller.registerWantToHelpFormState.citySuburb.touched = true;
+        this.controller.registerWantToHelpFormState.limitations.touched = true;
+        this.controller.registerWantToHelpFormState.postCode.touched = true;
+
+        //Email validation
+        if(this.controller.registerWantToHelp.email.length == 0){
+            this.controller.registerWantToHelpFormState.email.fieldValidationError = 'Required';
+        }else if (!emailPattern.test(this.controller.registerWantToHelp.email)) {
+            this.controller.registerWantToHelpFormState.email.fieldValidationError = 'Invalid email address';
+        }else{
+            this.controller.registerWantToHelpFormState.email.fieldValidationError = '';
+        }
+
+        //FullName
+        if(this.controller.registerWantToHelp.fullName.length == 0){
+            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = 'Required';
+        }else if (!lettersOnlyPatter.test(this.controller.registerWantToHelp.fullName)) {
+            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = 'Name can contain valid characters only';
+        }else{
+            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = '';
+        }        
+
+        //Phone no
+        if(this.controller.registerWantToHelp.phoneNo.length == 0){
+            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Required';
+        }else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.phoneNo)) {
+            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+        }else{
+            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = '';
+        }       
+
+        //City/Suburb
+        if(this.controller.registerWantToHelp.citySuburb.length == 0){
+            this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError = 'Required';
+        }else{
+            this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError = '';
+        }          
+
+        //PostCode
+        if(this.controller.registerWantToHelp.postCode.length == 0){
+            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = 'Required';
+        }else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.postCode)) {
+            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = 'Post code can contain numbers only';
+        }else{
+            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = '';
+        }    
+
+        //Limitations
+        if(this.controller.registerWantToHelp.limitations.length == 0){
+            this.controller.registerWantToHelpFormState.limitations.fieldValidationError = 'Required';
+        }else{
+            this.controller.registerWantToHelpFormState.limitations.fieldValidationError = '';
+        }                                                                                                                                                  
+    }
+
+    handleBlur = (event) => {
+        switch(event.target.id)
+        {
+            case DonationFields.fullName:
+                this.controller.registerWantToHelpFormState.fullName.touched = true;
+                break;
+            case DonationFields.phoneNo:
+                this.controller.registerWantToHelpFormState.phoneNo.touched = true;
+                break;
+            case DonationFields.email:
+                this.controller.registerWantToHelpFormState.email.touched = true;
+                break;
+            case DonationFields.citySuburb:
+                this.controller.registerWantToHelpFormState.citySuburb.touched = true;
+                break;
+            case DonationFields.postCode:
+                this.controller.registerWantToHelpFormState.postCode.touched = true;
+                break;
+            case DonationFields.limitations:
+                this.controller.registerWantToHelpFormState.limitations.touched = true;                
+        }
+    }
+
+    shouldMarkError = (control:string) => {
+        let hasError : boolean = false;
+        let shouldShow : boolean = false;
+
+        switch(control)
+        {
+            case DonationFields.fullName:
+                hasError = this.controller.registerWantToHelpFormState.fullName.fieldValidationError.length > 0;
+                shouldShow = this.controller.registerWantToHelpFormState.fullName.touched;
+                break;
+            case DonationFields.phoneNo:
+                hasError  = this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError.length > 0;
+                shouldShow = this.controller.registerWantToHelpFormState.phoneNo.touched;
+                break;
+            case DonationFields.email:
+                hasError  = this.controller.registerWantToHelpFormState.email.fieldValidationError.length > 0;
+                shouldShow = this.controller.registerWantToHelpFormState.email.touched;
+                break;
+            case DonationFields.postCode:
+                hasError  = this.controller.registerWantToHelpFormState.postCode.fieldValidationError.length > 0;
+                shouldShow = this.controller.registerWantToHelpFormState.postCode.touched;
+                break;
+            case DonationFields.amountToDonate:
+                hasError  = this.controller.registerWantToHelpFormState.limitations.fieldValidationError.length > 0;
+                shouldShow = this.controller.registerWantToHelpFormState.limitations.touched;
+                break;                
+        }    
+        return hasError ? shouldShow : false;
+    };
+
     addDonation(event:React.FormEvent) {
         
         // 1. Stop the form from submitting
@@ -60,7 +203,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         let donation : IDonation = {
             uid: _firebaseAuth.currentUser.uid !== null ? _firebaseAuth.currentUser.uid : null,
             fullName : this.resolveRefValue(this.refs[DonationFields.fullName]),
-            emailAddress : this.resolveRefValue(this.refs[DonationFields.emailAddress]),
+            emailAddress : this.resolveRefValue(this.refs[DonationFields.email]),
             phoneNo : this.resolveRefValue(this.refs[DonationFields.phoneNo]),
             zipCode : this.resolveRefValue(this.refs[DonationFields.zipCode]),
             amountToDonate : this.resolveRefValue(this.refs[DonationFields.amountToDonate]),   
@@ -72,14 +215,19 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         };
 
         //Save into DB?
-    
+
         this.controller.addNewDonation(donation).then(response => {
             this.props.history.push('/');       
         })
-         
+            
     }
 
-   render() {
+    resetForm = (event) => {
+        event.preventDefault();
+        this.controller.resetForm();
+    }
+
+    render() {
 
         const { causeId } : any = this.props.params;  
 
@@ -216,6 +364,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                     </div>
 
                                     <button className="btn btn-default" type="submit">Donate</button>
+                                    <button className="btn btn-default" type="button" onClick={this.resetForm}>Cancel</button>
                                 </form>
                             </div>
                         </div>

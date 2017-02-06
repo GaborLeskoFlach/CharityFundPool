@@ -267,7 +267,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                 <form ref="donationRegistrationForm" onSubmit={this.register.bind(this)}>
 
                                     <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="fullName">Name</label>
+                                        <label htmlFor="fullName">Name (*)</label>
                                         <input 
                                             className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                                             id="fullName" 
@@ -282,7 +282,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.fullName.fieldValidationError}</p>                        
 
                                     <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="email">Email address</label>
+                                        <label htmlFor="email">Email address (*)</label>
                                         <input 
                                             className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                                             id="email" 
@@ -297,7 +297,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.email.fieldValidationError}</p>  
 
                                     <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="phoneNo">Phone No</label>
+                                        <label htmlFor="phoneNo">Phone No (*)</label>
                                         <input 
                                             className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                                             id="phoneNo" 
@@ -312,7 +312,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError}</p>
 
                                     <div className={this.shouldMarkError('citySuburb') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="citySuburb">City</label>
+                                        <label htmlFor="citySuburb">City (*)</label>
                                         <input 
                                             className={this.shouldMarkError('citySuburb') ? "form-control error" : "form-control"}
                                             id="citySuburb" 
@@ -327,7 +327,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError}</p>
 
                                     <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="postCode">Postcode</label>
+                                        <label htmlFor="postCode">Postcode (*)</label>
                                         <input 
                                             className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
                                             id="postCode" 
@@ -342,7 +342,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.postCode.fieldValidationError}</p>     
 
                                     <div className={this.shouldMarkError('limitations') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="limitations">Limitations</label>
+                                        <label htmlFor="limitations">Limitations (*)</label>
                                         <div>
                                             <select 
                                                 className={this.shouldMarkError('limitations') ? "form-control error" : "form-control"}

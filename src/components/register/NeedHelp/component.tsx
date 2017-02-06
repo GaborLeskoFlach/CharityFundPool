@@ -539,7 +539,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.validationError}</p>
 
                 <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="fullName">Your Name</label> 
+                    <label htmlFor="fullName">Your Name (*)</label> 
                     <input 
                         className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                         id="fullName" 
@@ -554,7 +554,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.fullName.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="phoneNo">Phone No</label>
+                    <label htmlFor="phoneNo">Phone No (*)</label>
                     <input 
                         className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                         id="phoneNo" 
@@ -569,7 +569,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email (*)</label>
                     <input 
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
@@ -584,7 +584,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.email.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('country') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="country">Country</label>
+                    <label htmlFor="country">Country (*)</label>
                     <div>
                         <select ref="country" className={this.shouldMarkError('country') ? "form-control error" : "form-control"} id="country" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.country} >
                             <option value=''>Please select an option...</option>
@@ -840,7 +840,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.country.fieldValidationError}</p>
                 
                 <div className={this.shouldMarkError('addressLine1') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="addressLine1">Address Line 1</label>
+                    <label htmlFor="addressLine1">Address Line 1 (*)</label>
                     <input 
                         className={this.shouldMarkError('addressLine1') ? "form-control error" : "form-control"}
                         id="addressLine1" 
@@ -855,7 +855,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine1.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('addressLine2') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="addressLine2">Address Line 2</label>
+                    <label htmlFor="addressLine2">Address Line 2 (*)</label>
                     <input 
                         className={this.shouldMarkError('addressLine2') ? "form-control error" : "form-control"}
                         id="addressLine2" 
@@ -870,7 +870,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine2.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('citySuburb') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="citySuburb">City/Suburb</label>
+                    <label htmlFor="citySuburb">City/Suburb (*)</label>
                     <input 
                         className={this.shouldMarkError('citySuburb') ? "form-control error" : "form-control"}
                         id="citySuburb" 
@@ -885,7 +885,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.citySuburb.fieldValidationError}</p>
                 
                 <div className={this.shouldMarkError('state') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="state">State/Province</label>
+                    <label htmlFor="state">State/Province (*)</label>
                     <div>
                         <select className={this.shouldMarkError('state') ? "form-control error" : "form-control"} ref="state" id="state" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.state}>
                             <option value=''>Please select an option..</option>
@@ -904,7 +904,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.state.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="postCode">Zip/Postcode</label>
+                    <label htmlFor="postCode">Zip/Postcode (*)</label>
                     <input 
                         className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
                         id="postCode"
@@ -919,7 +919,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.postCode.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('whatINeedHelpWith') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="whatINeedHelpWith">What I need help with</label>
+                    <label htmlFor="whatINeedHelpWith">What I need help with (*)</label>
                     <div>
                         <select className={this.shouldMarkError('whatINeedHelpWith') ? "form-control error" : "form-control"} ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.whatINeedHelpWith}>
                             <option value="">Please select an option...</option>

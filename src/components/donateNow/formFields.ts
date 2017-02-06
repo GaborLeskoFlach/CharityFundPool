@@ -1,6 +1,6 @@
 
 export const fullName : string = "fullName";
-export const emailAddress : string = 'emailAddress';
+export const email : string = 'emailAddress';
 export const phoneNo : string = 'phoneNo';
 export const zipCode : string = 'zipCode'; 
 
