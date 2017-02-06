@@ -21,10 +21,7 @@ export class RegisterWantToHelpController {
         this.hasTrade = false;
         this.hasRegistered = false;
         this.isLoading = false;    
-        this.tradeOptionsSelected = [];         
-        
-
-        
+        this.tradeOptionsSelected = [];                 
         this.submitBtnCaption = 'Register';
         this.resetForm();
     }

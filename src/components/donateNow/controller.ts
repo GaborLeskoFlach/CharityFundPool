@@ -1,31 +1,72 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp } from '../firebaseAuth/component'
 import { map, toJS } from 'mobx';
-import { ICause, IDonation } from '../interfaces';
+import { ICause, IDonation, IFieldValidation } from '../interfaces';
 
 interface IDonationFields{
+    fullName : IFieldValidation;
+    email : IFieldValidation;
+    phoneNo : IFieldValidation;
+    postCode : IFieldValidation; 
+    amountToDonate : IFieldValidation;
     
+    validationError : string;      
 }
 
 export class DonationController {
     
     constructor() {
         this.causes = [];
-        this.isLoading = false;      
+        this.isLoading = false;
+        this.resetForm();
     }
 
     @observable causes : Array<ICause>;
     @observable isLoading : boolean;
+    @observable donationRegistration : IDonation;
+    @observable donationFormState : IDonationFields;
 
     @action("reset form(state)")
     resetForm = () => {
 
+        this.donationRegistration = {
+            fullName : '',
+            email : '',
+            phoneNo : '',
+            postCode : '', 
+            amountToDonate : ''
+        }
+
+        this.donationFormState = {
+            fullName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            email : {
+                fieldValidationError : '',
+                touched : false
+            },
+            phoneNo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            postCode : {
+                fieldValidationError : '',
+                touched : false
+            }, 
+            amountToDonate : {
+                fieldValidationError : '',
+                touched : false
+            },
+            
+            validationError : ''      
+        }
     }
 
     @action("Add new Donation")
-    addNewDonation = (donation : IDonation) : Promise<any> => {
+    addNewDonation = () : Promise<any> => {
         return new Promise((resolve) => {
-            _firebaseApp.database().ref('donations').push(donation).then(result => {
+            _firebaseApp.database().ref('donations').push(toJS(this.donationRegistration)).then(result => {
                 resolve();
                 console.log('New Donation has been successfully added');
             });

@@ -34,8 +34,6 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         this.controller = new DonationController();       
     }
 
-
-
     componentWillMount(){
         this.controller.isLoading = true;
         this.controller.getCauses().then(response => {           
@@ -43,36 +41,28 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         })
     }
 
-    resolveRefValue(element : React.ReactInstance) : string{
-        if(element !== undefined){
-           return (element as HTMLInputElement).value;
-        }else{
-            return '';
-        }
-    }
-
-    handleChange(event : any){
+    handleChange = (event : any) => {
         switch(event.target.id)
         {
             case DonationFields.email:   
-                this.controller.registerWantToHelp.email = event.target.value;
-                this.controller.registerWantToHelpFormState.email.fieldValidationError = '';
+                this.controller.donationRegistration.email = event.target.value;
+                this.controller.donationFormState.email.fieldValidationError = '';
                 break;
             case DonationFields.fullName:
-                this.controller.registerWantToHelp.fullName = event.target.value;
-                this.controller.registerWantToHelpFormState.fullName.fieldValidationError = '';
+                this.controller.donationRegistration.fullName = event.target.value;
+                this.controller.donationFormState.fullName.fieldValidationError = '';
                 break;
             case DonationFields.phoneNo:
-                this.controller.registerWantToHelp.phoneNo = event.target.value;
-                this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = '';
+                this.controller.donationRegistration.phoneNo = event.target.value;
+                this.controller.donationFormState.phoneNo.fieldValidationError = '';
                 break;
             case DonationFields.postCode:
-                this.controller.registerWantToHelp.postCode = event.target.value;
-                this.controller.registerWantToHelpFormState.postCode.fieldValidationError = '';
+                this.controller.donationRegistration.postCode = event.target.value;
+                this.controller.donationFormState.postCode.fieldValidationError = '';
                 break;
             case DonationFields.amountToDonate:
-                this.controller.registerWantToHelp.limitations = event.target.value;
-                this.controller.registerWantToHelpFormState.limitations.fieldValidationError = '';
+                this.controller.donationRegistration.amountToDonate = event.target.value;
+                this.controller.donationFormState.amountToDonate.fieldValidationError = '';
                 break;                  
         }
     }
@@ -83,61 +73,55 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         const numericOnlyPatter = /^[0-9]*$/;
         const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
         
-        this.controller.registerWantToHelpFormState.email.touched = true;
-        this.controller.registerWantToHelpFormState.fullName.touched = true;
-        this.controller.registerWantToHelpFormState.phoneNo.touched = true;
-        this.controller.registerWantToHelpFormState.citySuburb.touched = true;
-        this.controller.registerWantToHelpFormState.limitations.touched = true;
-        this.controller.registerWantToHelpFormState.postCode.touched = true;
+        this.controller.donationFormState.email.touched = true;
+        this.controller.donationFormState.fullName.touched = true;
+        this.controller.donationFormState.phoneNo.touched = true;
+        this.controller.donationFormState.amountToDonate.touched = true;
+        this.controller.donationFormState.postCode.touched = true;
 
         //Email validation
-        if(this.controller.registerWantToHelp.email.length == 0){
-            this.controller.registerWantToHelpFormState.email.fieldValidationError = 'Required';
-        }else if (!emailPattern.test(this.controller.registerWantToHelp.email)) {
-            this.controller.registerWantToHelpFormState.email.fieldValidationError = 'Invalid email address';
+        if(this.controller.donationRegistration.email.length == 0){
+            this.controller.donationFormState.email.fieldValidationError = 'Required';
+        }else if (!emailPattern.test(this.controller.donationRegistration.email)) {
+            this.controller.donationFormState.email.fieldValidationError = 'Invalid email address';
         }else{
-            this.controller.registerWantToHelpFormState.email.fieldValidationError = '';
+            this.controller.donationFormState.email.fieldValidationError = '';
         }
 
         //FullName
-        if(this.controller.registerWantToHelp.fullName.length == 0){
-            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = 'Required';
-        }else if (!lettersOnlyPatter.test(this.controller.registerWantToHelp.fullName)) {
-            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = 'Name can contain valid characters only';
+        if(this.controller.donationRegistration.fullName.length == 0){
+            this.controller.donationFormState.fullName.fieldValidationError = 'Required';
+        }else if (!lettersOnlyPatter.test(this.controller.donationRegistration.fullName)) {
+            this.controller.donationFormState.fullName.fieldValidationError = 'Name can contain valid characters only';
         }else{
-            this.controller.registerWantToHelpFormState.fullName.fieldValidationError = '';
+            this.controller.donationFormState.fullName.fieldValidationError = '';
         }        
 
         //Phone no
-        if(this.controller.registerWantToHelp.phoneNo.length == 0){
-            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Required';
-        }else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.phoneNo)) {
-            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+        if(this.controller.donationRegistration.phoneNo.length == 0){
+            this.controller.donationFormState.phoneNo.fieldValidationError = 'Required';
+        }else if (!numericOnlyPatter.test(this.controller.donationRegistration.phoneNo)) {
+            this.controller.donationFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
         }else{
-            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = '';
+            this.controller.donationFormState.phoneNo.fieldValidationError = '';
         }       
 
-        //City/Suburb
-        if(this.controller.registerWantToHelp.citySuburb.length == 0){
-            this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError = 'Required';
-        }else{
-            this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError = '';
-        }          
-
         //PostCode
-        if(this.controller.registerWantToHelp.postCode.length == 0){
-            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = 'Required';
-        }else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.postCode)) {
-            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = 'Post code can contain numbers only';
+        if(this.controller.donationRegistration.postCode.length == 0){
+            this.controller.donationFormState.postCode.fieldValidationError = 'Required';
+        }else if (!numericOnlyPatter.test(this.controller.donationRegistration.postCode)) {
+            this.controller.donationFormState.postCode.fieldValidationError = 'Post code can contain numbers only';
         }else{
-            this.controller.registerWantToHelpFormState.postCode.fieldValidationError = '';
+            this.controller.donationFormState.postCode.fieldValidationError = '';
         }    
 
-        //Limitations
-        if(this.controller.registerWantToHelp.limitations.length == 0){
-            this.controller.registerWantToHelpFormState.limitations.fieldValidationError = 'Required';
+        //AmountToDonate
+        if(this.controller.donationRegistration.amountToDonate.length == 0){
+            this.controller.donationFormState.amountToDonate.fieldValidationError = 'Required';
+        }else if (!numericOnlyPatter.test(this.controller.donationRegistration.amountToDonate)) {
+            this.controller.donationFormState.amountToDonate.fieldValidationError = 'Amount can contain numbers only';            
         }else{
-            this.controller.registerWantToHelpFormState.limitations.fieldValidationError = '';
+            this.controller.donationFormState.amountToDonate.fieldValidationError = '';
         }                                                                                                                                                  
     }
 
@@ -145,22 +129,19 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         switch(event.target.id)
         {
             case DonationFields.fullName:
-                this.controller.registerWantToHelpFormState.fullName.touched = true;
+                this.controller.donationFormState.fullName.touched = true;
                 break;
             case DonationFields.phoneNo:
-                this.controller.registerWantToHelpFormState.phoneNo.touched = true;
+                this.controller.donationFormState.phoneNo.touched = true;
                 break;
             case DonationFields.email:
-                this.controller.registerWantToHelpFormState.email.touched = true;
-                break;
-            case DonationFields.citySuburb:
-                this.controller.registerWantToHelpFormState.citySuburb.touched = true;
+                this.controller.donationFormState.email.touched = true;
                 break;
             case DonationFields.postCode:
-                this.controller.registerWantToHelpFormState.postCode.touched = true;
+                this.controller.donationFormState.postCode.touched = true;
                 break;
-            case DonationFields.limitations:
-                this.controller.registerWantToHelpFormState.limitations.touched = true;                
+            case DonationFields.amountToDonate:
+                this.controller.donationFormState.amountToDonate.touched = true;                
         }
     }
 
@@ -171,55 +152,48 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         switch(control)
         {
             case DonationFields.fullName:
-                hasError = this.controller.registerWantToHelpFormState.fullName.fieldValidationError.length > 0;
-                shouldShow = this.controller.registerWantToHelpFormState.fullName.touched;
+                hasError = this.controller.donationFormState.fullName.fieldValidationError.length > 0;
+                shouldShow = this.controller.donationFormState.fullName.touched;
                 break;
             case DonationFields.phoneNo:
-                hasError  = this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError.length > 0;
-                shouldShow = this.controller.registerWantToHelpFormState.phoneNo.touched;
+                hasError  = this.controller.donationFormState.phoneNo.fieldValidationError.length > 0;
+                shouldShow = this.controller.donationFormState.phoneNo.touched;
                 break;
             case DonationFields.email:
-                hasError  = this.controller.registerWantToHelpFormState.email.fieldValidationError.length > 0;
-                shouldShow = this.controller.registerWantToHelpFormState.email.touched;
+                hasError  = this.controller.donationFormState.email.fieldValidationError.length > 0;
+                shouldShow = this.controller.donationFormState.email.touched;
                 break;
             case DonationFields.postCode:
-                hasError  = this.controller.registerWantToHelpFormState.postCode.fieldValidationError.length > 0;
-                shouldShow = this.controller.registerWantToHelpFormState.postCode.touched;
+                hasError  = this.controller.donationFormState.postCode.fieldValidationError.length > 0;
+                shouldShow = this.controller.donationFormState.postCode.touched;
                 break;
             case DonationFields.amountToDonate:
-                hasError  = this.controller.registerWantToHelpFormState.limitations.fieldValidationError.length > 0;
-                shouldShow = this.controller.registerWantToHelpFormState.limitations.touched;
+                hasError  = this.controller.donationFormState.amountToDonate.fieldValidationError.length > 0;
+                shouldShow = this.controller.donationFormState.amountToDonate.touched;
                 break;                
         }    
         return hasError ? shouldShow : false;
     };
 
-    addDonation(event:React.FormEvent) {
+    addDonation = (event:React.FormEvent) => {
         
         // 1. Stop the form from submitting
         event.preventDefault();
         
-        // 2. Take the data from the form and create an object
-        let donation : IDonation = {
-            uid: _firebaseAuth.currentUser.uid !== null ? _firebaseAuth.currentUser.uid : null,
-            fullName : this.resolveRefValue(this.refs[DonationFields.fullName]),
-            emailAddress : this.resolveRefValue(this.refs[DonationFields.email]),
-            phoneNo : this.resolveRefValue(this.refs[DonationFields.phoneNo]),
-            zipCode : this.resolveRefValue(this.refs[DonationFields.zipCode]),
-            amountToDonate : this.resolveRefValue(this.refs[DonationFields.amountToDonate]),   
-            nameOnCard : this.resolveRefValue(this.refs[DonationFields.nameOnCard]),
-            cardType : this.resolveRefValue(this.refs[DonationFields.cardType]),
-            expiryDateMonth : this.resolveRefValue(this.refs[DonationFields.expiryDateMonth]),
-            expiryDateYear : this.resolveRefValue(this.refs[DonationFields.expiryDateYear]),
-            securityCode : this.resolveRefValue(this.refs[DonationFields.securityCode])
-        };
+        this.validate();
 
-        //Save into DB?
-
-        this.controller.addNewDonation(donation).then(response => {
-            this.props.history.push('/');       
-        })
-            
+        if(this.controller.donationFormState.amountToDonate.fieldValidationError.length == 0 &&
+            this.controller.donationFormState.email.fieldValidationError.length == 0 &&
+            this.controller.donationFormState.fullName.fieldValidationError.length == 0 &&
+            this.controller.donationFormState.phoneNo.fieldValidationError.length == 0 &&
+            this.controller.donationFormState.postCode.fieldValidationError.length == 0)
+        {
+            this.controller.addNewDonation().then(response => {
+                this.props.history.push('/');       
+            }).catch((error) => {
+                this.controller.donationFormState.validationError = JSON.stringify(error);
+            })
+        }            
     }
 
     resetForm = (event) => {
@@ -230,6 +204,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
     render() {
 
         const { causeId } : any = this.props.params;  
+        let btnFloatRight : React.CSSProperties = { float : 'right'}
 
         if(this.controller.isLoading){
             return (
@@ -248,7 +223,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="contact-form">
-                                <form ref="donationForm" onSubmit={this.addDonation.bind(this)}>
+                                <form ref="donationForm" onSubmit={this.addDonation}>
                                     
                                     <div className="form-group">
                                         <label htmlFor="needs">Needs</label>
@@ -264,35 +239,83 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                         </div>
                                     </div>
                                 
-                                    <div className="form-group">
-                                        <label htmlFor="firstName">Your Name</label>
-                                        <input className="form-control" id="fullName" type="text" ref="fullName" placeholder="Your Name"/>
+                                    <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
+                                        <label htmlFor="fullName">Name (*)</label>
+                                        <input 
+                                            className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
+                                            id="fullName" 
+                                            type="text" 
+                                            ref="fullName" 
+                                            placeholder="Full Name" 
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleBlur}
+                                            value={this.controller.donationRegistration.fullName}/>
+                                            <span className={this.shouldMarkError('fullName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>               
                                     </div>
+                                    <p className='validationErrorMsg'>{this.controller.donationFormState.fullName.fieldValidationError}</p>  
 
-                                    <div className="form-group">
-                                        <label htmlFor="emailAddress">Email</label>
-                                        <input className="form-control" id="emailAddress" type="text" ref="emailAddress" placeholder="Email"/>
+                                    <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
+                                        <label htmlFor="email">Email address (*)</label>
+                                        <input 
+                                            className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
+                                            id="email" 
+                                            type="text" 
+                                            ref="email" 
+                                            placeholder="Email"
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleBlur}
+                                            value={this.controller.donationRegistration.email}/>
+                                            <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>                     
                                     </div>
+                                    <p className='validationErrorMsg'>{this.controller.donationFormState.email.fieldValidationError}</p> 
 
-                                    <div className="form-group">
-                                        <label htmlFor="phone">Phone</label>
-                                        <input className="form-control" id="phoneNo" type="text" ref="phoneNo" placeholder="Phone"/>
+                                    <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
+                                        <label htmlFor="phoneNo">Phone No (*)</label>
+                                        <input 
+                                            className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
+                                            id="phoneNo" 
+                                            type="text" 
+                                            ref="phoneNo" 
+                                            placeholder="Phone no" 
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleBlur}
+                                            value={this.controller.donationRegistration.phoneNo}/>
+                                            <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                                     </div>
+                                    <p className='validationErrorMsg'>{this.controller.donationFormState.phoneNo.fieldValidationError}</p>
                                 
-                                    <div className="form-group">
-                                        <label htmlFor="zipCode">Zip/Postcode</label>
-                                        <input className="form-control" id="zipCode" type="text" ref="zipCode" placeholder="PostCode/ZipCode"/>
-                                    </div>
+                                    <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
+                                        <label htmlFor="postCode">Postcode (*)</label>
+                                        <input 
+                                            className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
+                                            id="postCode" 
+                                            type="text" 
+                                            placeholder="Postcode" 
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleBlur}
+                                            value={this.controller.donationRegistration.postCode} />
+                                            <span className={this.shouldMarkError('postCode') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
+                                    </div>      
+                                    <p className='validationErrorMsg'>{this.controller.donationFormState.postCode.fieldValidationError}</p>  
 
 
-                                    <div className="form-group">
+                                    <div className={this.shouldMarkError('amountToDonate') ? "form-group has-error has-feedback" : ""}>
                                         <label htmlFor="amountToDonate">Amount to donate</label>
                                         <div className="input-group">
                                             <div className="input-group-addon">$</div>
-                                            <input type="text" className="form-control" ref="amountToDonate" id="amountToDonate" placeholder="Amount" />
-                                            <div className="input-group-addon">.00</div>
+                                            <input 
+                                                type="text" 
+                                                className={this.shouldMarkError('amountToDonate') ? "form-control error" : "form-control"}
+                                                id="amountToDonate"
+                                                onChange={this.handleChange}
+                                                onBlur={this.handleBlur}                                                 
+                                                placeholder="Amount" 
+                                                value={this.controller.donationRegistration.amountToDonate}
+                                            />
+                                            <span className={this.shouldMarkError('amountToDonate') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                                         </div>
                                     </div>
+                                    <p className='validationErrorMsg'>{this.controller.donationFormState.amountToDonate.fieldValidationError}</p>  
                             
 
                                     <div className="section-title">
@@ -364,7 +387,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                     </div>
 
                                     <button className="btn btn-default" type="submit">Donate</button>
-                                    <button className="btn btn-default" type="button" onClick={this.resetForm}>Cancel</button>
+                                    <button style={btnFloatRight} className="btn btn-secondary" type="button" onClick={this.resetForm}>Cancel</button>
                                 </form>
                             </div>
                         </div>

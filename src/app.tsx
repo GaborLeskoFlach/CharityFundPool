@@ -21,6 +21,8 @@ import { RegisterWantToHelpComponent } from './components/register/WantToHelp/co
 import { PasswordReset } from './components/login/passwordReset/component';
 import { SignOut } from './components/login/signOut/component';
 
+import { AlternativeDonation } from './components/donateNow/alternativeDonation';
+
 import { requireAuth } from '../src/components/firebaseAuth/component';
 
 ReactDOM.render(
@@ -33,7 +35,7 @@ ReactDOM.render(
             <Route path="/register/:requestType(/:Type)(/:ID)" component={RegisterNeedHelpComponent} />                    
             <Route path="/confirm" component={RegistrationConfirmation } />    
             <Route path="/aboutUs" component={WhoWeAreComponent} />
-            <Route path="/donate(/:causeId)" component={DonateNowComponent} />
+            <Route path="/donate(/:causeId)" component={AlternativeDonation} />
             <Route path="/viewNeeds" component={CauseListComponent} onEnter={requireAuth} />          
             <Route path="/contactUs" component={ContactUsComponent} />
             <Route path="/login" component={LoginComponent}/>

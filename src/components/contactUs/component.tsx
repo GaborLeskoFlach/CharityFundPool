@@ -20,41 +20,47 @@ export class ContactUsComponent extends React.Component<IContactUsComponentProps
                 </div>
                 <div className="row">
                     <div className="col-sm-12">
-                        <div className="row contact-details">
-                            <div className="col-sm-4">
-                                <span><i className="fa fa-map-marker"></i></span>
-                                <p className="contact-info">1234 Street Name, City Name</p>
-                            </div>
-                            <div className="col-sm-4">
-                                <span><i className="fa fa-phone"></i></span>
-                                <p className="contact-info">+(123) 456-7890 </p>
-                            </div>
-                            <div className="col-sm-4">
-                                <span><i className="fa fa-envelope"></i></span>
-                                <a className="contact-info" href="#">contact@humanity.com</a>
-                            </div>
-                        </div>
-
-                        <div className="contact-form">
-                            <form id="contact-form" className="contact-form" name="contact-form" method="post" action="send-mail.php">
-                                <div className="row">
-                                    <div className="form-group col-sm-6">
-                                        <input type="text" name="name" className="form-control" required="required" placeholder="Name" />
-                                        <input type="text" name="company" className="form-control" placeholder="Company" />
+                        <form>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label>
+                                            Name</label>
+                                        <input type="text" className="form-control" id="name" placeholder="Enter name" required="required" />
                                     </div>
-                                    <div className="form-group col-sm-6">
-                                        <input type="email" name="email" className="form-control" required="required" placeholder="Email Address" />
-                                        <input type="email" name="website" className="form-control" required="required" placeholder="Website" />
+                                    <div className="form-group">
+                                        <label>
+                                            Email Address</label>
+                                        <div className="input-group">
+                                            <span className="input-group-addon"><span className="glyphicon glyphicon-envelope"></span>
+                                            </span>
+                                            <input type="email" className="form-control" id="email" placeholder="Enter email" required="required" /></div>
                                     </div>
-                                    <div className="form-group col-sm-12">
-                                        <textarea name="message" id="message" required="required" className="form-control" rows="8" placeholder="Message"></textarea>
-                                    </div> 
-                                </div>				                                   
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-default">Send Your Message</button>
+                                    <div className="form-group">
+                                        <label>
+                                            Subject</label>
+                                        <select id="subject" name="subject" className="form-control" required="required">
+                                            <option defaultValue value="na">Please select an option...</option>
+                                            <option value="service">General Customer Service</option>
+                                            <option value="suggestions">Suggestions</option>
+                                            <option value="product">Product Support</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </form>	
-                        </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label >
+                                            Message</label>
+                                        <textarea name="message" id="message" className="form-control" rows="9" cols="25" required="required"
+                                            placeholder="Message"></textarea>
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <button type="submit" className="btn btn-default pull-right" id="btnContactUs">
+                                        Send Message</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

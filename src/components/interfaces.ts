@@ -74,19 +74,19 @@ export interface ICause extends IConvertDataConstraint{
 export interface IDonation{
 
     fullName : string;
-    emailAddress : string;
+    email : string;
     phoneNo : string;
-    zipCode : string; 
+    postCode : string; 
 
     amountToDonate : string;
 
-    nameOnCard : string;
+    nameOnCard? : string;
     cardType? : string;
     cardNumber? : string;
-    expiryDateMonth : string;
-    expiryDateYear : string;
-    securityCode : string;
-    uid:string;
+    expiryDateMonth? : string;
+    expiryDateYear? : string;
+    securityCode? : string;
+    uid?:string;
 }
 
 export interface IMultiSelect extends IConvertDataConstraint{

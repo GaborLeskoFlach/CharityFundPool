@@ -32,9 +32,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         //check URL Query
         if(this.props.params){
             this.requestURL_ID = this.props.params.ID;
-        }
-
-        this.handleChange = this.handleChange.bind(this);   
+        }  
     }
 
     componentWillMount(){
