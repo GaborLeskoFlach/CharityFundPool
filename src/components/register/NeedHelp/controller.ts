@@ -4,12 +4,9 @@ import { map, toJS } from 'mobx';
 import { generateTempPassword, convertData } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
-import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, ICause, RegistrationType } from '../../interfaces';
-
-interface IFieldValidation{
-    fieldValidationError : string;
-    touched : boolean;
-}
+import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
+        IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, 
+        ICause, RegistrationType, IFieldValidation } from '../../interfaces';
 
 interface IRegisterIndividualFormFields{
     fullName : IFieldValidation;
@@ -48,45 +45,64 @@ export class RegisterNeedHelpController {
         this.hasRegistered = false;
         this.isLoading = false;      
         this.causes = [];
-        
-        this.registrationNeedHelpInd = {
-            ID: '',
-            active : true,
-            uid: '',
-            registrationType : '',
-            fullName : '',
-            phoneNo : '',
-            email : '',
-            whatINeedHelpWith : '',
-            country: '',
-            state: '',
-            addressLine1: '',
-            addressLine2: '',
-            citySuburb : '',
-            postCode : '',
-            whenINeedHelp : {
-                singleDate : { day : '', reoccurring : false},
-                dateRange : { from : '', to : '' , reoccurring : false},
-                flexible : false
-            }
-        }
+                
+        this.submitBtnCaption = 'Register'; 
+        this.resetForm();
+    }
 
-        this.registrationNeedHelpOrg = {
-            ID : '',
-            active : true,
-            uid: '',
-            registrationType : '',            
-            charityName : '',
-            fullName : '',
-            phoneNo : '',
-            email : '',
-            websiteLink : '',
-            whatWeDo : '',
-            whatWeNeed : ''
-        }
-        
-        this.submitBtnCaption = 'Register';
+    @observable registrationType : string;
+    @observable formIsVisible : boolean;
+    @observable hasTrade : boolean;
+    @observable hasRegistered : boolean;
+    @observable isLoading : boolean;
+    @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
+    @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
+    @observable causes : Array<ICause>;
+    @observable submitBtnCaption : string;
+    @observable registerIndividualFormState : IRegisterIndividualFormFields;
+    @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
 
+    addNeed1 = (value : IWhatWeNeed) => {
+        _firebaseApp.database().ref('utils/whatWeNeed').push(value);
+    }
+
+    addNeed2 = (value : IWhatINeedHelpWith) => {
+        _firebaseApp.database().ref('utils/whatINeedHelpWith').push(value);
+    }
+
+    @action("reset form (state)")
+    resetForm = () => {
+        this.registerOrganisationFormState = {
+            fullName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            phoneNo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            email : {
+                fieldValidationError : '',
+                touched : false
+            },
+            charityName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            websiteLink : {
+                fieldValidationError : '',
+                touched : false
+            },
+            whatWeDo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            whatWeNeed : {
+                fieldValidationError : '',
+                touched : false
+            },                                     
+            validationError : ''            
+        }  
         this.registerIndividualFormState = {
             fullName : {
                 fieldValidationError : '',
@@ -129,59 +145,41 @@ export class RegisterNeedHelpController {
                 touched : false
             },                                                
             validationError : ''            
-        }      
-
-        this.registerOrganisationFormState = {
-            fullName : {
-                fieldValidationError : '',
-                touched : false
-            },
-            phoneNo : {
-                fieldValidationError : '',
-                touched : false
-            },
-            email : {
-                fieldValidationError : '',
-                touched : false
-            },
-            charityName : {
-                fieldValidationError : '',
-                touched : false
-            },
-            websiteLink : {
-                fieldValidationError : '',
-                touched : false
-            },
-            whatWeDo : {
-                fieldValidationError : '',
-                touched : false
-            },
-            whatWeNeed : {
-                fieldValidationError : '',
-                touched : false
-            },                                     
-            validationError : ''            
-        }             
-    }
-
-    @observable registrationType : string;
-    @observable formIsVisible : boolean;
-    @observable hasTrade : boolean;
-    @observable hasRegistered : boolean;
-    @observable isLoading : boolean;
-    @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
-    @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
-    @observable causes : Array<ICause>;
-    @observable submitBtnCaption : string;
-    @observable registerIndividualFormState : IRegisterIndividualFormFields;
-    @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
-
-    addNeed1 = (value : IWhatWeNeed) => {
-        _firebaseApp.database().ref('utils/whatWeNeed').push(value);
-    }
-
-    addNeed2 = (value : IWhatINeedHelpWith) => {
-        _firebaseApp.database().ref('utils/whatINeedHelpWith').push(value);
+        }  
+        this.registrationNeedHelpInd = {
+            ID: '',
+            active : true,
+            uid: '',
+            registrationType : '',
+            fullName : '',
+            phoneNo : '',
+            email : '',
+            whatINeedHelpWith : '',
+            country: '',
+            state: '',
+            addressLine1: '',
+            addressLine2: '',
+            citySuburb : '',
+            postCode : '',
+            whenINeedHelp : {
+                singleDate : { day : '', reoccurring : false},
+                dateRange : { from : '', to : '' , reoccurring : false},
+                flexible : false
+            }
+        }
+        this.registrationNeedHelpOrg = {
+            ID : '',
+            active : true,
+            uid: '',
+            registrationType : '',            
+            charityName : '',
+            fullName : '',
+            phoneNo : '',
+            email : '',
+            websiteLink : '',
+            whatWeDo : '',
+            whatWeNeed : ''
+        }                    
     }
 
     @action("Retrieve Causes for current user")

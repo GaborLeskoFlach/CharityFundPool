@@ -3,7 +3,17 @@ import { _firebaseApp, register } from '../../firebaseAuth/component';
 import { generateTempPassword } from '../../../utils/utils';
 import { map, toJS } from 'mobx';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect, IFieldValidation } from '../../interfaces';
+
+interface IRegisterWantToHelpFormFields{
+    fullName : IFieldValidation;
+    email:IFieldValidation;
+    phoneNo : IFieldValidation;    
+    citySuburb : IFieldValidation;
+    postCode : IFieldValidation;
+    limitations : IFieldValidation;  
+    validationError : string;  
+}
 
 export class RegisterWantToHelpController {
 
@@ -12,6 +22,52 @@ export class RegisterWantToHelpController {
         this.hasRegistered = false;
         this.isLoading = false;    
         this.tradeOptionsSelected = [];         
+        
+
+        
+        this.submitBtnCaption = 'Register';
+        this.resetForm();
+    }
+
+    @observable hasTrade : boolean;
+    @observable hasRegistered : boolean;
+    @observable isLoading : boolean;
+    @observable tradeOptions : Array<IMultiSelect>;    
+    @observable registerWantToHelp : IRegistrationWantToHelp;
+    @observable submitBtnCaption : string;
+    @observable registerWantToHelpFormState : IRegisterWantToHelpFormFields;
+ 
+    tradeOptionsSelected : Array<IMultiSelect>;
+
+    @action("Reset Form (state)")
+    resetForm = () : void => {
+        this.registerWantToHelpFormState = {
+            fullName : {
+                fieldValidationError : '',
+                touched : false
+            },
+            phoneNo : {
+                fieldValidationError : '',
+                touched : false
+            },
+            email : {
+                fieldValidationError : '',
+                touched : false
+            },
+            citySuburb : {
+                fieldValidationError : '',
+                touched : false
+            },
+            postCode : {
+                fieldValidationError : '',
+                touched : false
+            },
+            limitations : {
+                fieldValidationError : '',
+                touched : false
+            },
+            validationError : ''            
+        }    
         
         this.registerWantToHelp = {
             ID : '',
@@ -26,18 +82,7 @@ export class RegisterWantToHelpController {
             hasTrade : false,
             listOfTrades : []
         };
-        
-        this.submitBtnCaption = 'Register';
     }
-
-    @observable hasTrade : boolean;
-    @observable hasRegistered : boolean;
-    @observable isLoading : boolean;
-    @observable tradeOptions : Array<IMultiSelect>;    
-    @observable registerWantToHelp : IRegistrationWantToHelp;
-    @observable submitBtnCaption : string;
- 
-    tradeOptionsSelected : Array<IMultiSelect>;
 
     @action("Add new Registration -> Want to Help")
     addNewRegistrationWantToHelp = () : Promise<any> => {

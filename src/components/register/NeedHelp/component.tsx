@@ -87,42 +87,154 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         })                     
     }
 
-    resolveRefValue(element : React.ReactInstance) : string{
-        if(element !== undefined){
-           return (element as HTMLInputElement).value;
-        }else{
-            return '';
-        }
-    }
-
     validate = (registrationType : string) => {
         const emailPattern = /(.+)@(.+){2,}\.(.+){2,}/;
+        const lettersOnlyPatter = /[a-zA-Z]+/;
+        const numericOnlyPatter = /^[0-9]*$/;
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
         
         switch(registrationType){
             case "Individual":
 
                 this.controller.registerIndividualFormState.email.touched = true;
+                this.controller.registerIndividualFormState.fullName.touched = true;
+                this.controller.registerIndividualFormState.phoneNo.touched = true;
+                this.controller.registerIndividualFormState.country.touched = true;
+                this.controller.registerIndividualFormState.addressLine1.touched = true;
+                this.controller.registerIndividualFormState.addressLine2.touched = true;
+                this.controller.registerIndividualFormState.citySuburb.touched = true;
+                this.controller.registerIndividualFormState.state.touched = true;
+                this.controller.registerIndividualFormState.postCode.touched = true;
 
-
+                //Email validation
                 if(this.controller.registrationNeedHelpInd.email.length == 0){
-                    this.controller.registerIndividualFormState.email.fieldValidationError = 'Email is mandatory';
+                    this.controller.registerIndividualFormState.email.fieldValidationError = 'Required';
                 }else if (!emailPattern.test(this.controller.registrationNeedHelpInd.email)) {
                     this.controller.registerIndividualFormState.email.fieldValidationError = 'Invalid email address';
                 }else{
                     this.controller.registerIndividualFormState.email.fieldValidationError = '';
                 }
+
+                //FullName
+                if(this.controller.registrationNeedHelpInd.fullName.length == 0){
+                    this.controller.registerIndividualFormState.fullName.fieldValidationError = 'Required';
+                }else if (!lettersOnlyPatter.test(this.controller.registrationNeedHelpInd.fullName)) {
+                    this.controller.registerIndividualFormState.fullName.fieldValidationError = 'Name can contain valid characters only';
+                }else{
+                    this.controller.registerIndividualFormState.fullName.fieldValidationError = '';
+                }        
+
+                //Phone no
+                if(this.controller.registrationNeedHelpInd.phoneNo.length == 0){
+                    this.controller.registerIndividualFormState.phoneNo.fieldValidationError = 'Required';
+                }else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpInd.phoneNo)) {
+                    this.controller.registerIndividualFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+                }else{
+                    this.controller.registerIndividualFormState.phoneNo.fieldValidationError = '';
+                }   
+
+                //Country
+                if(this.controller.registrationNeedHelpInd.country.length == 0){
+                    this.controller.registerIndividualFormState.country.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerIndividualFormState.country.fieldValidationError = '';
+                }      
+
+                //AddressLine1
+                if(this.controller.registrationNeedHelpInd.addressLine1.length == 0){
+                    this.controller.registerIndividualFormState.addressLine1.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerIndividualFormState.addressLine1.fieldValidationError = '';
+                }      
+
+                //AddressLine2
+                if(this.controller.registrationNeedHelpInd.addressLine2.length == 0){
+                    this.controller.registerIndividualFormState.addressLine2.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerIndividualFormState.addressLine2.fieldValidationError = '';
+                }         
+
+                //City/Suburb
+                if(this.controller.registrationNeedHelpInd.citySuburb.length == 0){
+                    this.controller.registerIndividualFormState.citySuburb.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerIndividualFormState.citySuburb.fieldValidationError = '';
+                }      
+
+                //State
+                if(this.controller.registrationNeedHelpInd.state.length == 0){
+                    this.controller.registerIndividualFormState.state.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerIndividualFormState.state.fieldValidationError = '';
+                }      
+
+                //PostCode
+                if(this.controller.registrationNeedHelpInd.postCode.length == 0){
+                    this.controller.registerIndividualFormState.postCode.fieldValidationError = 'Required';
+                }else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpInd.postCode)) {
+                    this.controller.registerIndividualFormState.postCode.fieldValidationError = 'Post code can contain numbers only';
+                }else{
+                    this.controller.registerIndividualFormState.postCode.fieldValidationError = '';
+                }                                                                                                                                            
             break;
             case "Org":
 
                 this.controller.registerOrganisationFormState.email.touched = true;
+                this.controller.registerOrganisationFormState.fullName.touched = true;
+                this.controller.registerOrganisationFormState.phoneNo.touched = true;
+                this.controller.registerOrganisationFormState.charityName.touched = true;
+                this.controller.registerOrganisationFormState.websiteLink.touched = true;
+                this.controller.registerOrganisationFormState.whatWeDo.touched = true;      
 
+                //Email
                 if(this.controller.registrationNeedHelpOrg.email.length == 0){
-                    this.controller.registerOrganisationFormState.email.fieldValidationError = 'Email is mandatory';
+                    this.controller.registerOrganisationFormState.email.fieldValidationError = 'Required';
                 }else if (!emailPattern.test(this.controller.registrationNeedHelpOrg.email)) {
                     this.controller.registerOrganisationFormState.email.fieldValidationError = 'Invalid email address';
                 }else{
                     this.controller.registerOrganisationFormState.email.fieldValidationError = '';
-                }            
+                }   
+
+                //FullName
+                if(this.controller.registrationNeedHelpOrg.fullName.length == 0){
+                    this.controller.registerOrganisationFormState.fullName.fieldValidationError = 'Required';
+                }else if (!lettersOnlyPatter.test(this.controller.registrationNeedHelpOrg.fullName)) {
+                    this.controller.registerOrganisationFormState.fullName.fieldValidationError = 'Name can contain valid characters only';
+                }else{
+                    this.controller.registerOrganisationFormState.fullName.fieldValidationError = '';
+                }        
+
+                //Phone no
+                if(this.controller.registrationNeedHelpOrg.phoneNo.length == 0){
+                    this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = 'Required';
+                }else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpOrg.phoneNo)) {
+                    this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+                }else{
+                    this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = '';
+                }     
+
+                //CharityName
+                if(this.controller.registrationNeedHelpOrg.charityName.length == 0){
+                    this.controller.registerOrganisationFormState.charityName.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerOrganisationFormState.charityName.fieldValidationError = '';
+                }     
+
+                //WebsiteLink
+                if(this.controller.registrationNeedHelpOrg.websiteLink.length == 0){
+                    this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = 'Required';
+                }else if (!urlPattern.test(this.controller.registrationNeedHelpOrg.websiteLink)) {
+                    this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = 'Not a valid URL';                    
+                }else{
+                    this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = '';
+                }     
+
+                //WhatWeDo
+                if(this.controller.registrationNeedHelpOrg.whatWeDo.length == 0){
+                    this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError = 'Required';
+                }else{
+                    this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError = '';
+                }                                                                           
             break;
         }
     }
@@ -133,34 +245,49 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         
         switch(this.controller.registrationType){
             case "Individual":
-                if(this.controller.registerIndividualFormState.email.fieldValidationError.length == 0){       
-                    this.registerIndividual(event);
+                if(this.controller.registerIndividualFormState.email.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.fullName.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.phoneNo.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.country.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.citySuburb.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.postCode.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.state.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.addressLine1.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.addressLine2.fieldValidationError.length == 0){       
+                        this.controller.addNewRegistrationNeedHelpInd().then(response => {
+                            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                            browserHistory.push('/confirm');
+                        }).catch((error) => {
+                        this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
+                    })
                 }
                 break;
             case "Org":
-                if(this.controller.registerOrganisationFormState.email.fieldValidationError.length == 0){
-                    this.registerOrganisation(event);
+                if(this.controller.registerOrganisationFormState.email.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.fullName.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.phoneNo.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.charityName.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length == 0 &&
+                this.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError.length == 0){
+                    this.controller.addNewRegistrationNeedHelpOrg().then(response => {
+                        (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                        browserHistory.push('/confirm');
+                    }).catch((error) => {
+                        this.controller.registerOrganisationFormState.validationError = JSON.stringify(error);
+                    })
                 }
                 break;
         }
     }
 
-    registerIndividual = (event:React.FormEvent) => {
-        this.controller.addNewRegistrationNeedHelpInd().then(response => {
-            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
-            browserHistory.push('/confirm');
-        });
-    }
-
-    registerOrganisation = (event:React.FormEvent) => {
-        this.controller.addNewRegistrationNeedHelpOrg().then(response => {
-            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
-            browserHistory.push('/confirm');
-        });
-    }
-
     handleRegistrationTypeChange = (e) => {
         this.controller.setRegistrationType(e.target.value);
+    }
+
+    resetForm = (event) => {
+        event.preventDefault();
+        this.controller.resetForm();
     }
 
     render(){
@@ -213,9 +340,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             <h3>As you are now registered as someone needing help, you are also eligible to help if you would like</h3>
                                         </div>
                                     }
+
                                     <div className="form-group">
                                         <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
-                                        <button style={myStyle} className="btn btn-secondary" type="submit">Cancel</button>
+                                        <button style={myStyle} className="btn btn-secondary" type="button" onClick={this.resetForm}>Cancel</button>
                                     </div>
                                 </form>
                             </div>
@@ -408,8 +536,10 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
         return (
 
             <div>
-                <div className="form-group">
-                    <label htmlFor="fullName">Your Name</label>
+                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.validationError}</p>
+
+                <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
+                    <label htmlFor="fullName">Your Name</label> 
                     <input 
                         className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                         id="fullName" 
@@ -418,10 +548,12 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         placeholder="Full Name"
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpInd.fullName === '' ? controller.registrationNeedHelpOrg.fullName : controller.registrationNeedHelpInd.fullName}/>
+                        value={controller.registrationNeedHelpInd.fullName}/>
+                        <span className={this.shouldMarkError('fullName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.fullName.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="phoneNo">Phone No</label>
                     <input 
                         className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
@@ -431,10 +563,12 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         placeholder="Phone no"
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
+                        value={controller.registrationNeedHelpInd.phoneNo}/>
+                        <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="email">Email</label>
                     <input 
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
@@ -444,10 +578,12 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         placeholder="Email"
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpInd.email === '' ? controller.registrationNeedHelpOrg.email : controller.registrationNeedHelpInd.email}/>
+                        value={controller.registrationNeedHelpInd.email}/>
+                        <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.email.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('country') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="country">Country</label>
                     <div>
                         <select ref="country" className={this.shouldMarkError('country') ? "form-control error" : "form-control"} id="country" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.country} >
@@ -702,7 +838,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     </div>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.country.fieldValidationError}</p>
-                <div className="form-group">
+                
+                <div className={this.shouldMarkError('addressLine1') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="addressLine1">Address Line 1</label>
                     <input 
                         className={this.shouldMarkError('addressLine1') ? "form-control error" : "form-control"}
@@ -713,9 +850,11 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.addressLine1}/>
+                        <span className={this.shouldMarkError('addressLine1') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine1.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('addressLine2') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="addressLine2">Address Line 2</label>
                     <input 
                         className={this.shouldMarkError('addressLine2') ? "form-control error" : "form-control"}
@@ -726,9 +865,11 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.addressLine2}/>
+                        <span className={this.shouldMarkError('addressLine2') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.addressLine2.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('citySuburb') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="citySuburb">City/Suburb</label>
                     <input 
                         className={this.shouldMarkError('citySuburb') ? "form-control error" : "form-control"}
@@ -739,9 +880,11 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.citySuburb}/>
+                        <span className={this.shouldMarkError('citySuburb') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.citySuburb.fieldValidationError}</p>
-                <div className="form-group">
+                
+                <div className={this.shouldMarkError('state') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="state">State/Province</label>
                     <div>
                         <select className={this.shouldMarkError('state') ? "form-control error" : "form-control"} ref="state" id="state" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.state}>
@@ -759,7 +902,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     </div>                                
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.state.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="postCode">Zip/Postcode</label>
                     <input 
                         className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
@@ -770,9 +914,11 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.postCode}/>
+                        <span className={this.shouldMarkError('postCode') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>  
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.postCode.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('whatINeedHelpWith') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatINeedHelpWith">What I need help with</label>
                     <div>
                         <select className={this.shouldMarkError('whatINeedHelpWith') ? "form-control error" : "form-control"} ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.whatINeedHelpWith}>
@@ -786,6 +932,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     </div>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError}</p>
+
                 <div className="form-group">
                     <label htmlFor="whenINeedHelp">When I need help</label>
 
@@ -942,7 +1089,9 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
         return (
             <div>
 
-                <div className="form-group">
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.validationError}</p>
+
+                <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="fullName">Your Name</label>
                     <input 
                         className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
@@ -953,9 +1102,11 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.fullName === '' ? controller.registrationNeedHelpOrg.fullName : controller.registrationNeedHelpInd.fullName}/>
+                        <span className={this.shouldMarkError('fullName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.fullName.fieldValidationError}</p>
-                <div className="form-group">
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
+                
+                <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="phoneNo">Phone No</label>
                     <input 
                         className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
@@ -966,9 +1117,11 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
+                        <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
-                <div className="form-group">
+                
+                <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="email">Email</label>
                     <input 
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
@@ -979,9 +1132,11 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.email === '' ? controller.registrationNeedHelpOrg.email : controller.registrationNeedHelpInd.email}/>
+                        <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.email.fieldValidationError}</p>
-                <div className="form-group">
+
+                <div className={this.shouldMarkError('charityName') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="charityName">Charity Name</label>
                     <input 
                         className={this.shouldMarkError('charityName') ? "form-control error" : "form-control"}
@@ -992,10 +1147,11 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpOrg.charityName}/>
-                </div>
+                        <span className={this.shouldMarkError('charityName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
+                </div>                
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.charityName.fieldValidationError}</p>
-
-                <div className="form-group">
+                
+                <div className={this.shouldMarkError('websiteLink') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="websiteLink">Website Link</label>
                     <input 
                         className={this.shouldMarkError('websiteLink') ? "form-control error" : "form-control"}
@@ -1006,10 +1162,11 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpOrg.websiteLink}/>
+                        <span className={this.shouldMarkError('websiteLink') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError}</p>
 
-                <div className="form-group">
+                <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeDo">What we do</label>
                     <textarea 
                         className={this.shouldMarkError('whatWeDo') ? "form-control error" : "form-control"}
@@ -1019,17 +1176,18 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         onChange={this.handleChange} 
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpOrg.whatWeDo}></textarea>
+                        <span className={this.shouldMarkError('whatWeDo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError}</p>        
 
-                <div className="form-group">
+                <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeNeed">What we need</label>
                     <div>
                         <CauseCreateComponent saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
                     </div>     
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>
-
+                
                 {(_firebaseAuth.currentUser !== null) &&
                     <div className="form-group">
                         <div className="table-responsive">

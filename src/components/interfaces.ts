@@ -147,3 +147,8 @@ export interface IAuthValidationError{
     code : string;
     message : string;
 }
+
+export interface IFieldValidation{
+    fieldValidationError : string;
+    touched : boolean;
+}
