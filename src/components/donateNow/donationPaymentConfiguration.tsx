@@ -2,25 +2,28 @@ import * as React from 'react';
 
 import './styles.css';
 
-export class AlternativeDonation extends React.Component<{},{}>{
+interface IDonationPaymentConfiguration {
+
+}
+
+export class DonationPaymentConfiguration extends React.Component<IDonationPaymentConfiguration,{}>{
 
     constructor(props){
         super(props);
+    }
+
+    handlePaymentSelect = (event) => {
+        //TODO add class 'active' to current element so it gets highlighted
+        console.log('Clicked this => {0}', event.target);
     }
 
     render(){
         return(
             <div id="donate-section">
                     <div className="container">
-                        <div className="donate-section padding">
-                            <div className="row section-title">
-                                <div className="col-sm-8 col-sm-offset-2">
-                                    <h1>Donate Now</h1>
-                                    <p>Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Praesent sapien massa, convallis a pellen tesque nec, egestas non nisi. Mauris blandit aliquet elit, eget tincidunt ni dictum porta.</p>
-                                </div>
-                            </div>				
+                        <div className="donate-section padding">				
                             <div className="donate-tab text-center">
-                                <form id="donate" method="post" action="#">
+                                <div id="donate">
                                     <ul className="tab-list list-inline" role="tablist">
                                         <li className="active"><a href="#onetime" role="tab" data-toggle="tab">One time</a></li>
                                         <li><a href="#monthly" role="tab" data-toggle="tab">Monthly Recurring </a></li>
@@ -30,9 +33,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                         <div className="tab-pane fade in active" id="onetime">
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$50</span>
                                                             </div>
@@ -43,9 +46,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$100</span>
                                                             </div>
@@ -56,9 +59,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$200</span>
                                                             </div>
@@ -69,11 +72,11 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
-                                                                <input autocomplete="off" id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
+                                                                <input id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
                                                             </div>
                                                             <div className="description">
                                                                 <h4>Other Amount</h4>
@@ -87,9 +90,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                         <div className="tab-pane fade " id="monthly">								
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$10</span>
                                                             </div>
@@ -100,9 +103,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$20</span>
                                                             </div>
@@ -113,9 +116,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$30</span>
                                                             </div>
@@ -126,11 +129,11 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
-                                                                <input autocomplete="off" id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
+                                                                <input  id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
                                                             </div>
                                                             <div className="description">
                                                                 <h4>Other Amount</h4>
@@ -144,9 +147,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                         <div className="tab-pane fade " id="gift">
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$200</span>
                                                             </div>
@@ -157,9 +160,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$300</span>
                                                             </div>
@@ -170,9 +173,9 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
                                                                 <span>$400</span>
                                                             </div>
@@ -183,11 +186,11 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select">
+                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
-                                                        <label for="">
+                                                        <label >
                                                             <div className="amount">
-                                                                <input autocomplete="off" id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
+                                                                <input  id="amount" name="" placeholder="Enter Amount" size={30} type="text" aria-invalid="false" />
                                                             </div>
                                                             <div className="description">
                                                                 <h4>Other Amount</h4>
@@ -203,30 +206,21 @@ export class AlternativeDonation extends React.Component<{},{}>{
                                         <p>Donate using a credit card, PayPal, or Other Option.</p>							
                                         <ul className="list-inline">
                                             <li>
-                                                <img className="img-resposive" src="images/payment-method/visa.png" alt="" />
+                                                <img className="img-resposive" src="../../../templates/images/donation-bg/visa.png" alt="" />
                                             </li>
                                             <li>
-                                                <img className="img-resposive" src="images/payment-method/master-card.png" alt="" />
+                                                <img className="img-resposive" src="../../../templates/images/donation-bg/master-card.png" alt="" />
                                             </li>
                                             <li>
-                                                <img className="img-resposive" src="images/payment-method/paypal.png" alt="" />
+                                                <img className="img-resposive" src="../../../templates/images/donation-bg/paypal.png" alt="" />
                                             </li>
                                             <li>
-                                                <img className="img-resposive" src="images/payment-method/western.png" alt="" />
-                                            </li>
-                                            <li>
-                                                <img className="img-resposive" src="images/payment-method/amarican.png" alt="" />
-                                            </li>
-                                            <li>
-                                                <img className="img-resposive" src="images/payment-method/skrill.png" alt="" />
-                                            </li>
-                                            <li>
-                                                <img className="img-resposive" src="images/payment-method/other.png" alt="" />
+                                                <img className="img-resposive" src="../../../templates/images/donation-bg/amarican.png" alt="" />
                                             </li>
                                         </ul>
                                     </fieldset>
-                                    <button type="submit" className="btn btn-primary submit">Donate</button>
-                                </form>
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>

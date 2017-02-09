@@ -7,7 +7,6 @@ import { Router, Route, browserHistory, hashHistory, IndexRoute } from 'react-ro
 import AppFrame from './appFrame';
 import { LoginComponent } from './components/login/component';
 import { NotFoundComponent } from './components/notFound/component';
-import { DonateNowComponent } from './components/donateNow/component'; 
 import { ContactUsComponent } from './components/contactUs/component';
 import { WhoWeAreComponent } from './components/whoWeAre/component'; 
 import { HomeComponent } from './components/home/component';
@@ -21,7 +20,7 @@ import { RegisterWantToHelpComponent } from './components/register/WantToHelp/co
 import { PasswordReset } from './components/login/passwordReset/component';
 import { SignOut } from './components/login/signOut/component';
 
-import { AlternativeDonation } from './components/donateNow/alternativeDonation';
+import { DonateNowComponent } from './components/donateNow/component';
 
 import { requireAuth } from '../src/components/firebaseAuth/component';
 
@@ -35,7 +34,7 @@ ReactDOM.render(
             <Route path="/register/:requestType(/:Type)(/:ID)" component={RegisterNeedHelpComponent} />                    
             <Route path="/confirm" component={RegistrationConfirmation } />    
             <Route path="/aboutUs" component={WhoWeAreComponent} />
-            <Route path="/donate(/:causeId)" component={AlternativeDonation} />
+            <Route path="/donate(/:causeId)" component={DonateNowComponent} />
             <Route path="/viewNeeds" component={CauseListComponent} onEnter={requireAuth} />          
             <Route path="/contactUs" component={ContactUsComponent} />
             <Route path="/login" component={LoginComponent}/>
