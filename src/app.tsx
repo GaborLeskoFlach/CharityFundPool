@@ -23,6 +23,7 @@ import { SignOut } from './components/login/signOut/component';
 import { DonateNowComponent } from './components/donateNow/component';
 
 import { requireAuth } from '../src/components/firebaseAuth/component';
+import { ListView } from './components/lists/component';
 
 ReactDOM.render(
     <Router history={browserHistory}>
@@ -42,6 +43,7 @@ ReactDOM.render(
             <Route path="/login/signout" component={SignOut}/>     
             <Route path="/jobs" component={Jobs} onEnter={requireAuth} />
             <Route path="/administration" component={Administration} onEnter={requireAuth}/>
+            <Route path="/listView" component={ListView} />
         </Route>
         <Route path="*" component={NotFoundComponent} />
     </Router>,
