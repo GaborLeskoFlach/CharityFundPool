@@ -1,7 +1,11 @@
 import * as React from 'react';
 import './styles.css';
 
-export class ListView extends React.Component<{},{}>{
+interface IListView{
+    data : Array<any>;
+}
+
+export class ListView<T> extends React.Component<IListView,{}>{
     
     constructor(){
         super();
@@ -14,17 +18,6 @@ export class ListView extends React.Component<{},{}>{
     render(){
         return(
             <div className="container">
-                <div className="row">
-                    <nav className="navbar navbar-default">
-                        <div className="container">
-                            <div className="navbar-header">
-                                <span className="navbar-brand">Bootstrap Table Panel</span>
-                            </div>
-                            <p className="navbar-text">With pagination, checkbox column, toggle-filtering and add/edit/delete row
-                                placeholders.</p>
-                        </div>
-                    </nav>
-                </div>
                 <div className="row">
                     <div className="col-md-10 col-md-offset-1">
                         <div className="panel panel-default panel-table">
