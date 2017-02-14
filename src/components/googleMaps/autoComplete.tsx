@@ -1,39 +1,55 @@
 import * as React from 'react'
+import {render, findDOMNode} from 'react-dom'
 
+let Map = require('google-maps-react').Map;
+let Marker = require('google-maps-react').Marker;
+let GoogleApiWrapper = require('google-maps-react').GoogleApiWrapper;
 
-import Map, {Marker, GoogleApiWrapper} from '../../src/index'
-import styles from './autocomplete.module.css'
+const styles = require('./autocomplete.module.css');
 
-const Contents = React.createClass({
-  getInitialState() {
-    return {
-      place: null,
-      position: null
+interface IContents{
+  google : any;
+  map : any;
+}
+
+interface IState{
+  position:any;
+  place : any;
+}
+
+class Contents extends React.Component<IContents,IState>{
+  
+  constructor(){
+    super();
+
+    this.state = {
+      place : null,
+      position : null
     }
-  },
+  }
 
-  onSubmit: function(e) {
+  onSubmit = (e) => {
     e.preventDefault();
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount = () => {
     this.renderAutoComplete();
-  },
+  }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = (prevProps : IContents) => {
     const {google, map} = this.props;
     if (map !== prevProps.map) {
       this.renderAutoComplete();
     }
-  },
+  }
 
-  renderAutoComplete: function() {
+  renderAutoComplete = () => {
     const {google, map} = this.props;
 
     if (!google || !map) return;
 
-    const aref = this.refs.autocomplete;
-    const node = ReactDOM.findDOMNode(aref);
+    const aref = this.refs['autocomplete'];
+    const node = findDOMNode(aref);
     var autocomplete = new google.maps.places.Autocomplete(node);
     autocomplete.bindTo('bounds', map);
 
@@ -55,9 +71,9 @@ const Contents = React.createClass({
         position: place.geometry.location
       })
     })
-  },
+  }
 
-  render: function() {
+  render() {
     const props = this.props;
     const {position} = this.state;
 
@@ -94,19 +110,34 @@ const Contents = React.createClass({
       </div>
     )
   }
-})
+}
 
-const MapWrapper = React.createClass({
-  render: function() {
+class MapWrapper extends React.Component<any,{}>{
+  
+  constructor(props){
+    super(props);
+  }
+  
+  render() {
     const props = this.props;
     const {google} = this.props;
 
-    return (
-      <Map google={google}
-          className={'map'}
-          visible={false}>
-            <Contents {...props} />
-      </Map>
-    );
+    if(props.loaded){
+      return (
+        <Map google={google}
+            className={'map'}
+            visible={false}>
+              <Contents {...props} />
+        </Map>
+      );
+    }else{
+      return <h1>Map is loading....</h1>
+    }
   }
-})
+}
+
+
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyDu78RCANSS6KHwVX-uj6KTHUlzOIFqnjw',
+  libraries: ['places','visualization']
+})(MapWrapper)

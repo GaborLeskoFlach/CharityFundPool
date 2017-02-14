@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { GoogleMapSimple } from './simple';
 import { GoogleMapClickableMarkers } from './clickableMarkers';
+import AutoComplete from './autoComplete';
 
 export class GoogleMapHost extends React.Component<{},{}>{
     
@@ -10,8 +11,14 @@ export class GoogleMapHost extends React.Component<{},{}>{
 
     render(){
         return(
-            /*<GoogleMapSimple loaded={true} google={window['google']} />*/
-            <GoogleMapClickableMarkers loaded={true} google={window['google']} />
+                <div className="container">
+                    <div className="section-title-center">
+                        <h1>Google Maps</h1>				
+                    </div>
+                    {/*<GoogleMapSimple loaded={true} google={window['google']} />*/}
+                    {/*<GoogleMapClickableMarkers google={window['google']} loaded={true} />*/}
+                    <AutoComplete />
+                </div>
         )
     }
 }

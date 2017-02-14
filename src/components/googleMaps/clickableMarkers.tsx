@@ -5,6 +5,7 @@ import {observer} from 'mobx-react';
 let Map = require('google-maps-react').Map;
 let Marker = require('google-maps-react').Marker;
 let InfoWindow = require('google-maps-react').InfoWindow;
+let GoogleApiWrapper = require('google-maps-react').GoogleApiWrapper;
 
 interface IMapState {
     showingInfoWindow: boolean;
@@ -139,3 +140,8 @@ export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickab
     }
 
 }
+
+/*
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyDu78RCANSS6KHwVX-uj6KTHUlzOIFqnjw',
+})(GoogleMapClickableMarkers)*/
