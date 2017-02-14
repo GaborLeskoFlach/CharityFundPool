@@ -15,7 +15,9 @@ interface IContents{
 interface IState{
   position:any;
   place : any;
+  places : Array<any>;
 }
+
 
 class Contents extends React.Component<IContents,IState>{
   
@@ -24,7 +26,8 @@ class Contents extends React.Component<IContents,IState>{
 
     this.state = {
       place : null,
-      position : null
+      position : null,
+      places : []
     }
   }
 
@@ -68,7 +71,8 @@ class Contents extends React.Component<IContents,IState>{
 
       this.setState({
         place: place,
-        position: place.geometry.location
+        position: place.geometry.location,
+        places : [...this.state.places, ...place]
       })
     })
   }
@@ -104,7 +108,11 @@ class Contents extends React.Component<IContents,IState>{
               }}
               center={this.state.position}
               centerAroundCurrentLocation={false}>
-                <Marker position={this.state.position} />
+                {
+                  this.state.places.map((place, index) => {
+                    <Marker position={place.geometry.location} />
+                  })
+                }
           </Map>
         </div>
       </div>
