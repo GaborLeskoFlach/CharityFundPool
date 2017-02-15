@@ -14,8 +14,14 @@ interface IContents{
   map : any;
 }
 
+interface IPosition{
+  lat : number;
+  lng : number
+}
+
 interface IState{
-  position:any;
+  initialPosition : IPosition;
+  position: IPosition;
   place : any;
   places : Array<any>;
   selectedPlaces : Array<IAddressDetails>;
@@ -38,6 +44,10 @@ class Contents extends React.Component<IContents,IState>{
 
     this.state = {
       place : null,
+      initialPosition : {
+        lat :  -37.81361100000001,
+        lng : 144.96305600000005
+      },
       position : null,
       places : [],
       selectedPlaces : []
@@ -86,7 +96,8 @@ class Contents extends React.Component<IContents,IState>{
         place: place,
         position: place.geometry.location,
         places : [...this.state.places, ...place],
-        selectedPlaces : [...this.state.selectedPlaces, this.extractAddressDetails(place.address_components)]
+        selectedPlaces : [...this.state.selectedPlaces, this.extractAddressDetails(place.address_components)],
+        initialPosition : null
       })
     })
   }
@@ -155,11 +166,12 @@ class Contents extends React.Component<IContents,IState>{
               type='submit'
               value='Go' />
           </form>
+          {/*
           <div>
             <div>Lat: {position && position.lat()}</div>
             <div>Lng: {position && position.lng()}</div>
           </div>
-
+          */}
           <div>
             <ul>
                 {
@@ -178,7 +190,8 @@ class Contents extends React.Component<IContents,IState>{
                 height: '100vh',
                 width: '100%'
               }}
-              center={this.state.position}
+              initialCenter={this.state.initialPosition}
+              center={position}
               centerAroundCurrentLocation={false}>
                 {
                   this.state.places.map((place, index) => {
