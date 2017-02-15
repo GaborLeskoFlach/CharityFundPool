@@ -5,6 +5,8 @@ let Map = require('google-maps-react').Map;
 let Marker = require('google-maps-react').Marker;
 let GoogleApiWrapper = require('google-maps-react').GoogleApiWrapper;
 
+import { Constants } from '../constants';
+
 const styles = require('./autocomplete.module.css');
 
 interface IContents{
@@ -16,8 +18,18 @@ interface IState{
   position:any;
   place : any;
   places : Array<any>;
+  selectedPlaces : Array<IAddressDetails>;
 }
 
+interface IAddressDetails{
+    streetNumber : string;
+    route : string;
+    locality : string;
+    administrativeAreaLevel1 : string;
+    administrativeAreaLevel2 : string;
+    country : string;
+    postalCode : string;
+}
 
 class Contents extends React.Component<IContents,IState>{
   
@@ -27,7 +39,8 @@ class Contents extends React.Component<IContents,IState>{
     this.state = {
       place : null,
       position : null,
-      places : []
+      places : [],
+      selectedPlaces : []
     }
   }
 
@@ -72,9 +85,57 @@ class Contents extends React.Component<IContents,IState>{
       this.setState({
         place: place,
         position: place.geometry.location,
-        places : [...this.state.places, ...place]
+        places : [...this.state.places, ...place],
+        selectedPlaces : [...this.state.selectedPlaces, this.extractAddressDetails(place.address_components)]
       })
     })
+  }
+
+  extractAddressDetails = (addressComponents : Array<any>) : IAddressDetails => {
+      let addressDetails : IAddressDetails = {
+        streetNumber : '',
+        route : '',
+        postalCode : '',
+        locality : '',
+        country : '',
+        administrativeAreaLevel1 : '',
+        administrativeAreaLevel2 : ''
+      };
+
+      addressComponents.map((addressComponent) => {
+        const value : string = addressComponent.long_name;
+        const type : string = addressComponent.types[0];
+
+        switch(type){
+            case Constants.googleAddressDetails_streetNumber :
+                addressDetails.streetNumber = value;
+                break;
+            case Constants.googleAddressDetails_route :
+                addressDetails.route = value;
+                break;
+            case Constants.googleAddressDetails_postalCode :
+                addressDetails.postalCode = value;
+                break;
+            case Constants.googleAddressDetails_locality :
+                addressDetails.locality = value;
+                break;
+            case Constants.googleAddressDetails_country : 
+                addressDetails.country = value;
+                break;
+            case Constants.googleAddressDetails_adminAreaLevel1 :
+                addressDetails.administrativeAreaLevel1 = value;
+                break;
+            case Constants.googleAddressDetails_adminAreaLevel2 :
+                addressDetails.administrativeAreaLevel2 = value;
+                break;
+        }
+      });
+
+      return addressDetails;
+  }
+
+  renderSelectedPlaces = (selectedPlace : IAddressDetails, index : number) => {
+    return <li key={index}>StreetNo: {selectedPlace.streetNumber}</li>
   }
 
   render() {
@@ -85,10 +146,10 @@ class Contents extends React.Component<IContents,IState>{
       <div className={styles.flexWrapper}>
         <div className={styles.left}>
           <form onSubmit={this.onSubmit}>
-            <input
-              ref='autocomplete'
-              type="text"
-              placeholder="Enter a location" />
+            <input                
+                ref='autocomplete'
+                type="text"
+                placeholder="Enter a location" />
             <input
               className={styles.button}
               type='submit'
@@ -98,6 +159,17 @@ class Contents extends React.Component<IContents,IState>{
             <div>Lat: {position && position.lat()}</div>
             <div>Lng: {position && position.lng()}</div>
           </div>
+
+          <div>
+            <ul>
+                {
+                    this.state.selectedPlaces.map((selectedPlace, index) => {
+                        return  this.renderSelectedPlaces(selectedPlace, index)
+                    })
+                }
+            </ul>
+          </div>
+
         </div>
         <div className={styles.right}>
           <Map {...props}
@@ -110,7 +182,7 @@ class Contents extends React.Component<IContents,IState>{
               centerAroundCurrentLocation={false}>
                 {
                   this.state.places.map((place, index) => {
-                    <Marker position={place.geometry.location} />
+                    return <Marker key={index} position={place.geometry.location} />
                   })
                 }
           </Map>
