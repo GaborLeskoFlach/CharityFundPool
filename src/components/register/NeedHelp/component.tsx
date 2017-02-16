@@ -12,6 +12,7 @@ import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;
 import { Link } from 'react-router';
 import { _firebaseAuth } from '../../firebaseAuth/component';
+import GoogleAddress from '../../googleMaps/autoCompleteWithoutForm';
 
 import './styles.css';
 
@@ -529,6 +530,10 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
         return value;
     }
 
+    onPlaceSelected = (address) => {
+        console.log('ADDRESS => {0}', address);
+    }
+
     render(){
 
         const { controller } = this.props;
@@ -582,6 +587,14 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.email.fieldValidationError}</p>
+
+
+
+                {/*TODO - Implement Google Place API*/}
+
+
+                <GoogleAddress onPlaceSelected={this.onPlaceSelected} />
+
 
                 <div className={this.shouldMarkError('country') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="country">Country (*)</label>

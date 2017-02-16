@@ -91,15 +91,17 @@ class Contents extends React.Component<IContents,IState>{
         return;
       }
 
+      let selectedPlace = this.extractAddressDetails(place.address_components);
+
       this.setState({
         place: place,
         position: place.geometry.location,
         places : [...this.state.places, ...place],
-        selectedPlaces : [...this.state.selectedPlaces, this.extractAddressDetails(place.address_components)],
+        selectedPlaces : [...this.state.selectedPlaces, selectedPlace],
         initialPosition : null
       })
 
-      this.onPlaceSelected(place);
+      this.onPlaceSelected(selectedPlace);
     })
   }
 
@@ -249,6 +251,10 @@ class Contents extends React.Component<IContents,IState>{
   }
 }
 
+interface IMapWrapper {
+  onPlaceSelected : (addressDetails : IAddressDetails) => void;
+}
+
 @observer
 class MapWrapper extends React.Component<any,{}>{
   @observable defaultPosition : IPosition;
@@ -260,9 +266,8 @@ class MapWrapper extends React.Component<any,{}>{
         lat :  -37.81361100000001,
         lng : 144.96305600000005      
     }
-
   }
-  
+
   render() {
     const props = this.props;
     const {google} = this.props;
@@ -273,7 +278,7 @@ class MapWrapper extends React.Component<any,{}>{
             containerStyle={{ position:'relative', height : '100%', width : '100%'}}            
             visible={false}
             initialCenter={this.defaultPosition} >
-              <Contents {...props} />
+              <Contents {...props} onPlaceSelected={this.props.onPlaceSelected} />
         </Map>
       );
     }else{
