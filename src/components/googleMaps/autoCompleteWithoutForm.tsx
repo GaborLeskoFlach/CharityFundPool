@@ -6,6 +6,7 @@ let Map = require('google-maps-react').Map;
 let Marker = require('google-maps-react').Marker;
 let GoogleApiWrapper = require('google-maps-react').GoogleApiWrapper;
 
+import { IAddressDetails, IPosition } from '../interfaces';
 import { Constants } from '../constants';
 
 const styles = require('./autocomplete.module.css');
@@ -16,27 +17,12 @@ interface IContents{
   onPlaceSelected : (place : IAddressDetails) => void;
 }
 
-interface IPosition{
-  lat : number;
-  lng : number
-}
-
 interface IState{
   initialPosition : IPosition;
   position: IPosition;
   place : any;
   places : Array<any>;
-  selectedPlaces : Array<IAddressDetails>;
-}
-
-interface IAddressDetails{
-    streetNumber : string;
-    route : string;
-    locality : string;
-    administrativeAreaLevel1 : string;
-    administrativeAreaLevel2 : string;
-    country : string;
-    postalCode : string;
+  //selectedPlaces : Array<IAddressDetails>;
 }
 
 class Contents extends React.Component<IContents,IState>{
@@ -52,7 +38,7 @@ class Contents extends React.Component<IContents,IState>{
       },
       position : null,
       places : [],
-      selectedPlaces : []
+      //selectedPlaces : []
     }
   }
 
@@ -90,16 +76,16 @@ class Contents extends React.Component<IContents,IState>{
       if (!place.geometry) {
         return;
       }
-
-      let selectedPlace = this.extractAddressDetails(place.address_components);
-
+            
       this.setState({
         place: place,
         position: place.geometry.location,
         places : [...this.state.places, ...place],
-        selectedPlaces : [...this.state.selectedPlaces, selectedPlace],
+        //selectedPlaces : [...this.state.selectedPlaces, selectedPlace],
         initialPosition : null
-      })
+      });
+
+      let selectedPlace = this.extractAddressDetails(place.address_components);
 
       this.onPlaceSelected(selectedPlace);
     })
@@ -113,7 +99,11 @@ class Contents extends React.Component<IContents,IState>{
         locality : '',
         country : '',
         administrativeAreaLevel1 : '',
-        administrativeAreaLevel2 : ''
+        administrativeAreaLevel2 : '',
+        position : {
+          lat : null,
+          lng : null
+        }
       };
 
       addressComponents.map((addressComponent) => {
@@ -144,6 +134,11 @@ class Contents extends React.Component<IContents,IState>{
                 break;
         }
       });
+
+      addressDetails.position = {
+        lng : this.state.position.lng(),
+        lat : this.state.position.lat()
+      }
 
       return addressDetails;
   }
@@ -224,17 +219,18 @@ class Contents extends React.Component<IContents,IState>{
 
     return (
         <div>
-          <form onSubmit={this.onSubmit}>
+
             <input
                 className="form-control"                
                 ref='autocomplete'
                 type="text"
                 placeholder="Enter a location" />
+            {/*
             <input
               className={styles.button}
               type='submit'
-              value='Go' />
-          </form>
+              value='Go' />*/}
+
           {/*
           <div>
             <ul>

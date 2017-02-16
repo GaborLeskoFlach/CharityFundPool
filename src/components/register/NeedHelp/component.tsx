@@ -22,7 +22,7 @@ import DateRange from '../../common/dateComponents/dateRange';
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
             IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
             IColumnData, ICause, DataSource, DataFilter, RegistrationType, 
-            IDateRange, IRouteParams_Registrations } from '../../interfaces';
+            IDateRange, IRouteParams_Registrations, IAddressDetails, IPosition } from '../../interfaces';
 
 let DataTable = require('react-data-components').DataTable;
 
@@ -359,6 +359,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
 @observer
 export class RegisterIndividualComponent extends React.Component<IRegistrationProps, {}>{
+    googleAddressPosition : IPosition;
 
     constructor(props){
         super(props);
@@ -530,8 +531,30 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
         return value;
     }
 
-    onPlaceSelected = (address) => {
-        console.log('ADDRESS => {0}', address);
+    onPlaceSelected = (address : IAddressDetails) => {
+        if(address){
+            if(address.streetNumber){
+                this.props.controller.registrationNeedHelpInd.addressLine1 = address.streetNumber;
+            }
+            if(address.route){
+                this.props.controller.registrationNeedHelpInd.addressLine2 = address.route;
+            }
+            if(address.postalCode){
+                this.props.controller.registrationNeedHelpInd.postCode = address.postalCode;
+            }
+            if(address.locality){
+                this.props.controller.registrationNeedHelpInd.citySuburb = address.locality;
+            }
+            if(address.country){
+                this.props.controller.registrationNeedHelpInd.country = address.country;
+            }
+            if(address.administrativeAreaLevel1){
+                this.props.controller.registrationNeedHelpInd.state = address.administrativeAreaLevel1;
+            }
+
+            //Longitude and Latitude to save into DB
+            this.googleAddressPosition = address.position;
+        }
     }
 
     render(){
@@ -588,13 +611,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.email.fieldValidationError}</p>
 
-
-
-                {/*TODO - Implement Google Place API*/}
-
-
                 <GoogleAddress onPlaceSelected={this.onPlaceSelected} />
-
 
                 <div className={this.shouldMarkError('country') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="country">Country (*)</label>

@@ -5,6 +5,8 @@ let Map = require('google-maps-react').Map;
 let Marker = require('google-maps-react').Marker;
 let GoogleApiWrapper = require('google-maps-react').GoogleApiWrapper;
 
+import { IAddressDetails } from '../interfaces';
+
 import { Constants } from '../constants';
 
 const styles = require('./autocomplete.module.css');
@@ -25,16 +27,6 @@ interface IState{
   place : any;
   places : Array<any>;
   selectedPlaces : Array<IAddressDetails>;
-}
-
-interface IAddressDetails{
-    streetNumber : string;
-    route : string;
-    locality : string;
-    administrativeAreaLevel1 : string;
-    administrativeAreaLevel2 : string;
-    country : string;
-    postalCode : string;
 }
 
 class Contents extends React.Component<IContents,IState>{
@@ -110,7 +102,11 @@ class Contents extends React.Component<IContents,IState>{
         locality : '',
         country : '',
         administrativeAreaLevel1 : '',
-        administrativeAreaLevel2 : ''
+        administrativeAreaLevel2 : '',
+        position : {
+          lng : null,
+          lat : null
+        }
       };
 
       addressComponents.map((addressComponent) => {
@@ -156,15 +152,16 @@ class Contents extends React.Component<IContents,IState>{
     return (
       <div className={styles.flexWrapper}>
         <div className={styles.left}>
-          <form onSubmit={this.onSubmit}>
+          <form>
             <input                
                 ref='autocomplete'
                 type="text"
                 placeholder="Enter a location" />
+            {/*
             <input
               className={styles.button}
               type='submit'
-              value='Go' />
+              value='Go' />*/}
           </form>
           {/*
           <div>

@@ -152,3 +152,20 @@ export interface IFieldValidation{
     fieldValidationError : string;
     touched : boolean;
 }
+
+export interface IAddressDetails{
+    streetNumber : string;
+    route : string;
+    locality : string;
+    administrativeAreaLevel1 : string;
+    administrativeAreaLevel2 : string;
+    country : string;
+    postalCode : string;
+
+    position : IPosition;
+}
+
+export interface IPosition{
+  lat : any;
+  lng : any
+}
