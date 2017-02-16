@@ -14,6 +14,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     whenINeedHelp? : INeedHelpDateConfig
     active:boolean;
     uid:string;
+    addressLocation : IPosition;
 }
 
 export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{

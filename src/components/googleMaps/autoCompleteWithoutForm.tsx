@@ -15,6 +15,7 @@ interface IContents{
   google : any;
   map : any;
   onPlaceSelected : (place : IAddressDetails) => void;
+  onResetPlaceSelected : () => void;
 }
 
 interface IState{
@@ -143,74 +144,12 @@ class Contents extends React.Component<IContents,IState>{
       return addressDetails;
   }
 
-  renderSelectedPlaces = (selectedPlace : IAddressDetails, index : number) => {
-    return (
-      <div key={index} className="form-inline">
-        <div className="form-group">
-            <label htmlFor="fullName">Street No</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.streetNumber}/>               
-        </div>
-        <div className="form-group">
-            <label htmlFor="fullName">Street</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.route}/>               
-        </div>
-        <div className="form-group">
-            <label htmlFor="fullName">PostCode</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.postalCode}/>               
-        </div>
-        <div className="form-group">
-            <label htmlFor="fullName">Suburb</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.locality}/>               
-        </div>
-        <div className="form-group">
-            <label htmlFor="fullName">Country</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.country}/>               
-        </div>
-        <div className="form-group">
-            <label htmlFor="fullName">State</label> 
-            <input 
-                className="form-control"
-                id="fullName" 
-                type="text" 
-                ref="fullName" 
-                placeholder="Full Name"
-                value={selectedPlace.administrativeAreaLevel1}/>               
-        </div> 
-
-        <hr />
-
-      </div>
-    )
+  resetField = () => {
+    const searchField : HTMLInputElement = findDOMNode(this.refs['autocomplete']) as HTMLInputElement;
+    if(searchField){
+      searchField.value = '';
+    }
+    this.props.onResetPlaceSelected();
   }
 
   render() {
@@ -218,31 +157,15 @@ class Contents extends React.Component<IContents,IState>{
     const {position} = this.state;
 
     return (
-        <div>
 
-            <input
-                className="form-control"                
-                ref='autocomplete'
-                type="text"
-                placeholder="Enter a location" />
-            {/*
-            <input
-              className={styles.button}
-              type='submit'
-              value='Go' />*/}
-
-          {/*
-          <div>
-            <ul>
-                {
-                    this.state.selectedPlaces.map((selectedPlace, index) => {
-                        return  (this.renderSelectedPlaces(selectedPlace, index))
-                    })
-                }
-            </ul>
-          </div>
-          */}
+      <div className="form-group">
+        <div className="input-group">
+          <div className="input-group-addon"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+          <input type="text" ref="autocomplete" className="form-control" id="googleAddressFinder" placeholder="Enter a location" />
+          <div className="input-group-addon" onClick={this.resetField}><span className="glyphicon glyphicon-erase" aria-hidden="true"></span></div>
         </div>
+      </div>
+
     )
   }
 }

@@ -165,7 +165,8 @@ export class RegisterNeedHelpController {
                 singleDate : { day : '', reoccurring : false},
                 dateRange : { from : '', to : '' , reoccurring : false},
                 flexible : false
-            }
+            },
+            addressLocation : null
         }
         this.registrationNeedHelpOrg = {
             ID : '',

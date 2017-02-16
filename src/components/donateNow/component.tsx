@@ -62,10 +62,12 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                 this.controller.donationRegistration.postCode = event.target.value;
                 this.controller.donationFormState.postCode.fieldValidationError = '';
                 break;
+            /*
             case DonationFields.amountToDonate:
                 this.controller.donationRegistration.amountToDonate = event.target.value;
                 this.controller.donationFormState.amountToDonate.fieldValidationError = '';
-                break;                  
+                break;      
+            */            
         }
     }
 
@@ -78,7 +80,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         this.controller.donationFormState.email.touched = true;
         this.controller.donationFormState.fullName.touched = true;
         this.controller.donationFormState.phoneNo.touched = true;
-        this.controller.donationFormState.amountToDonate.touched = true;
+        //this.controller.donationFormState.amountToDonate.touched = true;
         this.controller.donationFormState.postCode.touched = true;
 
         //Email validation
@@ -117,7 +119,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
             this.controller.donationFormState.postCode.fieldValidationError = '';
         }    
 
-        //AmountToDonate
+        //AmountToDonate        
         if(this.controller.donationRegistration.amountToDonate.length == 0){
             this.controller.donationFormState.amountToDonate.fieldValidationError = 'Required';
         }else if (!numericOnlyPatter.test(this.controller.donationRegistration.amountToDonate)) {
@@ -300,7 +302,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                     </div>      
                                     <p className='validationErrorMsg'>{this.controller.donationFormState.postCode.fieldValidationError}</p>  
 
-
+                                    {/*
                                     <div className={this.shouldMarkError('amountToDonate') ? "form-group has-error has-feedback" : ""}>
                                         <label htmlFor="amountToDonate">Amount to donate</label>
                                         <div className="input-group">
@@ -318,7 +320,8 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                         </div>
                                     </div>
                                     <p className='validationErrorMsg'>{this.controller.donationFormState.amountToDonate.fieldValidationError}</p>  
-                            
+                                    */}
+
                                     <DonationPaymentConfiguration  />
 
                                     <button type="submit" className="btn btn-primary submit">Donate</button>
