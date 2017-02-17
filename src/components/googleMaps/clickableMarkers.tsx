@@ -2,6 +2,8 @@ import * as React from 'react'
 import {observable } from 'mobx';
 import {observer} from 'mobx-react';
 
+import { IMarker, IPosition } from '../interfaces';
+
 let Map = require('google-maps-react').Map;
 let Marker = require('google-maps-react').Marker;
 let InfoWindow = require('google-maps-react').InfoWindow;
@@ -15,24 +17,13 @@ interface IMapState {
 }
 
 interface IGoogleMapClickableMarkers{
-    loaded : boolean;
-    google : any;
-}
-
-interface IMarkerPosition{
-    lat : number;
-    lng : number;
-}
-
-interface IMarker {
-    onClick : (props, marker, e) => void;
-    position : IMarkerPosition;
-    name : string;
-    extraInfo : string;
+    google? : any;
+    loaded? : boolean;
+    data : Array<IMarker>;
+    defaultPosition : IPosition;
 }
 
 export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickableMarkers,IMapState>{
-    markers : Array<IMarker>;
 
     constructor(props){
         super(props);
@@ -42,28 +33,7 @@ export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickab
             activeMarker : {},
             selectedPlace : {},
             markerExtraInfo : ''
-        }    
-
-        this.markers = [            
-            {
-                name : 'Marker 1',
-                position : { lat: 37.778519, lng: -122.405640},
-                onClick : this.onMarkerClick,
-                extraInfo : '11'
-            },
-            {
-                name : 'Marker 2',
-                position : { lat: 37.759703, lng: -122.428093},
-                onClick : this.onMarkerClick,
-                extraInfo : '22'
-            },
-            {
-                name : 'Marker 3',
-                position : { lat : -37.809912, lng : 145.26118900000006 },
-                onClick : this.onMarkerClick,
-                extraInfo : '33'
-            }                        
-        ]           
+        }        
     }
 
     getMarkerExtraDetails = (name : string) : string => {
@@ -110,38 +80,44 @@ export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickab
     }
 
     render() {
-        return (
-            <Map google={this.props.google}
-                style={{width: '100%', height: '100%', position: 'relative'}}
-                className={'map'}
-                zoom={14}
-                onClick={this.onMapClicked}>
-            
-            {
-                this.markers.map((marker : IMarker, index) => {
-                    return this.renderMarker(index,marker);
-                })
-            }
+
+        if(this.props.loaded){
+            return (
+                <Map google={this.props.google}
+                    containerStyle={{ position:'relative', height : '300px', width : '100%'}}         
+                    className={'map'}
+                    zoom={14}
+                    initialCenter={this.props.defaultPosition}
+                    onClick={this.onMapClicked}>                
+                {
+                    this.props.data.map((marker : IMarker, index) => {
+                        return this.renderMarker(index,marker);
+                    })
+                }
 
 
-            { this.state.selectedPlace && 
-                <InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}
-                    onClose={this.onInfoWindowClose}>
-                    <div>
-                    <h1>{this.state.selectedPlace.name}</h1>
-                    <p>Details: {this.state.markerExtraInfo}</p>
-                    </div>
-                </InfoWindow>
-            }
-            </Map>
-        )
+                { this.state.selectedPlace && 
+                    <InfoWindow
+                        marker={this.state.activeMarker}
+                        visible={this.state.showingInfoWindow}
+                        onClose={this.onInfoWindowClose}>
+                        <div>
+                        <h1>{this.state.selectedPlace.name}</h1>
+                        <p>Details: {this.state.markerExtraInfo}</p>
+                        </div>
+                    </InfoWindow>
+                }
+                </Map>
+            )
+        }else{
+            return <h1>Map is loading....</h1>
+        }
+
+
     }
 
 }
 
-/*
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDu78RCANSS6KHwVX-uj6KTHUlzOIFqnjw',
-})(GoogleMapClickableMarkers)*/
+  apiKey: 'AIzaSyDu78RCANSS6KHwVX-uj6KTHUlzOIFqnjw'
+})(GoogleMapClickableMarkers)

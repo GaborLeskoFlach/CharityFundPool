@@ -3,12 +3,14 @@ let DataTable = require('react-data-components').DataTable;
 import { JobSearchController } from './controller';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, DataFilter } from '../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, DataFilter, IMarker, IPosition } from '../interfaces';
 import { convertData } from '../../utils/utils';
 import { Link } from 'react-router';
 
 import { ListView } from './../lists/simpleList'
 import { ResponsiveTiles } from './../lists/responsiveTiles';
+
+import GoogleMarkers from './../googleMaps/clickableMarkers';
 
 import './styles.css';
 
@@ -121,10 +123,16 @@ interface ISearchResults {
 export class SearchResults extends React.Component<ISearchResults,{}>{
     registrationNeedHelpIndColumns : Array<IColumnData>;
     controller : JobSearchController;
+    defaultPosition : IPosition;
 
     constructor(){
         super();
         this.controller = new JobSearchController();
+
+        this.defaultPosition = {
+            lat :  -37.81361100000001,
+            lng : 144.96305600000005      
+        } 
     }
 
     componentWillReceiveProps(nextProps : ISearchResults){        
@@ -134,6 +142,18 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
         }).catch((e) => {
             this.controller.isLoading = false;
         })
+    }
+
+    convertSearchResultsToGoogleMarkers = (searchResults : Array<IRegistrationNeedHelpInd>) : Array<IMarker> =>  {        
+        let markers : Array<IMarker> = [];
+        searchResults.map((item) => {            
+            markers.push({
+                name : item.fullName,
+                position : this.defaultPosition,
+                extraInfo : item.phoneNo
+            })
+        })
+        return markers;
     }
 
     render(){
@@ -158,7 +178,13 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
                         <div className="container">
                             <div className="section-title">
                                 <h1>Results</h1>                            
-                            </div>                       
+                            </div>  
+
+                            {/*TODO -> Inject Google Maps with Markers here*/}
+                            <GoogleMarkers data={this.convertSearchResultsToGoogleMarkers(filteredData)} defaultPosition={this.defaultPosition}/>
+
+                            <hr/>
+
                             <ResponsiveTiles data={filteredData}/>
                         </div>                                         
                     )

@@ -170,3 +170,10 @@ export interface IPosition{
   lat : any;
   lng : any
 }
+
+export interface IMarker {
+    //onClick : (props, marker, e) => void;
+    position : IPosition;
+    name : string;
+    extraInfo : string;
+}
