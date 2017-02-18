@@ -112,7 +112,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                     <span className="icon-bar"></span>
                                 </button>
                                 <a className="navbar-brand" href="index.html">
-                                    <h1><img className="img-responsive" src="templates/images/default_profile_image.png" alt="User profile image" /></h1>
+                                    <h4>Hello, John</h4>
                                 </a>                    
                             </div>	
 

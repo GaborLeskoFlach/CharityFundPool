@@ -25,7 +25,7 @@ interface IGoogleMapClickableMarkers{
 
 export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickableMarkers,IMapState>{
 
-    constructor(props){
+   constructor(props){
         super(props);
 
         this.state = {
@@ -33,12 +33,12 @@ export class GoogleMapClickableMarkers extends React.Component<IGoogleMapClickab
             activeMarker : {},
             selectedPlace : {},
             markerExtraInfo : ''
-        }        
+        }               
     }
 
     getMarkerExtraDetails = (name : string) : string => {
         //TODO implement.
-        return 'Fuck Ya => ' + name;
+        return 'Show more details => ' + name;
     }
 
     onMarkerClick = (props, marker, e) => {

@@ -76,7 +76,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         this.controller.setCurrentTradeOptions(obj);
     }
 
-    handleChange(event : any){
+    handleChange = (event : any) => {
         switch(event.target.id)
         {
             case RegistrationFields.email:   

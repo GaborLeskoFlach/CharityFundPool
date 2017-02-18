@@ -26,8 +26,7 @@ import { requireAuth } from '../src/components/firebaseAuth/component';
 import { ListView } from './components/lists/simpleList';
 import { BootstrapList } from './components/lists/bootstrapList';
 
-import { GoogleRenderSimple } from './components/jobs/googleRenderSimple';
-import { GoogleRenderComplex } from './components/jobs/googleRenderComplex';
+import { NeedList } from './components/needs/needList';
 
 import { GoogleMapHost } from './components/googleMaps/host';
 
@@ -50,7 +49,7 @@ ReactDOM.render(
             <Route path="/jobs" component={Jobs} onEnter={requireAuth} />
             <Route path="/administration" component={Administration} onEnter={requireAuth}/>
             <Route path="/googleMapHost" component={GoogleMapHost} />
-
+            <Route path="/needList" component={NeedList} />
         </Route>
         <Route path="*" component={NotFoundComponent} />
     </Router>,

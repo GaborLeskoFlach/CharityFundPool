@@ -115,7 +115,7 @@ body {
 }
 
 .donate-tab .tab-list {
-	margin-bottom:85px;
+	margin-bottom:20px;
 }
 
 .donate-tab .tab-list li a {
@@ -205,7 +205,8 @@ input#amount {
 	margin:0 15px;
 }
 
+/*
 .donate-tab .btn-primary {
 	padding:12px 55px;
-}
+}*/
 

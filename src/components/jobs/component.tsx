@@ -75,13 +75,13 @@ export class Jobs extends React.Component<{},{}> {
                 <div className="inner-bg">
                     <div className="container">
                         <div className="row">
-                            <div className="col-sm-8 col-sm-offset-2 text">
+                            <div className="col-sm-12">
                                 <h1 className="wow fadeInLeftBig animated" style={{ visibility : 'visible', animationName : 'fadeInLeftBig' }}><strong>Job search Form</strong></h1>
                                 <div className="description wow fadeInLeftBig animated" style={{ visibility: 'visible', animationName: 'fadeInLeftBig'}}>
-                                    <p>
+                                    <h3>
                                         Use this form to search for available jobs in your area.
                                         Type in your postcode in the box below and pick jobs from the results
-                                    </p>
+                                    </h3>
                                 </div>
                                 <div className="subscribe wow fadeInUp animated" style={{ visibility: 'visible', animationName: 'fadeInUp'}}>
                                     <form className="form-inline" onSubmit={this.searchByPostCode}>
@@ -128,11 +128,6 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
     constructor(){
         super();
         this.controller = new JobSearchController();
-
-        this.defaultPosition = {
-            lat :  -37.81361100000001,
-            lng : 144.96305600000005      
-        } 
     }
 
     componentWillReceiveProps(nextProps : ISearchResults){        
@@ -149,11 +144,19 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
         searchResults.map((item) => {            
             markers.push({
                 name : item.fullName,
-                position : this.defaultPosition,
+                position : item.addressLocation,
                 extraInfo : item.phoneNo
             })
-        })
+        });
+
+        //Set defaultPosition to the fist Marker position
+        this.defaultPosition = markers[0].position;
+
         return markers;
+    }
+
+    navigateToMarker = () => {
+        
     }
 
     render(){
@@ -180,19 +183,18 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
                                 <h1>Results</h1>                            
                             </div>  
 
-                            {/*TODO -> Inject Google Maps with Markers here*/}
                             <GoogleMarkers data={this.convertSearchResultsToGoogleMarkers(filteredData)} defaultPosition={this.defaultPosition}/>
 
-                            <hr/>
+                            <hr />
 
-                            <ResponsiveTiles data={filteredData}/>
+                            <ResponsiveTiles data={filteredData} navigateToMarker={this.navigateToMarker}/>
                         </div>                                         
                     )
                 }else{
                     return(
                     <div className="container">
                         <div className="section-title">
-                            <h1>No results...</h1>
+                            <h1>Nothing to display</h1>
                         </div>
                     </div>
                     )
@@ -200,13 +202,7 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
 
 
             }else{
-                return(
-                    <div className="container">
-                        <div className="section-title">
-                            <h1>No results...</h1>
-                        </div>
-                    </div>
-                )
+                return null
             }       
         }
     }
