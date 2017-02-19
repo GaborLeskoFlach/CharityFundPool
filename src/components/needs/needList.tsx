@@ -114,7 +114,12 @@ export class TabContent extends React.Component<ITabContent, {}>{
     renderNeedCard = (need : ICause, index : number) => {
         return(
             <li key={index} className="col-sm-3">
-                <NeedCard need={need} onClickArchive={this.onClickArchiveNeed} onClickDonate={this.onClickDonateNeed} onClickEdit={this.onClickEditNeed}/>
+                <NeedCard 
+                    need={need} 
+                    onClickArchive={this.onClickArchiveNeed} 
+                    onClickDonate={this.onClickDonateNeed} 
+                    onClickEdit={this.onClickEditNeed} 
+                />
             </li>  
         )
     }

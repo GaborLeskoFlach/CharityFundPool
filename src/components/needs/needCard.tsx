@@ -28,22 +28,24 @@ export class NeedCard extends React.Component<INeedCard, {}>{
                             <i className="glyphicon glyphicon-map-marker"></i><cite title="San Francisco, USA">San Francisco, USA </cite>
                         </small>
                         <p>Created: {need.createDate}</p>
-                        <p>Estimated Value: {need.estimatedValue}</p>
-                        <p>Best price: {need.bestPrice}</p>
-                        <p>Donated: {need.donated}</p>
-                        <p>To go: {need.toGo}</p>                                                
+                        <p>Estimated Value: {need.estimatedValue} $</p>
+                        <p>Best price: {need.bestPrice} $</p>
+                        <p>Donated: {!need.donated ? 0 : need.donated} $</p>
+                        <p>To go: {!need.toGo ? 0 : need.toGo} $</p>
 
-                        <div className="btn-group btn-group-sm">
-                            <button className="btn btn-danger" onClick={this.props.onClickArchive.bind(this,need)} >
-                                <span className="glyphicon glyphicon-remove"></span> Archive
-                            </button>
-                            <button className="btn btn-default" onClick={this.props.onClickEdit.bind(this,need)}>
-                                <span className="glyphicon glyphicon-edit"></span> Edit
-                            </button>
-                            <button className="btn btn-default" onClick={this.props.onClickDonate.bind(this,need)}> 
-                                <span className="glyphicon glyphicon-gift"></span> Donate
-                            </button>                        
-                        </div>
+                        { need.active &&                        
+                            <div className="btn-group btn-group-sm">
+                                <button className="btn btn-danger" onClick={this.props.onClickArchive.bind(this,need)} >
+                                    <span className="glyphicon glyphicon-remove"></span> Archive
+                                </button>
+                                <button className="btn btn-default" onClick={this.props.onClickEdit.bind(this,need)}>
+                                    <span className="glyphicon glyphicon-edit"></span> Edit
+                                </button>
+                                <button className="btn btn-default" onClick={this.props.onClickDonate.bind(this,need)}> 
+                                    <span className="glyphicon glyphicon-gift"></span> Donate
+                                </button>                        
+                            </div>                        
+                        }
                     </div>
                 </div>
             </div>

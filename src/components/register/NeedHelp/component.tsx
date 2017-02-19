@@ -6,7 +6,7 @@ import { observer} from 'mobx-react';
 import { observable } from 'mobx';
 import { map } from 'lodash';
 import { RegisterNeedHelpController } from './controller';
-import { CauseCreateComponent } from '../../causes/addNewCause/component';
+import { CauseCreateComponent } from '../../needs/addNewCause/component';
 import { convertData } from '../../../utils/utils';
 import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;

@@ -1,466 +1,137 @@
 import * as React from 'react';
-let DataTable = require('react-data-components').DataTable;
-
+import './styles.css';
+import { ICause, DataFilter } from '../interfaces';
+import { browserHistory } from 'react-router';
 import { AdministrationController } from './controller';
-import { toJS } from 'mobx';
-import { observer } from 'mobx-react';
-import { observable } from 'mobx';
-import { map } from 'lodash';
-import { IRegistrationNeedHelpInd, IRegistrationWantToHelp, IRegistrationNeedHelpOrg, DataFilter, RegistrationType } from '../interfaces';
-import { Link, browserHistory } from 'react-router';
 import { convertData } from '../../utils/utils';
 
+import { NeedHelpIndividualRegistrations } from './NeedHelpIndividual/list';
+import { NeedHelpOrganisationRegistrations } from './NeedHelpOrganization/list';
+import { WantToHelpRegistrations } from './WantToHelp/list';
 
-interface IColumnData {
-    title : string;
-    prop : string;
-    render? : (val,row) => void;
-    className? : string;
-}
+import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
 @observer
-export class Administration extends React.Component<{},{}> {
-    registrationNeedHelpIndColumns : Array<IColumnData>;
-    registrationNeedHelpOrgColumns : Array<IColumnData>;
-    registrationWantToHelpColumns : Array<IColumnData>;
+export class Administration extends React.Component<{},{}>{
+    controller: AdministrationController;
+    @observable tabIndActive : boolean;
+    @observable tabOrgActive : boolean;
+    @observable tabWantActive : boolean;
+    @observable tabArchivedActive : boolean;
 
-    registrationNeedHelpIndColumnsArc : Array<IColumnData>;
-    registrationNeedHelpOrgColumnsArc : Array<IColumnData>;
-    registrationWantToHelpColumnsArc : Array<IColumnData>;    
-    @observable registrationsDynamic : Array<IColumnData>;
-
-    controller : AdministrationController;
-
-    constructor(props){
-        super(props)
-        
+    constructor(props)
+    {
+        super(props);
         this.controller = new AdministrationController();
 
-        this.registrationNeedHelpIndColumns = [
-            { title: '', prop: 'ID', render : this.render_Remove_Ind, className : 'text-center' },
-            { title: '', prop: 'ID', render : this.render_Edit_Ind, className : 'text-center' },
-            { title: '', prop: 'ID', render : this.render_User_Ind, className : 'text-center' },
-            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
-            { title: 'Email', prop: 'email' },
-            { title: 'Name', prop: 'fullName' },
-            { title: 'Phone No', prop: 'phoneNo' },
-            { title: 'Country', prop: 'country' },
-            { title: 'Address Line1', prop: 'addressLine1'  },
-            { title: 'Address Line2', prop: 'addressLine2'  },
-            { title: 'City/Suburb', prop: 'citySuburb'  },
-            { title: 'PostCode', prop: 'postCode'  },
-            { title: 'Need Help With', prop: 'whatINeedHelpWith'  },
-            { title: 'When I Need Help', prop: 'whenINeedHelp', render : this.render_WhenINeedHelp   }
-        ];
-
-        this.registrationNeedHelpOrgColumns = [
-            { title: '', prop: 'ID', render : this.render_Remove_Org, className : 'text-center'  },
-            { title: '', prop: 'ID', render : this.render_Edit_Org, className : 'text-center'  },
-            { title: '', prop: 'ID', render : this.render_User_Org, className : 'text-center'  },
-            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
-            { title: 'Email', prop: 'email'  },
-            { title: 'Charity', prop: 'charityName'},
-            { title: 'Name', prop: 'fullName'  },
-            { title: 'Phone No', prop: 'phoneNo'  },            
-        ];
-
-        this.registrationWantToHelpColumns = [
-            { title: '', prop: 'ID', render : this.render_Remove_WantToHelp, className : 'text-center'  },
-            { title: '', prop: 'ID', render : this.render_Edit_WantToHelp, className : 'text-center'  },
-            { title: '', prop: 'ID', render : this.render_User_WantToHelp, className : 'text-center'  },
-            { title: 'Status', prop: 'uid', render : this.renderRegisteredFlag, className : 'text-center' },
-            { title: 'Email', prop: 'email' },
-            { title: 'Name', prop: 'fullName' },
-            { title: 'PhoneNo', prop: 'phoneNo' },
-            { title: 'City/Suburb', prop: 'citySuburb' },
-            { title: 'Postcode', prop: 'postCode'  },
-            { title: 'Limitations', prop: 'limitations' },
-            { title: 'HasTrade', prop: 'hasTrade' },
-            { title: 'ListOfTrades', prop: 'listOfTrades', render : this.render_ListOfTrades }            
-        ];
-
-        this.registrationNeedHelpIndColumnsArc = [
-            { title: '', prop: 'ID', render : this.render_Activate_Ind, className : 'text-center' },
-            { title: 'Email', prop: 'email' },
-            { title: 'Name', prop: 'fullName' },
-            { title: 'Phone No', prop: 'phoneNo' },
-            { title: 'Country', prop: 'country' },
-            { title: 'Address Line1', prop: 'addressLine1'  },
-            { title: 'Address Line2', prop: 'addressLine2'  },
-            { title: 'City/Suburb', prop: 'citySuburb'  },
-            { title: 'PostCode', prop: 'postCode'  },
-            { title: 'Need Help With', prop: 'whatINeedHelpWith'  },
-            { title: 'When I Need Help', prop: 'whenINeedHelp', render : this.render_WhenINeedHelp  }
-        ];
-
-        this.registrationNeedHelpOrgColumnsArc = [
-            { title: '', prop: 'ID', render : this.render_Activate_Org, className : 'text-center'  },
-            { title: 'Email', prop: 'email'  },
-            { title: 'Charity', prop: 'charityName'},
-            { title: 'Name', prop: 'fullName'  },
-            { title: 'Phone No', prop: 'phoneNo'  },            
-        ];
-
-        this.registrationWantToHelpColumnsArc = [
-            { title: '', prop: 'ID', render : this.render_Activate_WantToHelp, className : 'text-center'  },
-            { title: 'Email', prop: 'email' },
-            { title: 'Name', prop: 'fullName' },
-            { title: 'PhoneNo', prop: 'phoneNo' },
-            { title: 'City/Suburb', prop: 'citySuburb' },
-            { title: 'Postcode', prop: 'postCode'  },
-            { title: 'Limitations', prop: 'limitations' },
-            { title: 'HasTrade', prop: 'hasTrade' },
-            { title: 'ListOfTrades', prop: 'listOfTrades', render : this.render_ListOfTrades }
-        ];
-
-        this.registrationsDynamic = [];
+        this.tabIndActive = true;
+        this.tabOrgActive = false;
+        this.tabWantActive = false;
+        this.tabArchivedActive = false;
     }
 
-    ///
-    /// DeActivating a User (should not be already registered) setting Active and ArchiveDate Flags
-    ///
-    archiveRegistration = (id : string, regType:RegistrationType, event : React.FormEvent) => {
-        event.preventDefault();
-
-        if(window.confirm('Are you sure you want to delete this item?')){
-            switch(regType){
-                case RegistrationType.NeedHelpInd:
-                console.log('Deleting NeedHelpInd Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.NeedHelpInd, id);
-                break;
-                case RegistrationType.NeedHelpOrg:
-                console.log('Deleting NeedHelpOrg Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.NeedHelpOrg,id);
-                break;
-                case RegistrationType.WantToHelp:
-                console.log('Deleting WantToHelp Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.WantToHelp,id);
-                break;
-            }
-        }        
-    }
-
-    ///
-    /// Activating a previously disabled Registration (setting Active and ArchivedDate flags)
-    ///
-    activateRegistration = (id : string, regType:RegistrationType, event : React.FormEvent) => {
-        event.preventDefault();
-
-        switch(regType){
-            case RegistrationType.NeedHelpInd:
-            console.log('Activating NeedHelpInd Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.NeedHelpInd, id);
-            break;
-            case RegistrationType.NeedHelpOrg:
-            console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.NeedHelpOrg, id);
-            break;
-            case RegistrationType.WantToHelp:
-            console.log('Activating WantToHelp Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.WantToHelp, id);
-            break;
-        }               
-    }
-
-    /// 
-    /// Register User first time (creating user profile)
-    ///
-    registerUser = (id : string, email:string, regType : RegistrationType, event : React.FormEvent) => {
-        event.preventDefault();
-
-        switch(regType){
-            case RegistrationType.NeedHelpInd:
-            console.log('Activating NeedHelpInd Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpInd, id, email);
-            break;
-            case RegistrationType.NeedHelpOrg:
-            console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpOrg, id, email);
-            break;
-            case RegistrationType.WantToHelp:
-            console.log('Activating WantToHelp Item => ' + id);
-            this.controller.registerUser(RegistrationType.WantToHelp, id, email);
-            break;
-        }   
-    }
-
-    ///
-    /// Redirects to particular Registation page to edit details and Save
-    ///
-    editRegistration = (id : string, regType : RegistrationType, event : React.FormEvent) => {
-        event.preventDefault();
-        switch(regType){
-                case RegistrationType.NeedHelpInd:
-                    browserHistory.push('/register/NeedHelp/Ind/' + id);
-                    break;
-                case RegistrationType.NeedHelpOrg:
-                    browserHistory.push('/register/NeedHelp/Org/' + id);
-                    break;
-                case RegistrationType.WantToHelp:
-                    browserHistory.push('/register/WantToHelp/' + id);
-                    break;
-            }    
-    }
-
-    render_WhenINeedHelp = (val : string, row : IRegistrationNeedHelpInd) => {
-        return (
-            <div>To be implemented</div>
-        )
-    }
-
-    render_ListOfTrades = (val : string, row : IRegistrationWantToHelp) => {
-        return(
-            <div>To be implemented</div>
-        )
-    }
-
-    render_Remove_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
-        return(
-            <button className="btn btn-danger" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.NeedHelpInd )}>
-                <span className="glyphicon glyphicon-remove"></span> Remove
-            </button>
-        )
-    }
-
-    render_Edit_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
-        return(
-             <button className="btn btn-default" onClick={this.editRegistration.bind(this, row.ID, RegistrationType.NeedHelpInd )}> 
-                <span className="glyphicon glyphicon-edit"></span> Edit
-             </button>
-        )
-    }
-
-    render_User_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
-        return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.NeedHelpInd )}> 
-                <span className="glyphicon glyphicon-cog"></span> User
-            </button>
-        )    
-    }
-
-    render_Remove_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
-        return(
-            <button className="btn btn-danger" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>
-                <span className="glyphicon glyphicon-remove"></span> Remove
-            </button>
-        )
-    }
-
-    render_Edit_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
-        return(
-            <button className="btn btn-default" onClick={this.editRegistration.bind(this, row.ID, RegistrationType.NeedHelpOrg )}>
-                <span className="glyphicon glyphicon-edit"></span> Edit
-            </button>
-        )
-    }
-
-    render_User_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
-        return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.NeedHelpOrg)}>
-                <span className="glyphicon glyphicon-cog"></span> User
-            </button>
-        ) 
-    }
-
-    render_Remove_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
-        return(
-            <button className="btn btn-danger" onClick={this.archiveRegistration.bind(this, row.ID, RegistrationType.WantToHelp)}>
-                <span className="glyphicon glyphicon-remove"></span> Remove
-            </button>
-        )
-    }
-
-    render_Edit_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
-        return(
-            <button className="btn btn-default" onClick={this.editRegistration.bind(this, row.ID, RegistrationType.WantToHelp )}>
-                <span className="glyphicon glyphicon-edit"></span> Edit
-            </button>
-        )
-    }
-
-    render_User_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
-         return(
-            <button className="btn btn-default" onClick={this.registerUser.bind(this, row.ID, row.email, RegistrationType.WantToHelp)}>
-                <span className="glyphicon glyphicon-cog"></span> User
-            </button>
-        )   
-    }
-
-    render_Activate_Ind = (val : string, row : IRegistrationNeedHelpInd) => {
-        return(
-            <button className="btn btn-success" onClick={this.activateRegistration.bind(this, row.ID, RegistrationType.NeedHelpInd )}>
-                <span className="glyphicon glyphicon-ok"></span> Activate
-            </button>
-        )
-    }
-
-    render_Activate_Org = (val : string, row : IRegistrationNeedHelpOrg) => {
-        return(
-            <button className="btn btn-success" onClick={this.activateRegistration.bind(this, row.ID, RegistrationType.NeedHelpOrg)}>
-                <span className="glyphicon glyphicon-ok"></span> Activate
-            </button>
-        )
-    }
-
-    render_Activate_WantToHelp = (val : string, row : IRegistrationWantToHelp) => {
-        return(
-            <button className="btn btn-success" onClick={this.activateRegistration.bind(this, row.ID, RegistrationType.WantToHelp)}>
-                <span className="glyphicon glyphicon-ok"></span> Activate
-            </button>
-        )
-    }
-
-    renderRegisteredFlag = (val : string) => {
-        let glyphiconColor : React.CSSProperties = null;
-        if(val && val !== 'null'){
-            glyphiconColor = { color : 'green'};     
-            return(                
-                <span className="glyphicon glyphicon-ok fa-2x" style={glyphiconColor}></span>
-            ) 
-        }else{
-            glyphiconColor = { color : 'red'}
-            return(
-                <span className="glyphicon glyphicon-remove fa-2x" style={glyphiconColor}></span>
-            ) 
-        }       
-    }
-
-    componentWillMount(){
-        this.controller.isLoading = true;
-        this.controller.getRegistrationsForNeedHelpInd().then(response => {
-            this.controller.getRegistrationsForNeedHelpOrg().then(response => {
-                this.controller.getRegistrationsForWantToHelp().then(response =>{
-                    this.controller.getArchivedRegistrations(RegistrationType.NeedHelpInd).then(response => {
-                        this.controller.isLoading = false;
-                    })                                                                    
-                })
-            })
-        });
-    }
-
-    handleRegistrationTypeChange = (e : any) => {
-        let regType : RegistrationType;
-        let registrationDynamicColumns : any; 
-
-        switch(e.target.value){
-            case 'NeedHelpInd':
-                regType = RegistrationType.NeedHelpInd
-                registrationDynamicColumns = this.registrationNeedHelpIndColumnsArc;
-                break;
-            case 'NeedHelpOrg':
-                regType = RegistrationType.NeedHelpOrg;
-                registrationDynamicColumns = this.registrationNeedHelpOrgColumnsArc;
-                break;
-            case 'WantToHelp':
-                regType = RegistrationType.WantToHelp;
-                registrationDynamicColumns = this.registrationWantToHelpColumnsArc;
-                break;
-        }
+    handleTabChange = (e) => {
         
-        this.controller.getArchivedRegistrations(regType).then(response => {
-            this.registrationsDynamic = registrationDynamicColumns;            
-        });
-    }   
 
-    render() {
+        switch(e.target.attributes[0].value)
+        {
+            case '#organizationsNeedHelp':
+                this.tabIndActive = false;
+                this.tabOrgActive = true;
+                this.tabWantActive = false;
+                this.tabArchivedActive = false;            
+            break;
+            case '#peopleNeedHelp':
+                this.tabIndActive = true;
+                this.tabOrgActive = false;
+                this.tabWantActive = false;
+                this.tabArchivedActive = false;            
+            break;
+            case '#peopleWantToHelp':
+                this.tabIndActive = false;
+                this.tabOrgActive = false;
+                this.tabWantActive = true;
+                this.tabArchivedActive = false;            
+            break;
+            case '#archivedRegistrations':
+                this.tabIndActive = false;
+                this.tabOrgActive = false;
+                this.tabWantActive = false;
+                this.tabArchivedActive = true;            
+            break;
+        }
+    }
 
-        if(this.controller.isLoading){
-            return (
-                <div className="container">
-                    <div className="section-title">
-                        <h1>Loading...</h1>
-                    </div>
+    render(){
+        return(
+            <div className="container">
+                <div className="section-title">
+                    <h1>Administration</h1>
                 </div>
-            )
-        }else{
-            return (
-
-                <div className="container">
-                    <div className="section-title">
-                        <h1>Administration</h1>				
-                    </div>
-                    <div className="our-details-tab padding-bottom">
-                        <div className="row">
-                            <section className="content">
-                                <div className="col-sm-12 tab-section">
-
-                                    <ul className="nav nav-tabs nav-justified" role="tablist">
-                                        <li className="active"><a href="#IndividualRegistrationNeedHelp" role="tab" data-toggle="tab"><span className="glyphicon glyphicon-user"></span> Registration (Need help)</a></li>
-                                        <li><a href="#OrganisationRegistrationNeedHelp" role="tab" data-toggle="tab"><span className="glyphicon glyphicon-home"></span> Registration (Need help)</a></li>
-                                        <li><a href="#registrationWantToHelp" role="tab" data-toggle="tab"><span className="glyphicon glyphicon-wrench"></span> Registration (Want to help)</a></li>
-                                        <li><a href="#archives" role="tab" data-toggle="tab"><span className="glyphicon glyphicon-trash"></span> Archives</a></li>
-                                    </ul>
-
-                                    <div className="tab-content">
-                                        <div className="tab-pane fade in active" id="IndividualRegistrationNeedHelp">
-                                            <div className="table-responsive">
-                                                <DataTable                                            
-                                                    keys="ID"
-                                                    columns={this.registrationNeedHelpIndColumns}
-                                                    initialData={convertData(this.controller.registrationsForNeedHelp_Ind, DataFilter.ActiveOnly)}
-                                                    initialPageLength={5}
-                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="tab-pane fade" id="OrganisationRegistrationNeedHelp">
-                                            <div className="table-responsive">
-                                                <DataTable
-                                                    keys="ID"
-                                                    columns={this.registrationNeedHelpOrgColumns}
-                                                    initialData={convertData(this.controller.registrationsForNeedHelp_Org, DataFilter.ActiveOnly)}
-                                                    initialPageLength={5}
-                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                />
-                                            </div>
-                                        </div>                                    
-                                        <div className="tab-pane fade " id="registrationWantToHelp">
-                                            <div className="table-responsive">
-                                                <DataTable
-                                                    keys="ID"
-                                                    columns={this.registrationWantToHelpColumns}
-                                                    initialData={convertData(this.controller.registrationsForWantToHelp, DataFilter.ActiveOnly)}
-                                                    initialPageLength={5}
-                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                />
-                                            </div>       
-                                        </div>
-                                        <div className="tab-pane fade " id="archives">
-                                            <div className="container">
-                                                <div className="row">
-                                                    <section className="content">                                                        
-                                                        <div className="col-sm-6">
-                                                            <select className="form-control" ref="registrationType" id="registrationType" 
-                                                                defaultValue="Individual"
-                                                                onChange={this.handleRegistrationTypeChange.bind(this)}>
-                                                                <option value=''>Please select an option...</option>
-                                                                <option value="NeedHelpInd">Registration - Individuals (Need help)</option>
-                                                                <option value="NeedHelpOrg">Registration - Organisations (Need help)</option>
-                                                                <option value="WantToHelp">Registration (Want to help)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="col-sm-6"></div>
-                                                    </section>                                                     
+                <div className="row">
+                    <div id="donate-section">   
+                        <div className="container">
+                            <div className="donate-section padding">				
+                                <div className="donate-tab text-center">
+                                    <div id="donate">
+                                        <ul className="tab-list list-inline" role="tablist" >
+                                            <li onClick={this.handleTabChange} className="active"><a href="#peopleNeedHelp" role="tab" data-toggle="tab">People who need help</a></li>
+                                            <li onClick={this.handleTabChange}><a href="#organizationsNeedHelp" role="tab" data-toggle="tab">Organizations need help</a></li>
+                                            <li onClick={this.handleTabChange}><a href="#peopleWantToHelp" role="tab" data-toggle="tab">People who want to help</a></li>
+                                            <li onClick={this.handleTabChange}><a href="#archivedRegistrations" role="tab" data-toggle="tab">Archived Registrations</a></li>                    
+                                        </ul>
+                                       
+                                        <fieldset className="tab-content">
+                                            <div className="tab-pane fade in active" id="peopleNeedHelp">
+                                                
+                                                <div className="well">
+                                                    All sorts of filters we can put in here to filter Need Cards below
                                                 </div>
-                                            </div>                            
-  
-                                            <div className="table-responsive">
-                                                <DataTable
-                                                    keys="ID"
-                                                    columns={this.registrationsDynamic}
-                                                    initialData={convertData(this.controller.archivedRegistrations, DataFilter.InActiveOnly)}
-                                                    initialPageLength={5}
-                                                    initialSortBy={{ prop: 'ID', order: 'descending' }}
-                                                />
-                                            </div>       
-                                        </div>                                                                                        
+                                                
+                                                <NeedHelpIndividualRegistrations filters={null} active={this.tabIndActive}/>
+
+                                            </div>
+                                            <div className="tab-pane fade " id="organizationsNeedHelp">
+
+                                                <div className="well">
+                                                    All sorts of filters we can put in here to filter Need Cards below
+                                                </div>                                            
+
+                                                <NeedHelpOrganisationRegistrations filters={null} active={this.tabOrgActive}/>                                                                                                                                                    
+
+                                            </div>
+                                            <div className="tab-pane fade" id="peopleWantToHelp">
+                                                
+                                                <div className="well">
+                                                    All sorts of filters we can put in here to filter Need Cards below
+                                                </div>
+                                                
+                                                <WantToHelpRegistrations filters={null}active={this.tabWantActive}/>
+
+                                            </div>
+                                            <div className="tab-pane fade" id="archivedRegistrations">
+
+                                                <div className="well">
+                                                    All sorts of filters we can put in here to filter Need Cards below
+                                                </div>                                            
+
+                                                <ul className="fancy-label row">
+                                                                    
+                                                </ul>                                                                                                                                                     
+
+                                            </div>                                            
+                                        </fieldset>
+
                                     </div>
                                 </div>
-                            </section>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )
-        }
+                </div>                   
+            </div>                      
+        )
+        
     }
 }
+

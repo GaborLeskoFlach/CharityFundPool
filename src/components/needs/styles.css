@@ -2,3 +2,7 @@ div.need-card:hover
 {
 	background-color:#f1f1f1;
 }
+
+div.need-card{
+	border : 3px solid lightgray;
+}

@@ -10,7 +10,6 @@ import { NotFoundComponent } from './components/notFound/component';
 import { ContactUsComponent } from './components/contactUs/component';
 import { WhoWeAreComponent } from './components/whoWeAre/component'; 
 import { HomeComponent } from './components/home/component';
-import { CauseListComponent } from './components/causes/component';
 import { RegisterNeedHelpComponent  } from './components/register/NeedHelp/component'; 
 import { RegistrationConfirmation } from './components/register/registrationConfirmation';
 import { Jobs } from './components/jobs/component';
@@ -41,7 +40,7 @@ ReactDOM.render(
             <Route path="/confirm" component={RegistrationConfirmation } />    
             <Route path="/aboutUs" component={WhoWeAreComponent} />
             <Route path="/donate(/:causeId)" component={DonateNowComponent} />
-            <Route path="/viewNeeds" component={CauseListComponent} onEnter={requireAuth} />          
+            <Route path="/viewNeeds" component={NeedList} onEnter={requireAuth} />          
             <Route path="/contactUs" component={ContactUsComponent} />
             <Route path="/login" component={LoginComponent}/>
             <Route path="/login/passwordReset" component={PasswordReset}/>
@@ -49,7 +48,6 @@ ReactDOM.render(
             <Route path="/jobs" component={Jobs} onEnter={requireAuth} />
             <Route path="/administration" component={Administration} onEnter={requireAuth}/>
             <Route path="/googleMapHost" component={GoogleMapHost} />
-            <Route path="/needList" component={NeedList} />
         </Route>
         <Route path="*" component={NotFoundComponent} />
     </Router>,
