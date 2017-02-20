@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './styles.css';
-import { ICause, DataFilter } from '../interfaces';
+import { ICause, DataFilter, RegistrationType } from '../interfaces';
 import { browserHistory } from 'react-router';
 import { AdministrationController } from './controller';
 import { convertData } from '../../utils/utils';
@@ -8,6 +8,11 @@ import { convertData } from '../../utils/utils';
 import { NeedHelpIndividualRegistrations } from './NeedHelpIndividual/list';
 import { NeedHelpOrganisationRegistrations } from './NeedHelpOrganization/list';
 import { WantToHelpRegistrations } from './WantToHelp/list';
+import { ArchivedRegistrations } from './ArchivedRegistrations/list';
+
+import { ListFilterIndividualRegistrations } from './NeedHelpIndividual/listFilter';
+import { ListFilterOrganisationRegistrations } from './NeedHelpOrganization/listFilter';
+import { ListFilterWantToHelpRegistrations } from './WantToHelp/listFilter';
 
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
@@ -31,8 +36,7 @@ export class Administration extends React.Component<{},{}>{
         this.tabArchivedActive = false;
     }
 
-    handleTabChange = (e) => {
-        
+    handleTabChange = (e) => {        
 
         switch(e.target.attributes[0].value)
         {
@@ -63,6 +67,90 @@ export class Administration extends React.Component<{},{}>{
         }
     }
 
+    
+    ///
+    /// DeActivating a User (should not be already registered) setting Active and ArchiveDate Flags
+    ///
+    handleArchiveRegistration = (id : string, regType:RegistrationType) => {
+
+        if(window.confirm('Are you sure you want to delete this item?')){
+            switch(regType){
+                case RegistrationType.NeedHelpInd:
+                console.log('Deleting NeedHelpInd Item => ' + id);
+                this.controller.archiveRegistration(RegistrationType.NeedHelpInd, id);
+                break;
+                case RegistrationType.NeedHelpOrg:
+                console.log('Deleting NeedHelpOrg Item => ' + id);
+                this.controller.archiveRegistration(RegistrationType.NeedHelpOrg,id);
+                break;
+                case RegistrationType.WantToHelp:
+                console.log('Deleting WantToHelp Item => ' + id);
+                this.controller.archiveRegistration(RegistrationType.WantToHelp,id);
+                break;
+            }
+        }        
+    }
+
+    ///
+    /// Activating a previously disabled Registration (setting Active and ArchivedDate flags)
+    ///
+    handleActivateRegistration = (id : string, regType:RegistrationType) => {
+
+        switch(regType){
+            case RegistrationType.NeedHelpInd:
+            console.log('Activating NeedHelpInd Item => ' + id);
+            this.controller.activateRegistration(RegistrationType.NeedHelpInd, id);
+            break;
+            case RegistrationType.NeedHelpOrg:
+            console.log('Activating NeedHelpOrg Item => ' + id);
+            this.controller.activateRegistration(RegistrationType.NeedHelpOrg, id);
+            break;
+            case RegistrationType.WantToHelp:
+            console.log('Activating WantToHelp Item => ' + id);
+            this.controller.activateRegistration(RegistrationType.WantToHelp, id);
+            break;
+        }               
+    }
+
+    /// 
+    /// Register User first time (creating user profile)
+    ///
+    handleRegisterUser = (id : string, email:string, regType : RegistrationType) => {
+
+        switch(regType){
+            case RegistrationType.NeedHelpInd:
+            console.log('Activating NeedHelpInd Item => ' + id);
+            this.controller.registerUser(RegistrationType.NeedHelpInd, id, email);
+            break;
+            case RegistrationType.NeedHelpOrg:
+            console.log('Activating NeedHelpOrg Item => ' + id);
+            this.controller.registerUser(RegistrationType.NeedHelpOrg, id, email);
+            break;
+            case RegistrationType.WantToHelp:
+            console.log('Activating WantToHelp Item => ' + id);
+            this.controller.registerUser(RegistrationType.WantToHelp, id, email);
+            break;
+        }   
+    }
+
+    ///
+    /// Redirects to particular Registation page to edit details and Save
+    ///
+    handleEditRegistration = (id : string, regType : RegistrationType) => {
+        switch(regType){
+                case RegistrationType.NeedHelpInd:
+                    browserHistory.push('/register/NeedHelp/Ind/' + id);
+                    break;
+                case RegistrationType.NeedHelpOrg:
+                    browserHistory.push('/register/NeedHelp/Org/' + id);
+                    break;
+                case RegistrationType.WantToHelp:
+                    browserHistory.push('/register/WantToHelp/' + id);
+                    break;
+            }    
+    }
+    
+    
     render(){
         return(
             <div className="container">
@@ -85,29 +173,44 @@ export class Administration extends React.Component<{},{}>{
                                         <fieldset className="tab-content">
                                             <div className="tab-pane fade in active" id="peopleNeedHelp">
                                                 
-                                                <div className="well">
-                                                    All sorts of filters we can put in here to filter Need Cards below
-                                                </div>
+                                                <ListFilterIndividualRegistrations />
                                                 
-                                                <NeedHelpIndividualRegistrations filters={null} active={this.tabIndActive}/>
+                                                <NeedHelpIndividualRegistrations 
+                                                    filters={null}
+                                                    showArchivedItemsOnly={false}
+                                                    active={this.tabIndActive}
+                                                    onArchiveRegistration={this.handleArchiveRegistration}
+                                                    onEditRegistration={this.handleEditRegistration}
+                                                    onRegisterUser={this.handleRegisterUser} 
+                                                    onActivateRegistration={() => {}} />
 
                                             </div>
                                             <div className="tab-pane fade " id="organizationsNeedHelp">
 
-                                                <div className="well">
-                                                    All sorts of filters we can put in here to filter Need Cards below
-                                                </div>                                            
+                                                <ListFilterOrganisationRegistrations />
 
-                                                <NeedHelpOrganisationRegistrations filters={null} active={this.tabOrgActive}/>                                                                                                                                                    
+                                                <NeedHelpOrganisationRegistrations 
+                                                    filters={null}
+                                                    showArchivedItemsOnly={false}
+                                                    active={this.tabOrgActive}
+                                                    onArchiveRegistration={this.handleArchiveRegistration}
+                                                    onEditRegistration={this.handleEditRegistration}
+                                                    onRegisterUser={this.handleRegisterUser}
+                                                    onActivateRegistration={() => {}} />
 
                                             </div>
                                             <div className="tab-pane fade" id="peopleWantToHelp">
                                                 
-                                                <div className="well">
-                                                    All sorts of filters we can put in here to filter Need Cards below
-                                                </div>
+                                                <ListFilterWantToHelpRegistrations />                                                 
                                                 
-                                                <WantToHelpRegistrations filters={null}active={this.tabWantActive}/>
+                                                <WantToHelpRegistrations 
+                                                    filters={null}
+                                                    showArchivedItemsOnly={false}
+                                                    active={this.tabWantActive}
+                                                    onArchiveRegistration={this.handleArchiveRegistration}
+                                                    onEditRegistration={this.handleEditRegistration}
+                                                    onRegisterUser={this.handleRegisterUser}
+                                                    onActivateRegistration={() => {}} />
 
                                             </div>
                                             <div className="tab-pane fade" id="archivedRegistrations">
@@ -116,13 +219,12 @@ export class Administration extends React.Component<{},{}>{
                                                     All sorts of filters we can put in here to filter Need Cards below
                                                 </div>                                            
 
-                                                <ul className="fancy-label row">
-                                                                    
-                                                </ul>                                                                                                                                                     
-
+                                                <ArchivedRegistrations 
+                                                    filters={null} 
+                                                    active={this.tabArchivedActive}
+                                                    onActivateRegistration={this.handleActivateRegistration} />
                                             </div>                                            
                                         </fieldset>
-
                                     </div>
                                 </div>
                             </div>
