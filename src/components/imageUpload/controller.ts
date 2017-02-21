@@ -1,4 +1,5 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
+import { _firebaseStorage } from '../firebaseAuth/component';
 
 export class ImageUploadController {
 
@@ -13,7 +14,7 @@ export class ImageUploadController {
     @action("Upload an image")
     setImageToUpload = action((file : any, imagePreviewUrl : string) => {
         this.file = file;
-        this.imagePreviewUrl = imagePreviewUrl;
+        this.imagePreviewUrl = imagePreviewUrl;        
     })
 
 }

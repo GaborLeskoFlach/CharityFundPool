@@ -14,6 +14,7 @@ interface IArchivedRegistrations{
     filters : Array<any>;
     active : boolean;
     onActivateRegistration : (id : string, registrationType : RegistrationType ) => void;
+    onDeleteRegistration : (id : string, registrationType : RegistrationType) => void;
 }
 
 @observer
@@ -42,7 +43,6 @@ export class ArchivedRegistrations extends React.Component<IArchivedRegistration
         this.loaded = false;
         this.controller.getRegistrationsForNeedHelpInd().then(response =>{
             this.loaded = true;
-            console.log('Loaded!');
         });         
     }
 
@@ -104,6 +104,7 @@ export class ArchivedRegistrations extends React.Component<IArchivedRegistration
                                                         onArchiveRegistration={() => {}}
                                                         onEditRegistration={() => {}}
                                                         onRegisterUser={() => {}}
+                                                        onDeleteRegistration={this.props.onDeleteRegistration}
                                                         onActivateRegistration={this.props.onActivateRegistration} />
                                                     
                                                 </div>
@@ -116,6 +117,7 @@ export class ArchivedRegistrations extends React.Component<IArchivedRegistration
                                                         onArchiveRegistration={() => {}}
                                                         onEditRegistration={() => {}}
                                                         onRegisterUser={() => {}}
+                                                        onDeleteRegistration={this.props.onDeleteRegistration}
                                                         onActivateRegistration={this.props.onActivateRegistration} />                                                 
                                                     
                                                 </div>
@@ -128,6 +130,7 @@ export class ArchivedRegistrations extends React.Component<IArchivedRegistration
                                                         onArchiveRegistration={() => {}}
                                                         onEditRegistration={() => {}}
                                                         onRegisterUser={() => {}}
+                                                        onDeleteRegistration={this.props.onDeleteRegistration}
                                                         onActivateRegistration={this.props.onActivateRegistration} />
                                                     
                                                 </div>

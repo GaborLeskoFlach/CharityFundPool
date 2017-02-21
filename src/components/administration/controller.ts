@@ -80,7 +80,7 @@ export class AdministrationController {
         });
     });
 
-    @action("Archive a Registration -> Need Help")
+    @action("Archive a Registration")
     archiveRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
         return new Promise<any>((resolve) => {      
             const dbRef = this.getDBRefByRegistrationType(registrationType, key);
@@ -97,7 +97,7 @@ export class AdministrationController {
         });       
     };
 
-    @action("Re-Activate a Registration -> Need Help")
+    @action("Re-Activate a Registration")
     activateRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
         return new Promise<any>((resolve) => {      
             const dbRef = this.getDBRefByRegistrationType(registrationType,key);
@@ -114,8 +114,20 @@ export class AdministrationController {
         });       
     };
 
-    @action("Register User for the first time for allow them to log into app")
-    registerUser = (registrationType : RegistrationType, key : string, email : string) : Promise<any> => {
+    @action("Physically deletes a Registration from DB")
+    deleteRegistration = (registrationType : RegistrationType, key : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {      
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key);
+             _firebaseApp.database().ref(dbRef).remove().then(response => {
+                console.log('Remove Succeeded!');
+             }).catch(error => {
+                console.log('Remove failed: {0}', error.message);
+             })
+        });       
+    };
+
+    @action("Register User for the first time to allow them to log into app")
+    registerUser = (registrationType : RegistrationType, key : string, email : string, registerUser : boolean) : Promise<any> => {
         return new Promise<any>((resolve) => {          
             const dbRef = this.getDBRefByRegistrationType(registrationType,key);            
             this.getRegistration(dbRef).then(registration => {

@@ -72,20 +72,16 @@ export class Administration extends React.Component<{},{}>{
     /// DeActivating a User (should not be already registered) setting Active and ArchiveDate Flags
     ///
     handleArchiveRegistration = (id : string, regType:RegistrationType) => {
-
-        if(window.confirm('Are you sure you want to delete this item?')){
+        if(window.confirm('Are you sure you want to Archive this item?')){
             switch(regType){
                 case RegistrationType.NeedHelpInd:
-                console.log('Deleting NeedHelpInd Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.NeedHelpInd, id);
+                this.controller.archiveRegistration(regType, id);
                 break;
                 case RegistrationType.NeedHelpOrg:
-                console.log('Deleting NeedHelpOrg Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.NeedHelpOrg,id);
+                this.controller.archiveRegistration(regType,id);
                 break;
                 case RegistrationType.WantToHelp:
-                console.log('Deleting WantToHelp Item => ' + id);
-                this.controller.archiveRegistration(RegistrationType.WantToHelp,id);
+                this.controller.archiveRegistration(regType,id);
                 break;
             }
         }        
@@ -95,19 +91,15 @@ export class Administration extends React.Component<{},{}>{
     /// Activating a previously disabled Registration (setting Active and ArchivedDate flags)
     ///
     handleActivateRegistration = (id : string, regType:RegistrationType) => {
-
         switch(regType){
-            case RegistrationType.NeedHelpInd:
-            console.log('Activating NeedHelpInd Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.NeedHelpInd, id);
+            case RegistrationType.NeedHelpInd:            
+            this.controller.activateRegistration(regType, id);
             break;
             case RegistrationType.NeedHelpOrg:
-            console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.NeedHelpOrg, id);
+            this.controller.activateRegistration(regType, id);
             break;
             case RegistrationType.WantToHelp:
-            console.log('Activating WantToHelp Item => ' + id);
-            this.controller.activateRegistration(RegistrationType.WantToHelp, id);
+            this.controller.activateRegistration(regType, id);
             break;
         }               
     }
@@ -115,21 +107,24 @@ export class Administration extends React.Component<{},{}>{
     /// 
     /// Register User first time (creating user profile)
     ///
-    handleRegisterUser = (id : string, email:string, regType : RegistrationType) => {
+    handleRegisterUser = (id : string, email:string, regType : RegistrationType, register : boolean) => {
+        const registerMsg : string = 'Email verification will be sent to user. Are you sure you want to continue?';
+        const unRegisterMsg : string = 'User will not be able to access the system. Are you sure you want to continue?';
+        const message : string = register ? registerMsg : unRegisterMsg;
 
-        switch(regType){
-            case RegistrationType.NeedHelpInd:
-            console.log('Activating NeedHelpInd Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpInd, id, email);
-            break;
-            case RegistrationType.NeedHelpOrg:
-            console.log('Activating NeedHelpOrg Item => ' + id);
-            this.controller.registerUser(RegistrationType.NeedHelpOrg, id, email);
-            break;
-            case RegistrationType.WantToHelp:
-            console.log('Activating WantToHelp Item => ' + id);
-            this.controller.registerUser(RegistrationType.WantToHelp, id, email);
-            break;
+
+        if(window.confirm(message)){
+            switch(regType){
+                case RegistrationType.NeedHelpInd:
+                this.controller.registerUser(regType, id, email, register);
+                break;
+                case RegistrationType.NeedHelpOrg:
+                this.controller.registerUser(regType, id, email, register);
+                break;
+                case RegistrationType.WantToHelp:
+                this.controller.registerUser(regType, id, email, register);
+                break;
+            }
         }   
     }
 
@@ -150,7 +145,25 @@ export class Administration extends React.Component<{},{}>{
             }    
     }
     
-    
+    ///
+    /// Handles Physical Delete operation
+    ///
+    handleDeleteRegistration = (id : string, regType : RegistrationType) => {
+        if(window.confirm('Are you sure you want to delete this registration?')){
+            switch(regType){
+                    case RegistrationType.NeedHelpInd:
+                        this.controller.deleteRegistration(regType, id);
+                        break;
+                    case RegistrationType.NeedHelpOrg:
+                        this.controller.deleteRegistration(regType, id);
+                        break;
+                    case RegistrationType.WantToHelp:
+                        this.controller.deleteRegistration(regType, id);
+                        break;
+            }
+        }
+    }  
+
     render(){
         return(
             <div className="container">
@@ -182,6 +195,7 @@ export class Administration extends React.Component<{},{}>{
                                                     onArchiveRegistration={this.handleArchiveRegistration}
                                                     onEditRegistration={this.handleEditRegistration}
                                                     onRegisterUser={this.handleRegisterUser} 
+                                                    onDeleteRegistration={() => {}}
                                                     onActivateRegistration={() => {}} />
 
                                             </div>
@@ -196,6 +210,7 @@ export class Administration extends React.Component<{},{}>{
                                                     onArchiveRegistration={this.handleArchiveRegistration}
                                                     onEditRegistration={this.handleEditRegistration}
                                                     onRegisterUser={this.handleRegisterUser}
+                                                    onDeleteRegistration={() => {}}
                                                     onActivateRegistration={() => {}} />
 
                                             </div>
@@ -210,6 +225,7 @@ export class Administration extends React.Component<{},{}>{
                                                     onArchiveRegistration={this.handleArchiveRegistration}
                                                     onEditRegistration={this.handleEditRegistration}
                                                     onRegisterUser={this.handleRegisterUser}
+                                                    onDeleteRegistration={() => {}}
                                                     onActivateRegistration={() => {}} />
 
                                             </div>
@@ -222,6 +238,7 @@ export class Administration extends React.Component<{},{}>{
                                                 <ArchivedRegistrations 
                                                     filters={null} 
                                                     active={this.tabArchivedActive}
+                                                    onDeleteRegistration={this.handleDeleteRegistration}
                                                     onActivateRegistration={this.handleActivateRegistration} />
                                             </div>                                            
                                         </fieldset>

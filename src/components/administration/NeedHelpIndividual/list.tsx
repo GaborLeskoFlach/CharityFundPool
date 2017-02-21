@@ -11,9 +11,10 @@ interface INeedHelpIndividualRegistrations{
     active : boolean;
     showArchivedItemsOnly : boolean;
     onEditRegistration : (id : string, registrationType : RegistrationType ) => void;
-    onRegisterUser : (id : string, email : string, registrationType : RegistrationType ) => void;
+    onRegisterUser : (id : string, email : string, registrationType : RegistrationType, register : boolean) => void;
     onArchiveRegistration : (id : string, registrationType : RegistrationType ) => void;
-    onActivateRegistration : (id : string, registrationType : RegistrationType ) => void;    
+    onActivateRegistration : (id : string, registrationType : RegistrationType) => void;
+    onDeleteRegistration : (id : string, registrationType : RegistrationType) => void;
 }
 
 @observer
@@ -39,11 +40,9 @@ export class NeedHelpIndividualRegistrations extends React.Component<INeedHelpIn
      }
 
     componentDidMount = () =>{
-        console.log('Loading IndReg data...');
         this.loaded = false;
         this.controller.getRegistrationsForNeedHelpInd().then(response =>{
             this.loaded = true;
-            console.log('Loaded!');
         });         
     }
 
@@ -62,7 +61,10 @@ export class NeedHelpIndividualRegistrations extends React.Component<INeedHelpIn
                     registration={registration} 
                     onArchiveRegistration={this.props.onArchiveRegistration}
                     onEditRegistration={this.props.onEditRegistration}
-                    onRegisterUser={this.props.onRegisterUser} />
+                    onRegisterUser={this.props.onRegisterUser}
+                    isArchived={this.props.showArchivedItemsOnly}
+                    onDeleteRegistration={this.props.onDeleteRegistration}
+                    onActivateRegistration={this.props.onActivateRegistration} />
             </li>
         )
     }

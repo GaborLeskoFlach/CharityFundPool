@@ -24,6 +24,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.22.0",
     "babel-preset-stage-1": "^6.5.0",
+    "babel-preset-stage-2": "^6.22.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.13.1",
     "eslint-plugin-react": "^5.1.1",
@@ -65,8 +66,10 @@
     "react-day-picker": "^3.1.1",
     "react-dom": "^15.3.0",
     "react-event-calendar": "^0.3.0",
+    "react-firebase-file-uploader": "^2.1.1",
     "react-google-maps": "^6.0.1",
     "react-input-calendar": "^0.3.14",
+    "react-modal-dialog": "^4.0.5",
     "react-router": "^2.8.1",
     "react-select-box": "^3.0.1",
     "require": "^2.4.20"

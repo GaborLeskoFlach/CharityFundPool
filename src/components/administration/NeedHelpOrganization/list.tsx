@@ -11,9 +11,10 @@ interface INeedHelpOrganisationRegistrations{
     active : boolean;
     showArchivedItemsOnly : boolean;
     onEditRegistration : (id : string, registrationType : RegistrationType ) => void;
-    onRegisterUser : (id : string, email : string, registrationType : RegistrationType ) => void;
+    onRegisterUser : (id : string, email : string, registrationType : RegistrationType, register : boolean) => void;
     onArchiveRegistration : (id : string, registrationType : RegistrationType ) => void;    
-    onActivateRegistration : (id : string, registrationType : RegistrationType ) => void; 
+    onActivateRegistration : (id : string, registrationType : RegistrationType) => void;
+    onDeleteRegistration : (id : string, registrationType : RegistrationType) => void;
 }
 
 @observer
@@ -53,7 +54,10 @@ export class NeedHelpOrganisationRegistrations extends React.Component<INeedHelp
                     registration={registration} 
                     onArchiveRegistration={this.props.onArchiveRegistration}
                     onEditRegistration={this.props.onEditRegistration}
-                    onRegisterUser={this.props.onRegisterUser} />
+                    onRegisterUser={this.props.onRegisterUser} 
+                    onActivateRegistration={this.props.onActivateRegistration}
+                    onDeleteRegistration={this.props.onDeleteRegistration}
+                    isArchived={this.props.showArchivedItemsOnly} />
             </li>
         )
     }

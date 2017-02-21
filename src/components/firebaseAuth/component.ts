@@ -115,6 +115,7 @@ var config = {
 
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);
 export const _firebaseAuth : firebase.Auth = _firebaseApp.auth();
+export const _firebaseStorage : firebase.FirebaseStorage = _firebaseApp.storage();
 export const _isUserLoggedIn = observable(false);
 
 function requireAuth(nextState : any, replace : any) {
@@ -149,7 +150,7 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                 resolve(userRef);
             }
         }))
-        .catch(function (error) {
+        .catch(function (error : any) {
             console.log('register error', error);
             if (error.code === 'auth/email-already-in-use') {
                 reject();
