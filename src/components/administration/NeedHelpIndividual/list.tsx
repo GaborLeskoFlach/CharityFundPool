@@ -58,6 +58,7 @@ export class NeedHelpIndividualRegistrations extends React.Component<INeedHelpIn
         return(
             <li key={index} className="col-sm-3">
                 <Card 
+                    controller={this.controller}
                     registration={registration} 
                     onArchiveRegistration={this.props.onArchiveRegistration}
                     onEditRegistration={this.props.onEditRegistration}

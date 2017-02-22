@@ -147,6 +147,24 @@ export class AdministrationController {
         });
     }
 
+
+    @action("Set ProfileImage for Registration")
+    setProfileImageForRegistration = (registrationType : RegistrationType, key : string, profileImageURL : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {      
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key);            
+            this.getRegistration(dbRef).then(response => {
+                if(response){
+                    response.profileImageURL = profileImageURL;
+                    _firebaseApp.database().ref(dbRef).update(response).then(result => {                
+                        resolve(response);
+                    }).catch(error => {
+                        console.log('Exception occured in setProfileImageForRegistration => {0}', error.message);
+                    })
+                }
+            }) 
+        });       
+    };
+
     ///
     /// Private Methods
     ///

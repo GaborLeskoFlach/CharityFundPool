@@ -2,6 +2,11 @@ import * as React from 'react';
 import { _firebaseStorage } from '../../firebaseAuth/component';
 let FirebaseFileUploader = require('react-firebase-file-uploader').default;
 
+interface IFirebaseFileUpload{
+    onFileUploaded : (uploadedFileURL : string) => void;
+    onFileUploadFailed : (error : string) => void;
+}
+
 interface IState{
       username?: string;
       avatar?: string;
@@ -10,24 +15,17 @@ interface IState{
       avatarURL?: string;
 }
 
-export class ProfilePage extends React.Component<{},IState> {
+export class FirebaseFileUpload extends React.Component<IFirebaseFileUpload,IState> {
   
     constructor(props){
         super(props);
 
         this.state = {
-            username: '',
             avatar: '',
             isUploading: false,
             progress: 0,
             avatarURL: ''          
         }
-    }
-
-    handleChangeUsername = (event) => {
-        this.setState({
-            username: event.target.value
-        });
     }
 
     handleUploadStart = () => {
@@ -40,7 +38,7 @@ export class ProfilePage extends React.Component<{},IState> {
 
     handleUploadError = (error) => {
         this.setState({isUploading: false});
-        console.error(error);
+        this.props.onFileUploadFailed(error);
     }
 
     handleUploadSuccess = (filename) => {
@@ -50,49 +48,27 @@ export class ProfilePage extends React.Component<{},IState> {
             isUploading: false
         });
 
-        _firebaseStorage.ref('images').child(filename).getDownloadURL()
+        _firebaseStorage.ref('profileImages').child(filename).getDownloadURL()
         .then(url => {
             this.setState({avatarURL: url})
+            this.props.onFileUploaded(url);
         }).catch(error =>{
+            this.props.onFileUploadFailed(error.message);
             console.log('Ooops something went wrong => {0}', error.message);
         })
     }
 
     render() {
         return (
-        <div className="container">
-            <div className="section-title-center">
-                <h1>Welcome to Charity Fund Pool</h1>				
-            </div>
-            <div className="text-center who-we-are">
-                <div className="row">
-                    <div className="col-sm-12">
-                            <form>
-                                <label>Username:</label>
-                                <input type="text" value={this.state.username} name="username" onChange={this.handleChangeUsername} />
-                                <label>Avatar:</label>
-                                
-                                {this.state.isUploading &&
-                                    <p>Progress: {this.state.progress}</p>
-                                }
-                                {this.state.avatarURL &&
-                                    <img src={this.state.avatarURL} />
-                                }
-                                
-                                <FirebaseFileUploader
-                                    accept="image/*"
-                                    name="avatar"
-                                    storageRef={_firebaseStorage.ref('images')}
-                                    onUploadStart={this.handleUploadStart}
-                                    onUploadError={this.handleUploadError}
-                                    onUploadSuccess={this.handleUploadSuccess}
-                                    onProgress={this.handleProgress}
-                                />
-                            </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        );
+            <FirebaseFileUploader
+                accept="image/*"
+                name="avatar"
+                storageRef={_firebaseStorage.ref('profileImages')}
+                onUploadStart={this.handleUploadStart}
+                onUploadError={this.handleUploadError}
+                onUploadSuccess={this.handleUploadSuccess}
+                onProgress={this.handleProgress}
+            />
+        )
     }
 }

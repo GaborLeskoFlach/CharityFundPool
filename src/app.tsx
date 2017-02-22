@@ -27,7 +27,7 @@ import { BootstrapList } from './components/lists/bootstrapList';
 
 import { NeedList } from './components/needs/needList';
 import { GoogleMapHost } from './components/googleMaps/host';
-import { ProfilePage } from './components/administration/ImageUpload/component';
+import { FirebaseFileUpload } from './components/administration/ImageUpload/component';
 
 ReactDOM.render(
     <Router history={browserHistory}>
@@ -48,7 +48,7 @@ ReactDOM.render(
             <Route path="/jobs" component={Jobs} onEnter={requireAuth} />
             <Route path="/administration" component={Administration} onEnter={requireAuth}/>
             <Route path="/googleMapHost" component={GoogleMapHost} />
-            <Route path="/firebaseFileUpload" component={ProfilePage} />
+            <Route path="/firebaseFileUpload" component={FirebaseFileUpload} />
         </Route>
         <Route path="*" component={NotFoundComponent} />
     </Router>,

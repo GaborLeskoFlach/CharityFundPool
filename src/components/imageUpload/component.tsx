@@ -12,13 +12,6 @@ export class ImageUpload extends React.Component<{},{}> {
     this.controller = new ImageUploadController();
   }
 
-  /*
-  _handleSubmit(e) {
-    e.preventDefault();
-    // TODO: do something with -> this.state.file
-    console.log('handle uploading-', this.controller.file);
-  }*/
-
   _handleImageChange(e) {
     e.preventDefault();
 

@@ -15,6 +15,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     active:boolean;
     uid:string;
     addressLocation : IPosition;
+    profileImageURL : string;
 }
 
 export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
@@ -54,6 +55,7 @@ export interface IRegistrationWantToHelp extends IConvertDataConstraint{
     listOfTrades? : Array<IMultiSelect>;
     active:boolean;
     uid:string;
+    profileImageURL : string;
 }
 
 export interface ICause extends IConvertDataConstraint{

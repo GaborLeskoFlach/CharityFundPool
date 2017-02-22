@@ -1,7 +1,16 @@
 import * as React from 'react';
 import { IRegistrationWantToHelp, RegistrationType } from '../../interfaces';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { FirebaseFileUpload } from '../ImageUpload/component';
+import { AdministrationController } from '../controller';
+import '../styles.css';
+
+let ModalContainer = require('react-modal-dialog').ModalContainer;
+let ModalDialog = require('react-modal-dialog').ModalDialog;
 
 interface ICard{
+    controller : AdministrationController;
     registration : IRegistrationWantToHelp;
     onEditRegistration : (id : string, registrationType : RegistrationType ) => void;
     onRegisterUser : (id : string, email : string, registrationType : RegistrationType, register : boolean) => void;
@@ -11,7 +20,10 @@ interface ICard{
     isArchived : boolean; 
 }
 
+@observer
 export class Card extends React.Component<ICard, {}>{
+    @observable isShowingModal : boolean = false;
+    @observable uploadedPhotoURL : string;
 
     constructor(props) {
         super(props);
@@ -88,6 +100,26 @@ export class Card extends React.Component<ICard, {}>{
         )
     }
 
+    handleClick = () =>{
+        this.isShowingModal = true;
+    }
+
+    handleClose = () => {
+        this.isShowingModal = false;
+    }
+
+    handleFileUploaded = ( uploadedImageURL : string) => {
+        this.uploadedPhotoURL = uploadedImageURL;
+        this.props.controller.setProfileImageForRegistration(RegistrationType.WantToHelp, this.props.registration.ID, uploadedImageURL).then(response => {            
+            this.handleClose();
+        })        
+    }
+
+    handleFileUploadFailed = (error : string) => {
+        console.log('File Upload Failed => {0}', error);
+        this.handleClose();
+    }
+
     render() {
 
         const registration = this.props.registration;
@@ -96,6 +128,54 @@ export class Card extends React.Component<ICard, {}>{
             <div className="well well-sm need-card">
                 <div className="row">
                     <div className="col-sm-12">
+                        <div className="profileCard hovercard">
+                            <div className="cardheader">                                
+
+                            </div>
+                            <div className="avatar">                        
+                                {
+                                    registration.profileImageURL ?
+                                        <img src={registration.profileImageURL} />
+                                    :
+                                        <a onClick={this.handleClick}>                                            
+                                            <img alt="Upload profile Image" src={null} />
+                                        </a>
+                                }                                
+                            </div>
+                            <div className="cardinfo">
+                                <div className="title">
+                                    <h4>{registration.fullName}</h4>
+                                </div>
+                                <div className="desc">Email: {registration.email}</div>
+                                <div className="desc">Phone: {registration.phoneNo}</div>
+                                <div className="desc">PostCode: {registration.postCode}</div>
+                                <div className="desc">City/Suburb: {registration.citySuburb}</div>
+                            </div>
+                            <div className="cardbottom">
+                                {
+                                    this.props.isArchived ? 
+                                        this.renderArchiveButton()
+                                    :
+                                        this.renderActionButtons()
+                                }
+                            </div>
+                            {
+                                this.isShowingModal &&
+                                <ModalContainer onClose={this.handleClose}>
+                                    <ModalDialog onClose={this.handleClose}>
+                                        <h1>Photo Upload</h1>
+                                        <div>
+                                            <FirebaseFileUpload 
+                                                onFileUploaded={this.handleFileUploaded} 
+                                                onFileUploadFailed={this.handleFileUploadFailed} 
+                                            />
+                                        </div>
+                                    </ModalDialog>
+                                </ModalContainer>                            
+                            }                            
+                        </div>                              
+                        
+                        {/*
                         <h4>{registration.fullName}</h4>
                         <p>Email: {registration.email}</p>
                         <p>Phone: {registration.phoneNo}</p>
@@ -110,7 +190,7 @@ export class Card extends React.Component<ICard, {}>{
                             :
                                 this.renderActionButtons()
                         }
-                                                                         
+                        */}                                                
                     </div>
                 </div>
             </div>

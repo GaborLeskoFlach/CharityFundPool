@@ -77,7 +77,8 @@ export class RegisterWantToHelpController {
             postCode : '',
             limitations : '',
             hasTrade : false,
-            listOfTrades : []
+            listOfTrades : [],
+            profileImageURL : ''
         };
     }
 
