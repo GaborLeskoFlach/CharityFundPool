@@ -64,20 +64,40 @@ class Tab extends React.Component<ITabProps,{}>{
 
 @observer
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
-    
+    @observable userLoggedIn : boolean = false;
+
     constructor(props){
         super(props);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.handleClick.bind(this);        
 
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
-                this.doesItWork(true);
+                this.userLoggedIn = true;
             }else{
-                this.doesItWork(false);
+                this.userLoggedIn = false;
             }
         });
     }
 
+/*
+        //Is this the right place to do this?
+        console.log('onAuthStateChanged');
+
+        //1. Get Mapping info for logged in User by uid
+        //2. Mapping info will contain ProfileImageURL (if populated...should be otherwise Admin shouldn't be allowed to Enable particular Access to system)
+        //3. Update Current User's PhotoURL property
+        //4. Now current user's photo should be displayed in the Nav Bar        
+        this.getMappingInfoForUser(user.uid).then(response => {
+            user.updateProfile({
+                displayName: "Jane Q. User",
+                photoURL: response.profileImageURL
+            }).then(function() {
+                console.log('Update successful');
+            }, function(error) {
+                console.log('An error happened');
+            });
+        });
+*/
 
     doesItWork(value:boolean) {
         console.log('does it work? => {0}', value);
@@ -94,7 +114,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     renderTab = (index : number, tab : ITab) => {
 
         if(tab.tabType === TabType.SignInOut){
-            if(_isUserLoggedIn.value){
+            if(this.userLoggedIn){
                 tab.name = 'Sign Out';
                 tab.to = '/login/signout';                
             }else{
