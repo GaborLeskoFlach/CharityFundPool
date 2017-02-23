@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { _isUserLoggedIn, signIn, _firebaseApp } from './components/firebaseAuth/component';
+import { signIn, _firebaseApp } from './components/firebaseAuth/component';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
 
@@ -65,6 +65,8 @@ class Tab extends React.Component<ITabProps,{}>{
 @observer
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
     @observable userLoggedIn : boolean = false;
+    @observable currentUser : firebase.User = null;
+    currentUserDisplayName : string;
 
     constructor(props){
         super(props);
@@ -73,8 +75,11 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
                 this.userLoggedIn = true;
+                this.currentUser = user;
+                this.currentUserDisplayName = this.currentUser.displayName;
             }else{
                 this.userLoggedIn = false;
+                this.currentUser = null;
             }
         });
     }
@@ -143,7 +148,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                     <span className="icon-bar"></span>
                                 </button>
                                 <a className="navbar-brand" href="index.html">
-                                    <h4>Hello, John</h4>
+                                    <h4>{ }</h4>
                                 </a>                    
                             </div>	
 

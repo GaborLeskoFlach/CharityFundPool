@@ -13,7 +13,6 @@ var config = {
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);
 export const _firebaseAuth : firebase.Auth = _firebaseApp.auth();
 export const _firebaseStorage : firebase.FirebaseStorage = _firebaseApp.storage();
-export const _isUserLoggedIn = <any>observable(false);
 
 function requireAuth(nextState : any, replace : any) {
 
@@ -108,15 +107,5 @@ function getMappingInfoForUser (uid : string) : Promise<any> {
         });
     });
 };
-
-/*
-// Listen to auth state changes
-_firebaseApp.auth().onAuthStateChanged((user) => {
-    if(user){
-        this._isUserLoggedIn = true;
-    }else{
-        this._isUserLoggedIn = false;
-    }
-})*/
 
 export { requireAuth, register, signIn, signOut, resetPassword };
