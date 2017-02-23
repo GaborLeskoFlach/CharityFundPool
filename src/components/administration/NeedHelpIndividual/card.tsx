@@ -123,6 +123,7 @@ export class Card extends React.Component<ICard, {}>{
 
     render() {
         const registration = this.props.registration ;
+        const userEnabledIndicator : string = registration.uid ? 'avatar-status-enabled' : 'avatar-status-disabled';
 
         return (
             <div className="well well-sm">
@@ -135,13 +136,18 @@ export class Card extends React.Component<ICard, {}>{
                             <div className="avatar">                        
                                 {
                                     registration.profileImageURL ?
-                                        <img src={registration.profileImageURL} />
-                                    :
-                                        <a onClick={this.handleClick}>                                            
-                                            <img alt="Upload profile Image" src={null} />
-                                        </a>
+                                        <img className={userEnabledIndicator} src={registration.profileImageURL} />
+                                    :                                 
+                                        <img alt="" src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
                                 }                                
                             </div>
+                            {
+                                !registration.profileImageURL &&
+
+                                <div className="profile-upload">
+                                    <a onClick={this.handleClick}>Upload Image</a>
+                                </div>
+                            }                         
                             <div className="cardinfo">
                                 <div className="title">
                                     <h4>{registration.fullName}</h4>

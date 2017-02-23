@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { _isUserLoggedIn, signIn } from './components/firebaseAuth/component';
+import { _isUserLoggedIn, signIn, _firebaseApp } from './components/firebaseAuth/component';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
 
@@ -50,8 +50,7 @@ class Tab extends React.Component<ITabProps,{}>{
         super(props);
     }
 
-    render(){
-
+    render(){        
         const { to, name }  : any = this.props.tabProps;
 
         return(
@@ -69,6 +68,19 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
+
+        _firebaseApp.auth().onAuthStateChanged((user) => {
+            if(user){
+                this.doesItWork(true);
+            }else{
+                this.doesItWork(false);
+            }
+        });
+    }
+
+
+    doesItWork(value:boolean) {
+        console.log('does it work? => {0}', value);
     }
 
     handleClick(tab : ITab){
@@ -82,7 +94,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     renderTab = (index : number, tab : ITab) => {
 
         if(tab.tabType === TabType.SignInOut){
-            if(_isUserLoggedIn){
+            if(_isUserLoggedIn.value){
                 tab.name = 'Sign Out';
                 tab.to = '/login/signout';                
             }else{
@@ -100,7 +112,6 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
 
         return(
             <div>
-                
                 <header id="navigation">
                     <div className="navbar navbar-fixed-top animated fadeIn" role="banner">
                         <div className="container">
