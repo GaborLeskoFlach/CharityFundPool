@@ -43,6 +43,14 @@ export interface IDateRange{
     to : Date
 }
 
+export interface IUserMapping{
+    uid : string;
+    enabled : boolean;
+    location : string;
+    profileImageURL : string;
+    displayName : string;
+}
+
 export interface IRegistrationWantToHelp extends IConvertDataConstraint{
     ID : string;
     fullName : string;

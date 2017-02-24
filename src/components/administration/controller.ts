@@ -126,14 +126,7 @@ export class AdministrationController {
         });       
     };
 
-    @action("Add new Registration to Mapping to make locating Users easier")
-    addNewRegistrationToMapping = (mapping : any) : Promise<any> => {
-        return new Promise((resolve) => {
-            _firebaseApp.database().ref('users').push(mapping).then(result => {
-                resolve(result);                       
-            });
-        });
-    };
+
 
     @action("Register User for the first time to allow them to log into app")
     registerUser = (registrationType : RegistrationType, key : string, email : string, registerUser : boolean) : Promise<any> => {
@@ -141,26 +134,14 @@ export class AdministrationController {
             const dbRef = this.getDBRefByRegistrationType(registrationType,key);            
             this.getRegistration(dbRef).then(registration => {
                 if(registration){
-                    register(email,'1234567890', true).then(userRef => {                                                
-                        //Update UID field
-                        registration.uid = userRef.uid;
-                        this.updateRegistration(dbRef,registration).then(response => {                            
-                            //TODO create a new Item under /Users this will make locating users easier
-
-                            let mapping = {
-                                uid : registration.uid,
-                                location : dbRef,
-                                profileImageURL : registration.profileImageURL
-                            }
-
-                            this.addNewRegistrationToMapping(mapping).then(response => {
-                                resolve();
-                            })                                                                                    
-                        });
+                    //TODO => Generate Temporary password instead of this
+                    register(email,'1234567890', true, registration, dbRef, registerUser).then(response => {
+                        resolve();
                     }).catch(error => {
                         //TODO => handle exception
                         console.log('Exception occured in addNewRegistrationNeedHelpInd => ' + error);
                     })
+                    
                 }
             });            
         });
@@ -213,12 +194,6 @@ export class AdministrationController {
         return dbRef;    
     }
 
-    private updateRegistration = (dbRef : string, registration : any) : Promise<any> => {
-        return new Promise<any>((resolve) => {
-            _firebaseApp.database().ref(dbRef).update(registration).then(result => {                
-                resolve(result);                       
-            });
-        });
-    };
+
 
 }

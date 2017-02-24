@@ -66,17 +66,30 @@ class Tab extends React.Component<ITabProps,{}>{
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
     @observable userLoggedIn : boolean = false;
     @observable currentUser : firebase.User = null;
-    currentUserDisplayName : string;
 
     constructor(props){
         super(props);
-        this.handleClick = this.handleClick.bind(this);        
+        this.handleClick = this.handleClick.bind(this);
+    }
 
+    componentWillMount = () => {
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
-                this.userLoggedIn = true;
-                this.currentUser = user;
-                this.currentUserDisplayName = this.currentUser.displayName;
+                //THis will run just once when User logs in
+                //this way we can keep User Details being displayed in Navbar up-to-date
+                this.getMappingInfoForUser(user.uid).then(response => {
+                    if(response){
+                        user.updateProfile({
+                            displayName: response.fullName,
+                            photoURL: response.profileImageURL
+                        }).then(response =>{
+                            this.userLoggedIn = true;
+                            this.currentUser = user;
+                        }).catch(error => {
+                            console.log('Exception occurred in UpdateProfile => {0}', error.message);
+                        });
+                    }
+                }); 
             }else{
                 this.userLoggedIn = false;
                 this.currentUser = null;
@@ -84,29 +97,15 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
         });
     }
 
-/*
-        //Is this the right place to do this?
-        console.log('onAuthStateChanged');
-
-        //1. Get Mapping info for logged in User by uid
-        //2. Mapping info will contain ProfileImageURL (if populated...should be otherwise Admin shouldn't be allowed to Enable particular Access to system)
-        //3. Update Current User's PhotoURL property
-        //4. Now current user's photo should be displayed in the Nav Bar        
-        this.getMappingInfoForUser(user.uid).then(response => {
-            user.updateProfile({
-                displayName: "Jane Q. User",
-                photoURL: response.profileImageURL
-            }).then(function() {
-                console.log('Update successful');
-            }, function(error) {
-                console.log('An error happened');
-            });
+    getMappingInfoForUser = (uid : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {     
+            _firebaseApp.database().ref('users').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {
+                resolve(snapshot.val());
+            }).catch(error => {
+                console.log('Ooops => {0}',error.message);
+            })
         });
-*/
-
-    doesItWork(value:boolean) {
-        console.log('does it work? => {0}', value);
-    }
+    };
 
     handleClick(tab : ITab){
        console.log('Click a Tab: ' + tab.name);
@@ -148,7 +147,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                     <span className="icon-bar"></span>
                                 </button>
                                 <a className="navbar-brand" href="index.html">
-                                    <h4>{ }</h4>
+                                    <h4>John Doe</h4>
                                 </a>                    
                             </div>	
 

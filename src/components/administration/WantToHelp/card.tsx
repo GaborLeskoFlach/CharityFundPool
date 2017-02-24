@@ -122,7 +122,7 @@ export class Card extends React.Component<ICard, {}>{
 
     render() {
         const registration = this.props.registration;
-        const userEnabledIndicator : string = registration.uid ? 'avatar-status-enabled' : 'avatar-status-disabled';
+        const userEnabledIndicator : string = registration.uid && registration.emailVerified ? 'avatar-status-enabled' : 'avatar-status-disabled';
 
         return (
             <div className="well well-sm">
