@@ -176,7 +176,11 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                     this.controller.registerIndividualFormState.postCode.fieldValidationError = 'Post code can contain numbers only';
                 }else{
                     this.controller.registerIndividualFormState.postCode.fieldValidationError = '';
-                }                                                                                                                                            
+                }            
+
+                //Password
+
+                //PasswordConfirm                                                                                                                                
             break;
             case "Org":
 
@@ -254,7 +258,9 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                     this.controller.registerIndividualFormState.postCode.fieldValidationError.length == 0 &&
                     this.controller.registerIndividualFormState.state.fieldValidationError.length == 0 &&
                     this.controller.registerIndividualFormState.addressLine1.fieldValidationError.length == 0 &&
-                    this.controller.registerIndividualFormState.addressLine2.fieldValidationError.length == 0){       
+                    this.controller.registerIndividualFormState.addressLine2.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.password.fieldValidationError.length == 0 &&
+                    this.controller.registerIndividualFormState.passwordConfirm.fieldValidationError.length == 0){       
                         this.controller.addNewRegistrationNeedHelpInd().then(response => {
                             (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
                             browserHistory.push('/confirm');
@@ -406,7 +412,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
             case RegistrationFields.postCode:
                 this.props.controller.registrationNeedHelpInd.postCode = event.target.value;
                 this.props.controller.registerIndividualFormState.postCode.fieldValidationError = '';
-                break;
+                break;                          
             case RegistrationFields.whenINeedHelpFlexible:
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.flexible = event.target.checked;
                 break;
@@ -450,6 +456,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 break;
             case RegistrationFields.postCode:
                 this.props.controller.registerIndividualFormState.postCode.touched = true;
+                break;
         }
     }
 
@@ -498,7 +505,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
             case RegistrationFields.postCode:
                 hasError  = this.props.controller.registerIndividualFormState.postCode.fieldValidationError.length > 0;
                 shouldShow = this.props.controller.registerIndividualFormState.postCode.touched;
-                break;
+                break;            
+
         }    
         return hasError ? shouldShow : false;
     };
@@ -611,7 +619,6 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
                         type="text" 
-                        ref="email" 
                         placeholder="Email"
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}

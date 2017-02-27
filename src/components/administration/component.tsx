@@ -112,7 +112,6 @@ export class Administration extends React.Component<{},{}>{
         const unRegisterMsg : string = 'User will not be able to access the system. Are you sure you want to continue?';
         const message : string = register ? registerMsg : unRegisterMsg;
 
-
         if(window.confirm(message)){
             switch(regType){
                 case RegistrationType.NeedHelpInd:

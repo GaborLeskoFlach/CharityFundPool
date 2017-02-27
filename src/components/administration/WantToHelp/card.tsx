@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { IRegistrationWantToHelp, RegistrationType } from '../../interfaces';
+import { getMappingInfoForUser } from '../../firebaseAuth/component';
+import { IRegistrationWantToHelp, RegistrationType, IUserMapping, UserStatus } from '../../interfaces';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FirebaseFileUpload } from '../ImageUpload/component';
@@ -24,9 +25,26 @@ interface ICard{
 export class Card extends React.Component<ICard, {}>{
     @observable isShowingModal : boolean = false;
     @observable uploadedPhotoURL : string;
+    @observable mappingInfo : IUserMapping;
 
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount = () => {
+        console.log('Card.componentWillMount');
+        getMappingInfoForUser(this.props.registration.uid).then((response) => {
+            console.log('Card.componentWillMount => {0}', response.status); 
+            this.mappingInfo = response;
+        })
+    }
+
+    componentWillReceiveProps = (nextProps : ICard) => {
+        console.log('Card.componentWillReceiveProps');
+        getMappingInfoForUser(nextProps.registration.uid).then((response) => {
+            console.log('Card.componentWillReceiveProps => {0}', response.status);
+            this.mappingInfo = response;
+        })
     }
 
     archiveRegistration = (e) => {
@@ -120,9 +138,18 @@ export class Card extends React.Component<ICard, {}>{
         this.handleClose();
     }
 
+    setUserStatusIndicator = () : string => {
+        if(this.props.registration.uid && this.mappingInfo.status === UserStatus.Enabled){
+            return 'avatar-status-enabled';
+        }else if(!this.props.registration.uid && this.mappingInfo.status === UserStatus.Disabled){
+            return 'avatar-status-disabled';
+        }else if(this.mappingInfo.status === UserStatus.Pending){
+            return 'avatar-status-pending';
+        }
+    }
+
     render() {
-        const registration = this.props.registration;
-        const userEnabledIndicator : string = registration.uid && registration.emailVerified ? 'avatar-status-enabled' : 'avatar-status-disabled';
+        const registration = this.props.registration;        
 
         return (
             <div className="well well-sm">
@@ -135,7 +162,7 @@ export class Card extends React.Component<ICard, {}>{
                             <div className="avatar">                        
                                 {
                                     registration.profileImageURL ?
-                                        <img className={userEnabledIndicator} src={registration.profileImageURL} />
+                                        <img className={this.setUserStatusIndicator()} src={registration.profileImageURL} />
                                     :                                         
                                         <img alt="" src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
                                 }                                

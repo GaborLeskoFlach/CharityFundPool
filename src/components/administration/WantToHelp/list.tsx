@@ -34,7 +34,7 @@ export class WantToHelpRegistrations extends React.Component<IWantToHelpRegistra
     componentWillReceiveProps(newProps : IWantToHelpRegistrations){
         if(newProps.active){
             this.loaded = false;
-            this.controller.getRegistrationsForWantToHelp().then(response =>{
+            this.controller.getRegistrationsForWantToHelp().then(() => {
                 this.loaded = true;
             }); 
         }

@@ -24,4 +24,7 @@ export const listOfTrades : string = 'listOfTrades'
 export const whenINeedHelpFlexible : string = 'flexibleDates';
 export const singleDateReoccurring : string = 'singleDateReoccurring';
 export const dateRangeReoccurring : string = 'dateRangeReoccurring';
+
+export const password : string = 'password';
+export const passwordConfirm : string = 'passwordConfirm';
 export const registrationForm : string = "registrationForm";

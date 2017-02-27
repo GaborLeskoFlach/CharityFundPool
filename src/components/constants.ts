@@ -9,4 +9,8 @@ export module Constants{
     export const googleAddressDetails_locality : string = 'locality';
     export const googleAddressDetails_route : string = 'route';
     export const googleAddressDetails_streetNumber : string = 'street_number';
+
+    export const userStatusIndicatorEnabled : string = 'Enabled';
+    export const userStatusIndicatorDisabled : string = 'Disabled';
+    export const userStatusIndicatorPending : string = 'Pending';
 }

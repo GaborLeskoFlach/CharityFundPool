@@ -12,6 +12,7 @@ interface IRegisterWantToHelpFormFields{
     citySuburb : IFieldValidation;
     postCode : IFieldValidation;
     limitations : IFieldValidation;  
+    password : IFieldValidation;
     validationError : string;  
 }
 
@@ -63,11 +64,14 @@ export class RegisterWantToHelpController {
                 fieldValidationError : '',
                 touched : false
             },
+            password : {
+                fieldValidationError : '',
+                touched : false
+            },            
             validationError : ''            
         }    
         
         this.registerWantToHelp = {
-            ID : '',
             active : true,
             uid : '',        
             fullName : '',
@@ -78,7 +82,7 @@ export class RegisterWantToHelpController {
             limitations : '',
             hasTrade : false,
             listOfTrades : [],
-            profileImageURL : ''
+            profileImageURL : '',
         };
     }
 

@@ -1,12 +1,12 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { _firebaseApp, _firebaseAuth, register } from '../../firebaseAuth/component';
+import { _firebaseApp, _firebaseAuth, register, addNewRegistrationToMapping } from '../../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 import { generateTempPassword, convertData } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
         IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, 
-        ICause, RegistrationType, IFieldValidation } from '../../interfaces';
+        ICause, RegistrationType, IFieldValidation, IUserMapping } from '../../interfaces';
 
 interface IRegisterIndividualFormFields{
     fullName : IFieldValidation;
@@ -19,6 +19,8 @@ interface IRegisterIndividualFormFields{
     state : IFieldValidation;
     postCode : IFieldValidation;
     whatINeedHelpWith : IFieldValidation;
+    password : IFieldValidation;
+    passwordConfirm : IFieldValidation;
     validationError : string;
 }
 
@@ -143,11 +145,18 @@ export class RegisterNeedHelpController {
             whatINeedHelpWith : {
                 fieldValidationError : '',
                 touched : false
-            },                                                
+            },
+            password : {
+                fieldValidationError : '',
+                touched : false
+            },  
+            passwordConfirm : {
+                fieldValidationError : '',
+                touched : false
+            },                                                                           
             validationError : ''            
         }  
         this.registrationNeedHelpInd = {
-            ID: '',
             active : true,
             uid: '',
             registrationType : '',
@@ -250,8 +259,8 @@ export class RegisterNeedHelpController {
     addNewRegistrationNeedHelpInd = () : Promise<any> => {
         return new Promise((resolve) => {
             this.registrationNeedHelpInd.registrationType = this.registrationType;
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(toJS(this.registrationNeedHelpInd)).then(result => {
-                resolve(result);                       
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(toJS(this.registrationNeedHelpInd)).then(result => {               
+                resolve(result);                         
             });
         });
     };

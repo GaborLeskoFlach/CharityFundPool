@@ -1,5 +1,4 @@
 export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
-    ID : string;
     registrationType : string;
     fullName : string;
     phoneNo : string;    
@@ -19,7 +18,6 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
 }
 
 export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
-    ID : string;
     registrationType : string;
     fullName? : string;
     charityName : string;
@@ -43,16 +41,23 @@ export interface IDateRange{
     to : Date
 }
 
+export enum UserStatus{
+    Enabled,
+    Disabled,
+    Pending
+}
+
 export interface IUserMapping{
     uid : string;
-    enabled : boolean;
+    status : UserStatus;
+    loggedInFirstTime : boolean;
+    loggedInFirstTimeDate : Date;
     location : string;
     profileImageURL : string;
     displayName : string;
 }
 
 export interface IRegistrationWantToHelp extends IConvertDataConstraint{
-    ID : string;
     fullName : string;
     email:string;
     phoneNo : string;    
@@ -67,7 +72,6 @@ export interface IRegistrationWantToHelp extends IConvertDataConstraint{
 }
 
 export interface ICause extends IConvertDataConstraint{
-    ID : string;
     title:string;
     description:string;
     createDate?:string;
@@ -83,14 +87,11 @@ export interface ICause extends IConvertDataConstraint{
 
  
 export interface IDonation{
-
     fullName : string;
     email : string;
     phoneNo : string;
     postCode : string; 
-
     amountToDonate : string;
-
     nameOnCard? : string;
     cardType? : string;
     cardNumber? : string;
@@ -119,7 +120,7 @@ export interface IWhatINeedHelpWith {
 
 //Contstraint -> For Generic interfaces
 export interface IConvertDataConstraint {
-    ID: string;
+    ID?: string;
     active:boolean;
 }
 

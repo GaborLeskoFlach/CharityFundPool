@@ -235,6 +235,17 @@
     border: 5px solid rgba(235,15,15,0.5);
 }
 
+.profileCard.hovercard .avatar img.avatar-status-pending{
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;    
+    border: 5px solid gray;
+}
+
 .profileCard.hovercard .cardinfo {
     padding: 4px 8px 10px;
 }

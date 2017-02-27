@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { signIn, _firebaseApp } from './components/firebaseAuth/component';
+import { signIn, _firebaseApp, getMappingInfoForUser, updateRegistrationToMapping } from './components/firebaseAuth/component';
+import { IUserMapping, UserStatus } from './components/interfaces';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
 
@@ -72,22 +73,41 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
+                this.userLoggedIn = true;
+                this.currentUser = user;                
                 //THis will run just once when User logs in
                 //this way we can keep User Details being displayed in Navbar up-to-date
-                this.getMappingInfoForUser(user.uid).then(response => {
+                getMappingInfoForUser(user.uid).then((response : IUserMapping) => {
                     if(response){
+                        
+                        response.status = UserStatus.Enabled;
+                        response.loggedInFirstTime = true;
+                        response.loggedInFirstTimeDate = new Date();
+                        
+                        updateRegistrationToMapping(response).then(() => {
+                            user.updateProfile({
+                                displayName: response.displayName,
+                                photoURL: response.profileImageURL
+                            }).then(response =>{
+                                this.userLoggedIn = true;
+                                this.currentUser = user;
+                            }).catch(error => {
+                                console.log('Exception occurred in UpdateProfile => {0}', error.message);
+                            });
+                        })                        
+                    }else{
                         user.updateProfile({
-                            displayName: response.fullName,
-                            photoURL: response.profileImageURL
+                            displayName: 'Administrator',
+                            photoURL : null
                         }).then(response =>{
                             this.userLoggedIn = true;
                             this.currentUser = user;
                         }).catch(error => {
                             console.log('Exception occurred in UpdateProfile => {0}', error.message);
-                        });
+                        });                        
                     }
                 }); 
             }else{
@@ -96,16 +116,6 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
             }
         });
     }
-
-    getMappingInfoForUser = (uid : string) : Promise<any> => {
-        return new Promise<any>((resolve) => {     
-            _firebaseApp.database().ref('users').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {
-                resolve(snapshot.val());
-            }).catch(error => {
-                console.log('Ooops => {0}',error.message);
-            })
-        });
-    };
 
     handleClick(tab : ITab){
        console.log('Click a Tab: ' + tab.name);
@@ -147,7 +157,10 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                     <span className="icon-bar"></span>
                                 </button>
                                 <a className="navbar-brand" href="index.html">
-                                    <h4>John Doe</h4>
+                                    {
+                                        this.currentUser &&
+                                        <Avatar user={this.currentUser} />
+                                    }                                    
                                 </a>                    
                             </div>	
 
@@ -170,3 +183,21 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     }
 }
 
+interface IAvatar{
+    user : firebase.User;
+}
+
+class Avatar extends React.Component<IAvatar,{}>{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return(
+            <div>
+                <h5>{this.props.user.displayName}</h5>
+            </div>
+        )
+    }
+}
