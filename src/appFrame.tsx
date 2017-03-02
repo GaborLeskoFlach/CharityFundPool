@@ -117,6 +117,8 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
         });
     }
 
+
+
     handleClick(tab : ITab){
        console.log('Click a Tab: ' + tab.name);
     }

@@ -17,7 +17,7 @@ export const _firebaseStorage : firebase.FirebaseStorage = _firebaseApp.storage(
 
 let secondaryApp : firebase.FirebaseApplication;
 
-function requireAuth(nextState : any, replace : any) {
+function requireAuth(nextState : any, replace : any) { 
 
     if(null === _firebaseApp.auth().currentUser) {
         replace({
@@ -103,25 +103,18 @@ function createUserWithEmailAndPassword(email : string, password : string) : Pro
 
 //Firebase doesnt seem to have Admin API available from Web, so need to fake Disable Client
 function unRegisterUser(registration : any, dbRef : string) : Promise<any>{
+    const uid : string = registration.uid;
     return new Promise<any>((resolve) => {
         //Update UID field
         registration.uid = '';
         updateRegistration(dbRef,registration).then(response => {                            
             //TODO update Mapping Item under /Users this will\
-
-            let mapping : IUserMapping = {
-                uid : registration.uid,
-                status : UserStatus.Disabled,
-                loggedInFirstTime : false,
-                loggedInFirstTimeDate : null,
-                location : dbRef,
-                profileImageURL : registration.profileImageURL,
-                displayName : registration.fullName
-            }
-
-            updateRegistrationToMapping(mapping).then(response => {
-                resolve();
-            })                                                                                    
+            getMappingInfoForUser(uid).then(mapping => {
+                mapping.status = UserStatus.Disabled;
+                updateRegistrationToMapping(mapping).then(response => {
+                    resolve();
+                })    
+            })                                                                                
         });
     });    
 }
