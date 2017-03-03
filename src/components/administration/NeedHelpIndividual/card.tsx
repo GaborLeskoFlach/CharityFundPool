@@ -27,21 +27,31 @@ export class Card extends React.Component<ICard, {}>{
     @observable isShowingModal : boolean = false;
     @observable uploadedPhotoURL : string;
     @observable mappingInfo : IUserMapping;
+    @observable isLoading : boolean = false;
 
     constructor(props) {
         super(props);
+        this.mappingInfo = null;
     }
 
-    componentDidMount = () => {
-        getMappingInfoForUser(this.props.registration.uid).then((response) => {
-            this.mappingInfo = response;            
-        })
+    componentDidMount = () => {        
+        if(this.props.registration.uid){
+            this.isLoading = true;
+            getMappingInfoForUser(this.props.registration.uid).then((response) => {
+                this.mappingInfo = response;
+                this.isLoading = false;
+            })
+        }
     }
 
     componentWillReceiveProps = (nextProps : ICard) => {
-        getMappingInfoForUser(nextProps.registration.uid).then((response) => {
-            this.mappingInfo = response;            
-        })
+        if(nextProps.registration.uid){
+            this.isLoading = true;
+            getMappingInfoForUser(nextProps.registration.uid).then((response) => {
+                this.mappingInfo = response;
+                this.isLoading = false;
+            })
+        }
     }
 
     archiveRegistration = (e) => {
@@ -153,64 +163,77 @@ export class Card extends React.Component<ICard, {}>{
     render() {
         const registration = this.props.registration ;
 
-        return (
-            <div className="well well-sm">
-                <div className="row">
-                    <div className="col-sm-12">
-                        <div className="profileCard hovercard">
-                            <div className="cardheader">                                
-
+        if(this.isLoading){
+            return (
+                <div className="well well-sm">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="profileCard hovercard">
+                                <p>Loading...</p>
                             </div>
-                            <div className="avatar">                        
-                                {
-                                    registration.profileImageURL ?
-                                        <img className={this.setUserStatusIndicator()} src={registration.profileImageURL} />
-                                    :                                 
-                                        <img className={this.setUserStatusIndicator()} src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
-                                }                                
-                            </div>
-                            {
-                                !registration.profileImageURL &&
-
-                                <div className="profile-upload">
-                                    <a onClick={this.handleClick}>Upload Image</a>
+                        </div>
+                    </div>
+                </div>                
+            )
+        }else{
+            return (
+                <div className="well well-sm">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="profileCard hovercard">
+                                <div className="cardheader">
                                 </div>
-                            }                         
-                            <div className="cardinfo">
-                                <div className="title">
-                                    <h4>{registration.fullName}</h4>
+                                <div className="avatar">                        
+                                    {
+                                        registration.profileImageURL ?
+                                            <img className={this.setUserStatusIndicator()} src={registration.profileImageURL} />
+                                        :                                 
+                                            <img className={this.setUserStatusIndicator()} src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
+                                    }                                
                                 </div>
-                                <div className="desc">Email: {registration.email}</div>
-                                <div className="desc">Phone: {registration.phoneNo}</div>
-                                <div className="desc">PostCode: {registration.postCode}</div>
-                                <div className="desc">City/Suburb: {registration.citySuburb}</div>
-                            </div>
-                            <div className="cardbottom">
                                 {
-                                    this.props.isArchived ? 
-                                        this.renderArchiveButton()
-                                    :
-                                        this.renderActionButtons()
-                                }
-                            </div>
-                            {
-                                this.isShowingModal &&
-                                <ModalContainer onClose={this.handleClose}>
-                                    <ModalDialog onClose={this.handleClose}>
-                                        <h1>Photo Upload</h1>
-                                        <div>
-                                            <FirebaseFileUpload 
-                                                onFileUploaded={this.handleFileUploaded} 
-                                                onFileUploadFailed={this.handleFileUploadFailed} 
-                                            />
-                                        </div>
-                                    </ModalDialog>
-                                </ModalContainer>                            
-                            }                            
-                        </div>                       
+                                    !registration.profileImageURL &&
+
+                                    <div className="profile-upload">
+                                        <a onClick={this.handleClick}>Upload Image</a>
+                                    </div>
+                                }                         
+                                <div className="cardinfo">
+                                    <div className="title">
+                                        <h4>{registration.fullName}</h4>
+                                    </div>
+                                    <div className="desc">Email: {registration.email}</div>
+                                    <div className="desc">Phone: {registration.phoneNo}</div>
+                                    <div className="desc">PostCode: {registration.postCode}</div>
+                                    <div className="desc">City/Suburb: {registration.citySuburb}</div>
+                                </div>
+                                <div className="cardbottom">
+                                    {
+                                        this.props.isArchived ? 
+                                            this.renderArchiveButton()
+                                        :
+                                            this.renderActionButtons()
+                                    }
+                                </div>
+                                {
+                                    this.isShowingModal &&
+                                    <ModalContainer onClose={this.handleClose}>
+                                        <ModalDialog onClose={this.handleClose}>
+                                            <h1>Photo Upload</h1>
+                                            <div>
+                                                <FirebaseFileUpload 
+                                                    onFileUploaded={this.handleFileUploaded} 
+                                                    onFileUploadFailed={this.handleFileUploadFailed} 
+                                                />
+                                            </div>
+                                        </ModalDialog>
+                                    </ModalContainer>                            
+                                }                            
+                            </div>                       
+                        </div>
                     </div>
                 </div>
-            </div>
-        )       
+            )     
+        }  
     }
 }
