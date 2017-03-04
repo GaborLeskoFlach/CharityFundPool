@@ -10,7 +10,7 @@ import { convertData } from '../../utils/utils';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
 
-import { DonationPaymentConfiguration } from './donationPaymentConfiguration';
+import { DonationPaymentConfiguration, IPaymentSelect } from './donationPaymentConfiguration';
 
 interface IRouteParams{
     causeId : string;
@@ -205,6 +205,10 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
         this.controller.resetForm();
     }
 
+    paymentTabConfigChange = (data : IPaymentSelect[]) => {
+        //TODO here we have access to whatever user selected in DonationPayment control
+    }
+
     render() {
 
         const { causeId } : any = this.props.params;  
@@ -302,27 +306,9 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                     </div>      
                                     <p className='validationErrorMsg'>{this.controller.donationFormState.postCode.fieldValidationError}</p>  
 
-                                    {/*
-                                    <div className={this.shouldMarkError('amountToDonate') ? "form-group has-error has-feedback" : ""}>
-                                        <label htmlFor="amountToDonate">Amount to donate</label>
-                                        <div className="input-group">
-                                            <div className="input-group-addon">$</div>
-                                            <input 
-                                                type="text" 
-                                                className={this.shouldMarkError('amountToDonate') ? "form-control error" : "form-control"}
-                                                id="amountToDonate"
-                                                onChange={this.handleChange}
-                                                onBlur={this.handleBlur}                                                 
-                                                placeholder="Amount" 
-                                                value={this.controller.donationRegistration.amountToDonate}
-                                            />
-                                            <span className={this.shouldMarkError('amountToDonate') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
-                                        </div>
-                                    </div>
-                                    <p className='validationErrorMsg'>{this.controller.donationFormState.amountToDonate.fieldValidationError}</p>  
-                                    */}
 
-                                    <DonationPaymentConfiguration  />
+
+                                    <DonationPaymentConfiguration paymentTabConfigState={this.paymentTabConfigChange} />
 
                                     <button type="submit" className="btn btn-primary submit">Donate</button>
                                     <button style={btnFloatRight} className="btn btn-secondary" type="button" onClick={this.resetForm}>Cancel</button>

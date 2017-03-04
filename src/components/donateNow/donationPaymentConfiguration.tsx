@@ -1,39 +1,129 @@
 import * as React from 'react';
-
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 import './styles.css';
 
 interface IDonationPaymentConfiguration {
-
+    paymentTabConfigState : (configState : IPaymentSelect[]) => void;
 }
 
+export interface IPaymentSelect{
+    optionOne : string;
+    optionTwo : string;
+    optionThree : string;
+    optionOther : string;
+}
+
+@observer
 export class DonationPaymentConfiguration extends React.Component<IDonationPaymentConfiguration,{}>{
+    @observable paymentSelectionConfig : IPaymentSelect[];
+    @observable tabIndex : number = 0;
 
     constructor(props){
         super(props);
+
+        this.paymentSelectionConfig = [
+            {
+                optionOne : ' active',
+                optionTwo : '',
+                optionThree : '',
+                optionOther : ''
+            },
+            {
+                optionOne : ' active',
+                optionTwo : '',
+                optionThree : '',
+                optionOther : ''
+            },
+            {
+                optionOne : ' active',
+                optionTwo : '',
+                optionThree : '',
+                optionOther : ''
+            }
+        ]
+    }
+    
+    updatePaymentTabConfigState = () => {
+        this.props.paymentTabConfigState(this.paymentSelectionConfig);
+    }
+
+    getPaymentSelectionConfig = (target : string) => {
+        let classToReturn : string;
+        switch(target){
+            case 'optionOne':
+                classToReturn = ('payment-select ' + this.paymentSelectionConfig[this.tabIndex].optionOne);
+                break;
+            case 'optionTwo':
+                classToReturn = ('payment-select ' + this.paymentSelectionConfig[this.tabIndex].optionTwo);
+                break;
+            case 'optionThree':
+                classToReturn = ('payment-select ' + this.paymentSelectionConfig[this.tabIndex].optionThree);
+                break;
+            case 'optionOther':
+                classToReturn = ('payment-select ' + this.paymentSelectionConfig[this.tabIndex].optionOther);
+                break;
+        }
+
+        this.updatePaymentTabConfigState();
+
+        return classToReturn;
     }
 
     handlePaymentSelect = (event) => {
-        //TODO add class 'active' to current element so it gets highlighted
-        console.log('Clicked this => {0}', event.target);
+        switch(event.currentTarget.id)
+        {
+            case 'optionOne':
+                this.paymentSelectionConfig[this.tabIndex].optionOne = 'active';
+                this.paymentSelectionConfig[this.tabIndex].optionTwo = '';
+                this.paymentSelectionConfig[this.tabIndex].optionThree = '';
+                this.paymentSelectionConfig[this.tabIndex].optionOther = '';
+                break;   
+            case 'optionTwo':
+                this.paymentSelectionConfig[this.tabIndex].optionOne = '';
+                this.paymentSelectionConfig[this.tabIndex].optionTwo = 'active';
+                this.paymentSelectionConfig[this.tabIndex].optionThree = '';
+                this.paymentSelectionConfig[this.tabIndex].optionOther = '';
+                break;
+            case 'optionThree':
+                this.paymentSelectionConfig[this.tabIndex].optionOne = '';
+                this.paymentSelectionConfig[this.tabIndex].optionTwo = '';
+                this.paymentSelectionConfig[this.tabIndex].optionThree = 'active';
+                this.paymentSelectionConfig[this.tabIndex].optionOther = '';
+                break;
+            case 'optionOther':
+                this.paymentSelectionConfig[this.tabIndex].optionOne = '';
+                this.paymentSelectionConfig[this.tabIndex].optionTwo = '';
+                this.paymentSelectionConfig[this.tabIndex].optionThree = '';
+                this.paymentSelectionConfig[this.tabIndex].optionOther = 'active';
+                break;
+        }
+        this.updatePaymentTabConfigState();       
+    }
+
+    tabSelectionChange = (event) => {
+        this.tabIndex = parseInt(event.target.id);
+        this.updatePaymentTabConfigState();
     }
 
     render(){
+
         return(
             <div id="donate-section">
                     <div className="container">
                         <div className="donate-section padding">				
                             <div className="donate-tab text-center">
                                 <div id="donate">
-                                    <ul className="tab-list list-inline" role="tablist">
-                                        <li className="active"><a href="#onetime" role="tab" data-toggle="tab">One time</a></li>
-                                        <li><a href="#monthly" role="tab" data-toggle="tab">Monthly Recurring </a></li>
-                                        <li><a href="#gift" role="tab" data-toggle="tab">For Gift</a></li>
+                                    <ul className="tab-list list-inline" role="tablist" onClick={this.tabSelectionChange} >
+                                        <li className="active"><a id="0" href="#onetime" role="tab" data-toggle="tab">One time</a></li>
+                                        <li><a id="1" href="#monthly" role="tab" data-toggle="tab">Monthly Recurring </a></li>
+                                        <li><a id="2" href="#gift" role="tab" data-toggle="tab">For Gift</a></li>
                                     </ul>
                                     <fieldset className="tab-content">
                                         <div className="tab-pane fade in active" id="onetime">
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOne' className={this.getPaymentSelectionConfig('optionOne')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -46,7 +136,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionTwo' className={this.getPaymentSelectionConfig('optionTwo')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -59,7 +149,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionThree' className={this.getPaymentSelectionConfig('optionThree')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -72,7 +162,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOther' className={this.getPaymentSelectionConfig('optionOther')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -90,7 +180,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                         <div className="tab-pane fade " id="monthly">								
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOne' className={this.getPaymentSelectionConfig('optionOne')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -103,7 +193,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionTwo' className={this.getPaymentSelectionConfig('optionTwo')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -116,7 +206,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionThree' className={this.getPaymentSelectionConfig('optionThree')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -129,7 +219,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOther' className={this.getPaymentSelectionConfig('optionOther')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -147,7 +237,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                         <div className="tab-pane fade " id="gift">
                                             <ul className="fancy-label row">
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOne' className={this.getPaymentSelectionConfig('optionOne')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -160,7 +250,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionTwo' className={this.getPaymentSelectionConfig('optionTwo')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -173,7 +263,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionThree' className={this.getPaymentSelectionConfig('optionThree')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
@@ -186,7 +276,7 @@ export class DonationPaymentConfiguration extends React.Component<IDonationPayme
                                                     </div>
                                                 </li>
                                                 <li className="col-sm-3">
-                                                    <div className="payment-select" onClick={this.handlePaymentSelect}>
+                                                    <div id='optionOther' className={this.getPaymentSelectionConfig('optionOther')} onClick={this.handlePaymentSelect}>
                                                         <input type="radio" name="" value="" />
                                                         <label >
                                                             <div className="amount">
