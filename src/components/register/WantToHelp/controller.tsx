@@ -86,14 +86,34 @@ export class RegisterWantToHelpController {
         };
     }
 
+
+    @action("check if Email is unique")
+    doesEmailAlreadyUsed = action((ref : string, email : string) => {
+        return new Promise<boolean>((resolve) => {
+            _firebaseApp.database().ref(ref + '/' + email).once('value', (snapshot) => {
+                let result = snapshot.val();
+                resolve(result);
+            })
+        });
+    }) 
+
     @action("Add new Registration -> Want to Help")
     addNewRegistrationWantToHelp = () : Promise<any> => {
-        return new Promise((resolve) => {
+        const dbRef : string = 'registrations/WantToHelp';
+        return new Promise((resolve,reject) => {
             this.registerWantToHelp.hasTrade = this.hasTrade,
             this.registerWantToHelp.listOfTrades = this.getCurrentTradeOptions();
-            _firebaseApp.database().ref('registrations/WantToHelp').push(toJS(this.registerWantToHelp)).then(result => {
-                resolve(result);
-            });
+            this.registerWantToHelp.email = this.registerWantToHelp.email.trim().toLowerCase();
+            this.doesEmailAlreadyUsed(dbRef,this.registerWantToHelp.email).then((exists) => {
+                if(!exists){
+                    _firebaseApp.database().ref(dbRef).push(toJS(this.registerWantToHelp)).then(result => {
+                        resolve(result);
+                    });
+                }else{
+                    //TODO - there is already a record in the DB with this email
+                    reject();
+                }
+            })
         });
     };
 

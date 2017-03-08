@@ -938,15 +938,15 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                         <div>
                             <select className={this.shouldMarkError('state') ? "form-control error" : "form-control"} ref="state" id="state" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.state}>
                                 <option value=''>Please select an option..</option>
-                                <option value="VIC">VIC</option>
-                                <option value="NSW">NSW</option>
-                                <option value="QLD">QLD</option>
-                                <option value="WA">WA</option>
-                                <option value="SA">SA</option>
-                                <option value="ACT">ACT</option>
-                                <option value="TAS">TAS</option>
-                                <option value="NT">NT</option>
-                                <option value="OTHER">OTHER</option>
+                                <option value="Victoria">VIC</option>
+                                <option value="New South Wales">NSW</option>
+                                <option value="Queensland">QLD</option>
+                                <option value="Western Australia">WA</option>
+                                <option value="South Australia">SA</option>
+                                <option value="Australian Capital Territory">ACT</option>
+                                <option value="Tasmania">TAS</option>
+                                <option value="Northern Territory">NT</option>
+                                <option value="Other">OTHER</option>
                             </select>
                         </div>                                
                     </div>

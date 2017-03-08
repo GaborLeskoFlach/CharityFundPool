@@ -255,25 +255,53 @@ export class RegisterNeedHelpController {
         this.hasRegistered = true;
     })
 
+    @action("check if Email is unique")
+    doesEmailAlreadyUsed = action((ref : string, email : string) => {
+        return new Promise<boolean>((resolve) => {
+            _firebaseApp.database().ref(ref + '/' + email).once('value', (snapshot) => {
+                let result = snapshot.val();
+                resolve(result);
+            })
+        });
+    })    
+
     @action("Add new Registration -> Need Help - for Individuals")
     addNewRegistrationNeedHelpInd = () : Promise<any> => {
-        return new Promise((resolve) => {
+        const dbRef : string = 'registrations/NeedHelp/Individuals';
+        return new Promise((resolve,reject) => {
             this.registrationNeedHelpInd.registrationType = this.registrationType;
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals').push(toJS(this.registrationNeedHelpInd)).then(result => {               
-                resolve(result);                         
-            });
+            this.registrationNeedHelpInd.email = this.registrationNeedHelpInd.email.trim().toLowerCase();
+            this.doesEmailAlreadyUsed(dbRef,this.registrationNeedHelpInd.email).then((exists) => {
+                if(!exists){
+                    _firebaseApp.database().ref(dbRef).push(toJS(this.registrationNeedHelpInd)).then(result => {               
+                        resolve(result);                         
+                    });
+                }else{
+                    //TODO - there is already a record in the DB with this email
+                    reject();
+                }
+            })
         });
     };
 
     @action("Add new Registration -> Need Help - for Organsiations")
     addNewRegistrationNeedHelpOrg = () : Promise<any> => {
-        return new Promise((resolve) => {
+        const dbRef : string = 'registrations/NeedHelp/Organisations'
+        return new Promise((resolve,reject) => {
             this.registrationNeedHelpOrg.registrationType = this.registrationType;
-            _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(this.registrationNeedHelpOrg).then(result => {
-                resolve(result);
+            this.registrationNeedHelpOrg.email = this.registrationNeedHelpOrg.email.trim().toLowerCase();
+            this.doesEmailAlreadyUsed(dbRef,this.registrationNeedHelpInd.email).then((exists) => {
+                if(!exists){
+                    _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(this.registrationNeedHelpOrg).then(result => {
+                        resolve(result);
+                    });
+                }else{
+                    //TODO - there is already a record in the DB with this email
+                    reject(); 
+                }
             });
-        });
-    };
+        })
+    }
 
     @action("get a registration by type and id")
     getRegistrationByTypeAndID = (registrationType : RegistrationType, key : string) => {
