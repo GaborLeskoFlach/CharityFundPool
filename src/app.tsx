@@ -46,9 +46,7 @@ ReactDOM.render(
             <Route path="/login/passwordReset" component={PasswordReset}/>
             <Route path="/login/signout" component={SignOut}/>     
             <Route path="/jobs" component={Jobs} onEnter={requireAuth} />
-            <Route path="/administration" component={Administration} onEnter={requireAuth}/>
-            <Route path="/googleMapHost" component={GoogleMapHost} />
-            <Route path="/firebaseFileUpload" component={FirebaseFileUpload} />
+            <Route path="/administration" component={Administration} onEnter={requireAuth} />
         </Route>
         <Route path="*" component={NotFoundComponent} />
     </Router>,

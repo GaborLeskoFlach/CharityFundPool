@@ -258,7 +258,7 @@ export class RegisterNeedHelpController {
     @action("check if Email is unique")
     doesEmailAlreadyUsed = action((ref : string, email : string) => {
         return new Promise<boolean>((resolve) => {
-            _firebaseApp.database().ref(ref + '/' + email).once('value', (snapshot) => {
+            _firebaseApp.database().ref(ref).orderByChild('email').equalTo(email).on('value', (snapshot) => {
                 let result = snapshot.val();
                 resolve(result);
             })
@@ -278,7 +278,7 @@ export class RegisterNeedHelpController {
                     });
                 }else{
                     //TODO - there is already a record in the DB with this email
-                    reject();
+                    reject('This email has already been registered in the system. Please use a different one.');
                 }
             })
         });
@@ -297,7 +297,7 @@ export class RegisterNeedHelpController {
                     });
                 }else{
                     //TODO - there is already a record in the DB with this email
-                    reject(); 
+                   reject('This email has already been registered in the system. Please use a different one.');
                 }
             });
         })
@@ -359,7 +359,6 @@ export class RegisterNeedHelpController {
     ///
     /// Private Methods
     ///
-
     private getDBRefByRegistrationType = (registrationType : RegistrationType, key : string) : string => {
         let dbRef : string = 'registrations';
 

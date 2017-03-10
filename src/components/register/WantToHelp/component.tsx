@@ -264,6 +264,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                             <div className="contact-form">
                                 <form ref="donationRegistrationForm" onSubmit={this.register.bind(this)}>
 
+                                    <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.validationError}</p>
+
                                     <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                                         <label htmlFor="fullName">Name (*)</label>
                                         <input 

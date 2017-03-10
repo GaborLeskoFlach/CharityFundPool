@@ -261,13 +261,14 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                     this.controller.registerIndividualFormState.addressLine2.fieldValidationError.length == 0 &&
                     this.controller.registerIndividualFormState.password.fieldValidationError.length == 0 &&
                     this.controller.registerIndividualFormState.passwordConfirm.fieldValidationError.length == 0){       
+                        
                         this.controller.addNewRegistrationNeedHelpInd().then(response => {
                             (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
                             browserHistory.push('/confirm');
                         }).catch((error) => {
-                        this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
-                    })
-                }
+                            this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
+                        })
+                    }
                 break;
             case "Org":
                 if(this.controller.registerOrganisationFormState.email.fieldValidationError.length == 0 &&
@@ -277,6 +278,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 this.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError.length == 0){
+                    
                     this.controller.addNewRegistrationNeedHelpOrg().then(response => {
                         (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
                         browserHistory.push('/confirm');
