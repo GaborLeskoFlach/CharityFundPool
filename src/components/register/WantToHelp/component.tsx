@@ -363,35 +363,19 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className="form-group" onChange={this.handleChange}>
                                         <label htmlFor="hasTrade" ref="hasTrade">Do you have trade/trades: </label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeYes"  checked={this.controller.registerWantToHelp.hasTrade == true} />Yes</label>
-                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeNo"   checked={this.controller.registerWantToHelp.hasTrade == false}/>No</label>                                            
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeYes"  defaultChecked={this.controller.registerWantToHelp.hasTrade == true} />Yes</label>
+                                        <label className="radio-inline"><input type="radio" name="optradio" id="hasTradeNo"   defaultChecked={this.controller.registerWantToHelp.hasTrade == false}/>No</label>                                            
                                     </div>
 
                                     { this.controller.hasTrade || this.controller.registerWantToHelp.hasTrade ? 
                                         <div className="form-group">
                                             <label htmlFor="listOfTrades">List options:</label>
-                                            <MultiSelectComponent defaultData={convertData(this.controller.tradeOptions,DataFilter.All)} userSetOptions={this.controller.registerWantToHelp.listOfTrades} onChange={this.onTradeSelectionHasChanged}/>
+                                            <MultiSelectComponent defaultData={convertData(this.controller.tradeOptions,DataFilter.All)} userSetOptions={convertFromObservable(this.controller.registerWantToHelp.listOfTrades)} onChange={this.onTradeSelectionHasChanged}/>
                                         </div>
 
                                     :
                                         null
                                     }
-
-                                    {/*
-                                    <div className="form-group">
-                                        <label htmlFor="imageUpload">Add photo</label>
-                                        <div>
-                                            <p>
-                                                Proof of ID - 
-                                                (option - a) send photo of drivers licence or passport *any ID with photo* to CFP for verification we reply with a registration number 
-                                                (option - b) arrange to visit a CFP consultant at a designated place or c) arrange for a CFP consultant to visit you)                                        
-                                            </p>
-                                        </div>
-                                        <div id="imageUpload">
-                                            <ImageUpload />
-                                        </div>
-                                    </div>
-                                    */}
 
                                     <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
                                     <button style={btnFloatRight} className="btn btn-secondary" type='button' onClick={this.resetForm}>Cancel</button>

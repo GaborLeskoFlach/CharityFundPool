@@ -69,7 +69,7 @@ export class MultiSelectComponent extends React.Component<IMultiSelectComponentP
 	shouldSet = (item : IMultiSelect) : boolean => {
 		const userHasSavedOption  = this.props.userSetOptions.filter(x => x.value === item.value);
 
-		if(this.props.userSetOptions){
+		if(this.props.userSetOptions.length > 0){
 			if(userHasSavedOption.length > 0){
 				item.checked = userHasSavedOption[0].checked
 			}else{
@@ -109,7 +109,6 @@ export class MultiSelectComponent extends React.Component<IMultiSelectComponentP
 					<label>
 						<input
 							type="checkbox"
-							value={false}
 							onChange={this.toggleSelectAll}
 							ref='selectAll'/> Select All
 					</label>				
