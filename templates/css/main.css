@@ -597,7 +597,7 @@ a.navbar-brand {
 	background-color: #fff;
 	padding: 30px 45px;
 	min-height:240px;
-	border-right:1px solid #ddd;
+	/*border-right:1px solid #ddd;*/
 }
 
 .our-details-tab .tab-content h4 {

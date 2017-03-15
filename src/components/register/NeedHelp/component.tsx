@@ -522,8 +522,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
     handleDateRangeSelection = (dateRange : IDateRange ) => {
         this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange = { 
-            from : dateRange.from.toString(), 
-            to : dateRange.to.toString(), 
+            from : dateRange.from ? dateRange.from.toString() : '', 
+            to : dateRange.to ? dateRange.to.toString() : '', 
             reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring 
         };
     }
@@ -1002,7 +1002,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                                         <li><a href="#flexible" role="tab" data-toggle="tab">Flexible</a></li>
                                     </ul>
 
-                                    <div className="tab-content">
+                                    <div className="tab-content well">
                                         <div className="tab-pane fade in active" id="singleDate">
                                             <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.registrationNeedHelpInd.whenINeedHelp.singleDate.day) }/>
                                             <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>

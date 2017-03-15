@@ -15,6 +15,7 @@ export class JobSearchController {
         this.registrationsForNeedHelp_Ind = [];
         this.isLoading = false;  
         this.postCode = '';
+        this.includeSurroundingSuburbs = false;
         this.registerIndividualFormState = {
             postCode : {
                 fieldValidationError : '',
@@ -28,6 +29,7 @@ export class JobSearchController {
     @observable isLoading : boolean;
     @observable registerIndividualFormState : IRegisterIndividualFormFields;
     @observable postCode : string;
+    @observable includeSurroundingSuburbs : boolean;
 
     @action("get Registrations for NeedHelp from DB")
     getRegistrationsForNeedHelpInd = action((postCode : string) => {

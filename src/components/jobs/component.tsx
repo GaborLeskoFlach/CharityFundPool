@@ -55,7 +55,11 @@ export class Jobs extends React.Component<{},{}> {
     }
 
     handleChange = (e) => {
-        this.controller.postCode = e.target.value;
+        if(e.target.type === 'checkbox'){
+            this.controller.includeSurroundingSuburbs = e.target.checked;
+        }else{
+            this.controller.postCode = e.target.value;
+        }
     }
 
     handleBlur = (e) => {
@@ -97,6 +101,16 @@ export class Jobs extends React.Component<{},{}> {
                                                 onBlur={this.handleBlur}
                                                 value={this.controller.postCode}/>
                                                 <span className={this.shouldMarkError('postCode') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
+                                        </div>
+                                        <br/>
+                                        <div>
+                                            <div className="checkbox">
+                                            <label><input type="checkbox" checked={this.controller.includeSurroundingSuburbs} onChange={this.handleChange}/>Include surrounding suburbs</label>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div className="well">
+                                            <JobSearchFilter />
                                         </div>
                                         <button type="submit" className="btn btn-primary submit">Search</button>
                                         <p className='validationErrorMsg'>{this.controller.registerIndividualFormState.postCode.fieldValidationError}</p>
@@ -160,7 +174,6 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
     }
 
     render(){
-
         if(this.controller.isLoading){
             return (
                 <div className="container">
@@ -170,9 +183,7 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
                 </div>
             )
         }else{
-
             if(this.props.postCode){
-
                 let filteredData = convertData<IRegistrationNeedHelpInd>(this.controller.registrationsForNeedHelp_Ind, DataFilter.ActiveOnly)
                                     .filter(x => x.postCode === this.props.postCode) ;
 
@@ -205,5 +216,19 @@ export class SearchResults extends React.Component<ISearchResults,{}>{
                 return null
             }       
         }
+    }
+}
+
+export class JobSearchFilter extends React.Component<{},{}>{
+
+    constructor(props){
+        super(props)
+    }
+
+    render(){
+        return(
+            <div>
+            </div>
+        )
     }
 }

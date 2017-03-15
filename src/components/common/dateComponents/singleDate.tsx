@@ -4,6 +4,7 @@ import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
+let moment = require('moment')
 
 interface ISingleDateProps{
   onDayClick : (selectedDay : Date) => void;
@@ -24,8 +25,12 @@ export default class SingleDate extends React.Component<ISingleDateProps,{}> {
   }
   
   handleDayClick(e, day){
-    this.selectedDay = day;
-    this.props.onDayClick(day);
+    if(moment(day).isSame(this.selectedDay)){
+      this.selectedDay = null;
+    }else{
+      this.selectedDay = day;
+      this.props.onDayClick(day);
+    }
   }
 
   render() {
@@ -35,7 +40,7 @@ export default class SingleDate extends React.Component<ISingleDateProps,{}> {
           selectedDays={ day => DateUtils.isSameDay(this.selectedDay, day) } onDayClick={this.handleDayClick}
         />
         <p>
-          { this.selectedDay ? this.selectedDay.toLocaleDateString() : 'Please select a day 👻' }
+          { new moment(this.selectedDay).isValid() ? this.selectedDay.toLocaleDateString() : 'Please select a day' }
         </p>
       </div>
     );
