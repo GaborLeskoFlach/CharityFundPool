@@ -6,7 +6,7 @@ import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
         IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, 
-        ICause, RegistrationType, IFieldValidation, IUserMapping } from '../../interfaces';
+        ICause, RegistrationType, IFieldValidation, IUserMapping, INeedHelpWithListItem } from '../../interfaces';
 
 interface IRegisterIndividualFormFields{
     fullName : IFieldValidation;
@@ -47,7 +47,7 @@ export class RegisterNeedHelpController {
         this.hasRegistered = false;
         this.isLoading = false;      
         this.causes = [];
-                
+        this.needHelpWithList = [];
         this.submitBtnCaption = 'Register'; 
         this.resetForm();
     }
@@ -60,6 +60,8 @@ export class RegisterNeedHelpController {
     @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
     @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
     @observable causes : Array<ICause>;
+    @observable needHelpWithList : Array<INeedHelpWithListItem>
+    @observable needHelpWithListItem : INeedHelpWithListItem
     @observable submitBtnCaption : string;
     @observable registerIndividualFormState : IRegisterIndividualFormFields;
     @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
@@ -163,7 +165,6 @@ export class RegisterNeedHelpController {
             fullName : '',
             phoneNo : '',
             email : '',
-            whatINeedHelpWith : '',
             country: '',
             state: '',
             addressLine1: '',
@@ -188,15 +189,44 @@ export class RegisterNeedHelpController {
             phoneNo : '',
             email : '',
             websiteLink : '',
-            whatWeDo : '',
-            whatWeNeed : ''
+            whatWeDo : ''
         }                    
     }
+
+    @action("get list of what I need help with")
+    getListOfWhatINeedHelpWith = action((registrationId:string) : Promise<Array<INeedHelpWithListItem>> => {
+        return new Promise<Array<INeedHelpWithListItem>>((resolve) => {     
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId).on('value', (snapshot) => {
+                this.needHelpWithList = snapshot.val();
+                resolve(this.needHelpWithList);
+            })
+        })        
+    })
+
+    @action("Add new NeedHelpWith List Item to User")
+    addNeedHelpWithListItem = action((registrationId :string, item : INeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {     
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId).push(item).then(response => {
+                resolve(true);
+            }).catch((error) => {
+                reject(error.message)
+            })
+        })        
+    })
+
+    @action("Remove NeedHelpWith List Item")
+    removeNeedHelpWithListItem = action((registrationId:string, id : string) : Promise<any> => {
+        return new Promise<any>((resolve) => {     
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId + '/whatINeedHelpWith').remove().then(response => {
+
+            })
+        })   
+    })
 
     @action("Retrieve Causes for current user")
     getWhatWeNeedForUser = action(() : Promise<Array<ICause>> => {
         return new Promise<Array<ICause>>((resolve) => {     
-            _firebaseApp.database().ref('needs').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
+            _firebaseApp.database().ref('needs/organisations').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);
             })
@@ -215,9 +245,7 @@ export class RegisterNeedHelpController {
     @action("Archive a Cause")
     archiveCause = (id:string) : Promise<any> =>{
         return new Promise((resolve) => {
-            
-            this.getCause(id).then(response => {
-                
+            this.getCause(id).then(response => {                
                 if(response){
                     response.archiveDate = new Date().toString();
                     response.active = false;

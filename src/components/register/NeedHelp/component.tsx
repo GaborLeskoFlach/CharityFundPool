@@ -6,7 +6,8 @@ import { observer} from 'mobx-react';
 import { observable } from 'mobx';
 import { map } from 'lodash';
 import { RegisterNeedHelpController } from './controller';
-import { CauseCreateComponent } from '../../needs/addNewCause/component';
+import { CreateNewCauseComponent } from '../../needs/addNewCause/component';
+import { CreateNewNeedComponent } from './addNewNeed/component';
 import { convertData } from '../../../utils/utils';
 import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;
@@ -22,7 +23,7 @@ import DateRange from '../../common/dateComponents/dateRange';
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
             IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
             IColumnData, ICause, DataSource, DataFilter, RegistrationType, 
-            IDateRange, IRouteParams_Registrations, IAddressDetails, IPosition } from '../../interfaces';
+            IDateRange, IRouteParams_Registrations, IAddressDetails, IPosition, INeedHelpWithListItem } from '../../interfaces';
 
 let DataTable = require('react-data-components').DataTable;
 
@@ -367,6 +368,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
 
 @observer
 export class RegisterIndividualComponent extends React.Component<IRegistrationProps, {}>{
+    @observable whatINeedHelpWith : Array<any> = []
 
     constructor(props){
         super(props);
@@ -386,10 +388,6 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
             case RegistrationFields.email:
                 this.props.controller.registrationNeedHelpInd.email = event.target.value;
                 this.props.controller.registerIndividualFormState.email.fieldValidationError = '';
-                break;
-            case RegistrationFields.whatINeedHelpWith:
-                this.props.controller.registrationNeedHelpInd.whatINeedHelpWith = event.target.value;
-                this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError = '';
                 break;
             case RegistrationFields.state:
                 this.props.controller.registrationNeedHelpInd.state = event.target.value;
@@ -511,33 +509,6 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
         }    
         return hasError ? shouldShow : false;
-    };
-
-    handleDaySelection = (day : Date) => {
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate = { 
-            day : day.toString(), 
-            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring 
-        };
-    }
-
-    handleDateRangeSelection = (dateRange : IDateRange ) => {
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange = { 
-            from : dateRange.from ? dateRange.from.toString() : '', 
-            to : dateRange.to ? dateRange.to.toString() : '', 
-            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring 
-        };
-    }
-
-    convertSingleDate = (day : string) : Date => {
-        return new Date(day);
-    }
-
-    convertDateRange = (dateRange : { from : string, to : string}) : IDateRange => {
-        let value : IDateRange = {
-            from : dateRange.from ? new Date(dateRange.from) : null,
-            to : dateRange.to ? new Date(dateRange.to) : null
-        }
-        return value;
     }
 
     onPlaceSelected = (address : IAddressDetails) => {
@@ -576,12 +547,15 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
         this.props.controller.registrationNeedHelpInd.addressLocation = null;
     }
 
+    newNeedAdded = () => {
+        console.log('New Need Added');
+    }
+
     render(){
 
         const { controller } = this.props;
 
         return (
-
             <div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.validationError}</p>
 
@@ -971,56 +945,10 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     
                     </div>
                 </div>
-
-                <div className={this.shouldMarkError('whatINeedHelpWith') ? "form-group has-error has-feedback" : ""}>
-                    <label htmlFor="whatINeedHelpWith">What I need help with (*)</label>
-                    <div>
-                        <select className={this.shouldMarkError('whatINeedHelpWith') ? "form-control error" : "form-control"} ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} onBlur={this.handleBlur} value={controller.registrationNeedHelpInd.whatINeedHelpWith}>
-                            <option value="">Please select an option...</option>
-                            
-                                {map(controller.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
-                                    <option key={key} value={need.name}>{need.name}</option>
-                                ))}
-
-                        </select>                                                
-                    </div>
-                </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.whatINeedHelpWith.fieldValidationError}</p>
-
-                <div className="form-group">
-                    <label htmlFor="whenINeedHelp">When I need help</label>
-
-                    <div className="container">
-                        <div className="our-details-tab">
-                            <div className="row">
-
-                                <div className="col-sm-12 tab-section">
-
-                                    <ul className="nav nav-tabs nav-justified" role="tablist">
-                                        <li className="active"><a href="#singleDate" role="tab" data-toggle="tab">Select a single date</a></li>
-                                        <li><a href="#dateRange" role="tab" data-toggle="tab">Select a date range</a></li>
-                                        <li><a href="#flexible" role="tab" data-toggle="tab">Flexible</a></li>
-                                    </ul>
-
-                                    <div className="tab-content well">
-                                        <div className="tab-pane fade in active" id="singleDate">
-                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.registrationNeedHelpInd.whenINeedHelp.singleDate.day) }/>
-                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
-                                        </div>
-                                        <div className="tab-pane fade " id="dateRange">								
-                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.registrationNeedHelpInd.whenINeedHelp.dateRange) }/>
-                                            <br />
-                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
-                                        </div>
-                                        <div className="tab-pane fade" id="flexible">
-                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.flexible}/> Flexible</label>
-                                        </div>                                
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
+                {(_firebaseAuth.currentUser !== null) &&
+                    <CreateNewNeedComponent controller={this.props.controller} onChanged={this.newNeedAdded} />
+                }
             </div>                   
         )
     }
@@ -1063,10 +991,6 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
             case RegistrationFields.whatWeDo:
                 this.props.controller.registrationNeedHelpOrg.whatWeDo = event.target.value;
                 this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError = '';
-                break;
-            case RegistrationFields.whatWeNeed:
-                this.props.controller.registrationNeedHelpOrg.whatWeNeed = event.target.value;
-                this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError = '';
                 break;
         }
     }
@@ -1237,7 +1161,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeNeed">What we need</label>
                     <div>
-                        <CauseCreateComponent saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
+                        <CreateNewCauseComponent id={''} saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
                     </div>     
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>

@@ -8,14 +8,15 @@ import { browserHistory } from 'react-router';
 import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 
-export interface ICauseCreateComponent{
+export interface ICreateNewCauseComponent{
     saveCauseTo : DataSource;
     onChanged : (cause:ICause) => void;
+    id : string;
 }
 
-export class CauseCreateComponent extends React.Component<ICauseCreateComponent, any>{
+export class CreateNewCauseComponent extends React.Component<ICreateNewCauseComponent, any>{
     controller : AddNewCauseController;
-
+    
     constructor(props) {
         super(props);
         this.controller = new AddNewCauseController();
@@ -47,7 +48,7 @@ export class CauseCreateComponent extends React.Component<ICauseCreateComponent,
 
         //Save into DB or LocalStorage
         if(this.props.saveCauseTo == DataSource.Firebase){
-            this.controller.addCause(cause).then(response => {
+            this.controller.addCause(this.props.id,cause).then(response => {
                 (this.refs[CauseFields.title] as HTMLInputElement).value = '';
                 (this.refs[CauseFields.description] as HTMLInputElement).value = '';
                 (this.refs[CauseFields.bestPrice] as HTMLInputElement).value = '';

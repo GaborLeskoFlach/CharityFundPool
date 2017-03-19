@@ -15,6 +15,7 @@ export const citySuburb : string = 'citySuburb';
 export const postCode : string = 'postCode';
 export const state : string = 'state';
 export const whatINeedHelpWith : string = 'whatINeedHelpWith';
+export const typeOfWork : string = 'typeOfWork';
 export const whenINeedHelp : string = 'whenINeedHelp';
 export const registrationCodeNo : string = 'registrationCodeNo';
 export const limitations : string = 'limitations';
