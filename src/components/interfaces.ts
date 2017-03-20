@@ -9,11 +9,11 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     addressLine2? : string;
     citySuburb? : string;
     postCode? : string;
-    whenINeedHelp? : INeedHelpDateConfig
     active:boolean;
     uid:string;
     addressLocation : IPosition;
     profileImageURL : string;
+    needHelpWithList : Array<INeedHelpWithListItem>
 
 }
 
@@ -85,6 +85,7 @@ export interface ICause extends IConvertDataConstraint{
 }
 
 export interface INeedHelpWithListItem extends IConvertDataConstraint{
+    whenINeedHelp : INeedHelpDateConfig
     whatINeedHelpWith : string;
     typeOfWork : string;
     active : boolean;

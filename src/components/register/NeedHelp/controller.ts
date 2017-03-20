@@ -47,11 +47,14 @@ export class RegisterNeedHelpController {
         this.hasRegistered = false;
         this.isLoading = false;      
         this.causes = [];
-        this.needHelpWithList = [];
         this.submitBtnCaption = 'Register'; 
+        this.individualRegistration = null;
+        this.organisationRegistration = null;
         this.resetForm();
     }
 
+    @observable individualRegistration : IRegistrationNeedHelpInd;
+    @observable organisationRegistration : IRegistrationNeedHelpOrg;
     @observable registrationType : string;
     @observable formIsVisible : boolean;
     @observable hasTrade : boolean;
@@ -60,7 +63,6 @@ export class RegisterNeedHelpController {
     @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
     @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
     @observable causes : Array<ICause>;
-    @observable needHelpWithList : Array<INeedHelpWithListItem>
     @observable needHelpWithListItem : INeedHelpWithListItem
     @observable submitBtnCaption : string;
     @observable registerIndividualFormState : IRegisterIndividualFormFields;
@@ -171,13 +173,9 @@ export class RegisterNeedHelpController {
             addressLine2: '',
             citySuburb : '',
             postCode : '',
-            whenINeedHelp : {
-                singleDate : { day : '', reoccurring : false},
-                dateRange : { from : '', to : '' , reoccurring : false},
-                flexible : false
-            },
             addressLocation : null,
-            profileImageURL : ''
+            profileImageURL : '',
+            needHelpWithList : []
         }
         this.registrationNeedHelpOrg = {
             ID : '',
@@ -190,23 +188,30 @@ export class RegisterNeedHelpController {
             email : '',
             websiteLink : '',
             whatWeDo : ''
-        }                    
+        }
+        this.needHelpWithListItem = {
+            whenINeedHelp : {
+                singleDate : { day : '', reoccurring : false},
+                dateRange : { from : '', to : '' , reoccurring : false},
+                flexible : false
+            },                      
+            typeOfWork : '',
+            whatINeedHelpWith : '',
+            active : true
+        };                       
     }
 
-    @action("get list of what I need help with")
-    getListOfWhatINeedHelpWith = action((registrationId:string) : Promise<Array<INeedHelpWithListItem>> => {
-        return new Promise<Array<INeedHelpWithListItem>>((resolve) => {     
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId).on('value', (snapshot) => {
-                this.needHelpWithList = snapshot.val();
-                resolve(this.needHelpWithList);
-            })
-        })        
-    })
-
     @action("Add new NeedHelpWith List Item to User")
-    addNeedHelpWithListItem = action((registrationId :string, item : INeedHelpWithListItem) : Promise<any> => {
-        return new Promise<any>((resolve, reject) => {     
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId).push(item).then(response => {
+    addNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {
+            if(this.individualRegistration.needHelpWithList){
+                this.individualRegistration.needHelpWithList.push(item);
+            }else{
+                this.individualRegistration.needHelpWithList = [];
+                this.individualRegistration.needHelpWithList.push(item);
+            }
+            
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID).update(this.individualRegistration).then(response => {
                 resolve(true);
             }).catch((error) => {
                 reject(error.message)
@@ -214,13 +219,18 @@ export class RegisterNeedHelpController {
         })        
     })
 
-    @action("Remove NeedHelpWith List Item")
-    removeNeedHelpWithListItem = action((registrationId:string, id : string) : Promise<any> => {
-        return new Promise<any>((resolve) => {     
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + registrationId + '/whatINeedHelpWith').remove().then(response => {
-
+    @action("Removes a NeedHelpWith List Item from Registration")
+    removeNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {
+            
+            this.individualRegistration.needHelpWithList.splice(this.individualRegistration.needHelpWithList.indexOf(this.individualRegistration.needHelpWithList.filter(x => x.ID === item.ID)[0],1))
+            
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID).update(this.individualRegistration).then(response => {
+                resolve(true);
+            }).catch((error) => {
+                reject(error.message)
             })
-        })   
+        })        
     })
 
     @action("Retrieve Causes for current user")
@@ -360,24 +370,22 @@ export class RegisterNeedHelpController {
         return new Promise<any>((resolve) => {
             const dbRef : string = 'registrations/' + registrationType
             _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
-                let individualRegistration : any;
-                let organisationRegistration : any;
                 let individuals : any = convertData(snapshot.val().Individuals, DataFilter.ActiveOnly);
                 let organisations : any = convertData(snapshot.val().Organisations, DataFilter.ActiveOnly);
 
-                individualRegistration = individuals.filter(x => x.uid === key)[0];
-                if(!individualRegistration){
-                    organisationRegistration = organisations.filter(x => x.uid === key)[0];
+                this.individualRegistration = individuals.filter(x => x.uid === key)[0];
+                if(!this.individualRegistration){
+                    this.organisationRegistration = organisations.filter(x => x.uid === key)[0];
                 }
 
-                if(individualRegistration){
+                if(this.individualRegistration){
                     this.submitBtnCaption = 'Save';
-                    this.registrationNeedHelpInd = individualRegistration;
+                    this.registrationNeedHelpInd = this.individualRegistration;
                 }
 
-                if(organisationRegistration){
+                if(this.organisationRegistration){
                     this.submitBtnCaption = 'Save';
-                    this.registrationNeedHelpOrg = organisationRegistration;
+                    this.registrationNeedHelpOrg = this.organisationRegistration;
                 }
                 resolve();
             });

@@ -17,31 +17,27 @@ export interface ICreateNewNeedComponent{
     onChanged : (any) => void;
 }
 
+@observer
 export class CreateNewNeedComponent extends React.Component<ICreateNewNeedComponent, any>{
     needHelpWithListItem : INeedHelpWithListItem;
 
     constructor(props) {
         super(props);
-        this.needHelpWithListItem = {
-            typeOfWork : '',
-            whatINeedHelpWith : '',
-            active : true
-        };
     }
 
     addNewListItem = (e) => {
         e.preventDefault();
-        this.props.controller.addNeedHelpWithListItem(_firebaseAuth.currentUser.uid,this.needHelpWithListItem);
+        this.props.controller.addNeedHelpWithListItem(this.props.controller.needHelpWithListItem);
     }
 
     handleChange = (e) => {
         switch(e.target.id){
             case FormFields.whatINeedHelpWith:
-            this.needHelpWithListItem.whatINeedHelpWith = e.target.value;
-            break;
+                this.props.controller.needHelpWithListItem.whatINeedHelpWith = e.target.value;
+                break;
             case FormFields.typeOfWork:
-            this.needHelpWithListItem.typeOfWork = e.target.value;
-            break;
+                this.props.controller.needHelpWithListItem.typeOfWork = e.target.value;
+                break;
         }
     }
 
@@ -58,17 +54,17 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
     }
 
     handleDaySelection = (day : Date) => {
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate = { 
+        this.props.controller.needHelpWithListItem.whenINeedHelp.singleDate = { 
             day : day.toString(), 
-            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring 
+            reoccurring : this.props.controller.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring 
         };
     }
 
     handleDateRangeSelection = (dateRange : IDateRange ) => {
-        this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange = { 
+        this.props.controller.needHelpWithListItem.whenINeedHelp.dateRange = { 
             from : dateRange.from ? dateRange.from.toString() : '', 
             to : dateRange.to ? dateRange.to.toString() : '', 
-            reoccurring : this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring 
+            reoccurring : this.props.controller.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring 
         };
     }
 
@@ -106,7 +102,6 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                         </select>                                                
                                     </div>
                                 </div>
-
                                 <div className="form-group">
                                     <label htmlFor="typeOfWork">Type of work (*)</label>
                                     <div>
@@ -122,7 +117,6 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                         </select>
                                     </div>     
                                 </div>
-
                                 <div className="form-group">
                                     <div className="container">
                                         <div className="our-details-tab text-center">
@@ -138,25 +132,23 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
                                                     <fieldset className="tab-content">
                                                         <div className="tab-pane fade in active" id="singleDate">
-                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.registrationNeedHelpInd.whenINeedHelp.singleDate.day) }/>
-                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
+                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.needHelpWithListItem.whenINeedHelp.singleDate.day) }/>
+                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade " id="dateRange">								
-                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.registrationNeedHelpInd.whenINeedHelp.dateRange) }/>
+                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.needHelpWithListItem.whenINeedHelp.dateRange) }/>
                                                             <br />
-                                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
+                                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade" id="flexible">
-                                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.registrationNeedHelpInd.whenINeedHelp.flexible}/> Flexible</label>
-                                                        </div>                                
+                                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.flexible}/> Flexible</label>
+                                                        </div>                        
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <button className="btn btn-default" onClick={this.addNewListItem}>Add</button>
                             </div>
                         </div>
@@ -173,13 +165,13 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
-                                        map(convertData(controller.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
+                                        map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
                                             return(
                                                 <tr key={index}>
                                                     <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
                                                     <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
                                                     <td className="col-sm-1 col-md-1">
-                                                        <button type="button" className="btn btn-danger" id="remove" onClick={controller.removeNeedHelpWithListItem.bind(this,item.ID)}>
+                                                        <button type="button" className="btn btn-danger" id="remove" onClick={() => controller.removeNeedHelpWithListItem(item.ID)}>
                                                             <span className="glyphicon glyphicon-remove"></span> Remove
                                                         </button>
                                                     </td>

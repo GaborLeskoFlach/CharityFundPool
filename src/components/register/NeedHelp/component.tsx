@@ -412,7 +412,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
             case RegistrationFields.postCode:
                 this.props.controller.registrationNeedHelpInd.postCode = event.target.value;
                 this.props.controller.registerIndividualFormState.postCode.fieldValidationError = '';
-                break;                          
+                break; 
+                /*                         
             case RegistrationFields.whenINeedHelpFlexible:
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.flexible = event.target.checked;
                 break;
@@ -420,7 +421,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 this.props.controller.registrationNeedHelpInd.whenINeedHelp.singleDate.reoccurring = event.target.checked;
                 break;
             case RegistrationFields.dateRangeReoccurring:
-                this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring = event.target.checked;
+                this.props.controller.registrationNeedHelpInd.whenINeedHelp.dateRange.reoccurring = event.target.checked;*/
         }
     }
 
