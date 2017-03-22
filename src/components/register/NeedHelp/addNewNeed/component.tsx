@@ -20,6 +20,7 @@ export interface ICreateNewNeedComponent{
 @observer
 export class CreateNewNeedComponent extends React.Component<ICreateNewNeedComponent, any>{
     needHelpWithListItem : INeedHelpWithListItem;
+    @observable isLoading : boolean = false;
 
     constructor(props) {
         super(props);
@@ -37,7 +38,10 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
     addNewListItem = (e) => {
         e.preventDefault();
-        this.props.controller.addNeedHelpWithListItem(this.needHelpWithListItem);
+        this.isLoading = true;
+        this.props.controller.addNeedHelpWithListItem(this.needHelpWithListItem).then((response) => {
+            this.isLoading = false;
+        })
     }
 
     handleChange = (e) => {
@@ -175,7 +179,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
-                                        controller.individualRegistration &&
+                                        controller.individualRegistration && this.isLoading &&
                                         map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
                                             return(
                                                 <tr key={index}>
