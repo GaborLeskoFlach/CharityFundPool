@@ -23,20 +23,30 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
     constructor(props) {
         super(props);
+        this.needHelpWithListItem = {
+            active : true,
+            whatINeedHelpWith : '',
+            whenINeedHelp : {
+                singleDate : { day : '', reoccurring : false },
+                dateRange : { from : '', to : '', reoccurring : false},
+                flexible : false
+            },
+            typeOfWork : ''
+        }
     }
 
     addNewListItem = (e) => {
         e.preventDefault();
-        this.props.controller.addNeedHelpWithListItem(this.props.controller.needHelpWithListItem);
+        this.props.controller.addNeedHelpWithListItem(this.needHelpWithListItem);
     }
 
     handleChange = (e) => {
         switch(e.target.id){
             case FormFields.whatINeedHelpWith:
-                this.props.controller.needHelpWithListItem.whatINeedHelpWith = e.target.value;
+                this.needHelpWithListItem.whatINeedHelpWith = e.target.value;
                 break;
             case FormFields.typeOfWork:
-                this.props.controller.needHelpWithListItem.typeOfWork = e.target.value;
+                this.needHelpWithListItem.typeOfWork = e.target.value;
                 break;
         }
     }
@@ -54,17 +64,17 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
     }
 
     handleDaySelection = (day : Date) => {
-        this.props.controller.needHelpWithListItem.whenINeedHelp.singleDate = { 
+        this.needHelpWithListItem.whenINeedHelp.singleDate = { 
             day : day.toString(), 
-            reoccurring : this.props.controller.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring 
+            reoccurring : this.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring 
         };
     }
 
     handleDateRangeSelection = (dateRange : IDateRange ) => {
-        this.props.controller.needHelpWithListItem.whenINeedHelp.dateRange = { 
+        this.needHelpWithListItem.whenINeedHelp.dateRange = { 
             from : dateRange.from ? dateRange.from.toString() : '', 
             to : dateRange.to ? dateRange.to.toString() : '', 
-            reoccurring : this.props.controller.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring 
+            reoccurring : this.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring 
         };
     }
 
@@ -165,6 +175,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
+                                        controller.individualRegistration &&
                                         map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
                                             return(
                                                 <tr key={index}>

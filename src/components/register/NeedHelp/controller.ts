@@ -203,15 +203,8 @@ export class RegisterNeedHelpController {
 
     @action("Add new NeedHelpWith List Item to User")
     addNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
-        return new Promise<any>((resolve, reject) => {
-            if(this.individualRegistration.needHelpWithList){
-                this.individualRegistration.needHelpWithList.push(item);
-            }else{
-                this.individualRegistration.needHelpWithList = [];
-                this.individualRegistration.needHelpWithList.push(item);
-            }
-            
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID).update(this.individualRegistration).then(response => {
+        return new Promise<any>((resolve, reject) => {            
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/').push(item).then(response => {
                 resolve(true);
             }).catch((error) => {
                 reject(error.message)
@@ -220,12 +213,12 @@ export class RegisterNeedHelpController {
     })
 
     @action("Removes a NeedHelpWith List Item from Registration")
-    removeNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
+    removeNeedHelpWithListItem = action((id : string) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
             
-            this.individualRegistration.needHelpWithList.splice(this.individualRegistration.needHelpWithList.indexOf(this.individualRegistration.needHelpWithList.filter(x => x.ID === item.ID)[0],1))
+            //this.individualRegistration.needHelpWithList.splice(this.individualRegistration.needHelpWithList.indexOf(this.individualRegistration.needHelpWithList.filter(x => x.ID === id)[0],1))
             
-            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID).update(this.individualRegistration).then(response => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
                 resolve(true);
             }).catch((error) => {
                 reject(error.message)

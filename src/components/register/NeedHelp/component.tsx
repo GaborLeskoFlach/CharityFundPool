@@ -946,10 +946,9 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     
                     </div>
                 </div>
+
+                <CreateNewNeedComponent controller={this.props.controller} onChanged={this.newNeedAdded} />
                 
-                {(_firebaseAuth.currentUser !== null) &&
-                    <CreateNewNeedComponent controller={this.props.controller} onChanged={this.newNeedAdded} />
-                }
             </div>                   
         )
     }
