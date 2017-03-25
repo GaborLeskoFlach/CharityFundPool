@@ -53,8 +53,8 @@ export class RegisterNeedHelpController {
         this.resetForm();
     }
 
-    @observable individualRegistration : IRegistrationNeedHelpInd;
-    @observable organisationRegistration : IRegistrationNeedHelpOrg;
+    individualRegistration : IRegistrationNeedHelpInd;
+    organisationRegistration : IRegistrationNeedHelpOrg;
     @observable registrationType : string;
     @observable formIsVisible : boolean;
     @observable hasTrade : boolean;
@@ -205,7 +205,9 @@ export class RegisterNeedHelpController {
     addNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {            
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/').push(item).then(response => {
-                resolve(true);
+                this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })  
             }).catch((error) => {
                 reject(error.message)
             })
@@ -215,11 +217,10 @@ export class RegisterNeedHelpController {
     @action("Removes a NeedHelpWith List Item from Registration")
     removeNeedHelpWithListItem = action((id : string) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
-            
-            //this.individualRegistration.needHelpWithList.splice(this.individualRegistration.needHelpWithList.indexOf(this.individualRegistration.needHelpWithList.filter(x => x.ID === id)[0],1))
-            
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
-                resolve(true);
+                this.getRegistrationByID('NeedHelp', _firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })
             }).catch((error) => {
                 reject(error.message)
             })

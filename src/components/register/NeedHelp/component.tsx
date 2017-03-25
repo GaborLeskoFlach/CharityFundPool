@@ -352,7 +352,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                     }
 
                                     <div className="form-group">
-                                        <button className="btn btn-default" type="submit">{this.controller.submitBtnCaption}</button>
+                                        <button className="btn btn-primary submit" type="submit">{this.controller.submitBtnCaption}</button>
                                         <button style={myStyle} className="btn btn-secondary" type="button" onClick={this.resetForm}>Cancel</button>
                                     </div>
                                 </form>

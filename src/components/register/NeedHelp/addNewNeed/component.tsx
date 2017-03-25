@@ -44,6 +44,14 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
         })
     }
 
+    removeNeedHelpWithListItem = (e, id : string) => {
+        e.preventDefault();
+        this.isLoading = true;
+        this.props.controller.removeNeedHelpWithListItem(id).then((response) => {
+            this.isLoading = false;
+        })
+    }
+
     handleChange = (e) => {
         switch(e.target.id){
             case FormFields.whatINeedHelpWith:
@@ -80,6 +88,36 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
             to : dateRange.to ? dateRange.to.toString() : '', 
             reoccurring : this.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring 
         };
+    }
+
+    needHelpWithListItemSelected = (e, id : string) => {
+        e.preventDefault();
+    }
+
+    renderNeedsForIndividual = (props : ICreateNewNeedComponent) => {   
+        if(this.isLoading){
+            return(
+                <tr>
+                    <td>Loading...</td>
+                </tr>
+            );
+        }else{
+            return(
+                map(convertData(props.controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
+                    return(
+                        <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
+                            <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
+                            <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
+                            <td className="col-sm-1 col-md-1">
+                                <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
+                                    <span className="glyphicon glyphicon-remove"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    )
+                }))                
+            )
+        }   
     }
 
     render() {
@@ -125,9 +163,9 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                             onChange={this.handleChange}
                                         >
                                             <option value="">Please select an option...</option>
-                                            <option value="lightDutyWork">Light duty work</option>
-                                            <option value="mediumDutyWork">Medium duty work</option>
-                                            <option value="heavyDutyWork">Heavy duty work</option>
+                                            <option value="Light duty work">Light duty work</option>
+                                            <option value="Medium duty work">Medium duty work</option>
+                                            <option value="Heavy duty work">Heavy duty work</option>
                                         </select>
                                     </div>     
                                 </div>
@@ -163,7 +201,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                         </div>
                                     </div>
                                 </div>
-                                <button className="btn btn-default" onClick={this.addNewListItem}>Add</button>
+                                <button className="btn btn-primary submit" onClick={this.addNewListItem}>Add</button>
                             </div>
                         </div>
                     </div>  
@@ -179,21 +217,8 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
-                                        controller.individualRegistration && this.isLoading &&
-                                        map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
-                                            return(
-                                                <tr key={index}>
-                                                    <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
-                                                    <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
-                                                    <td className="col-sm-1 col-md-1">
-                                                        <button type="button" className="btn btn-danger" id="remove" onClick={() => controller.removeNeedHelpWithListItem(item.ID)}>
-                                                            <span className="glyphicon glyphicon-remove"></span> Remove
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    )}
+                                        this.renderNeedsForIndividual(this.props)
+                                    }
                                 </tbody>
                             </table>
                         </div>                                     
