@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { signIn, _firebaseApp, getMappingInfoForUser, updateRegistrationToMapping } from './components/firebaseAuth/component';
-import { IUserMapping, UserStatus } from './components/interfaces';
+import { IUserMapping, UserStatus, RegistrationRoles } from './components/interfaces';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
+import './styles.css';
 
 enum TabType {
     Home = 1,
@@ -32,17 +33,18 @@ interface ITab{
     name : string;
     to? : string;  
     tabType : TabType;
+    canSee : Array<RegistrationRoles>
 }
 
 let tabList : Array<ITab>  = [
-    { id: 1, name: 'Home', to:'/home', tabType : TabType.Home },
-    { id: 2, name: 'About Us', to:'/aboutUs', tabType : TabType.AboutUs },
-    { id: 3, name: 'Donate', to:'/donate', tabType : TabType.Donate },
-    { id: 4, name: 'View Needs', to:'/viewNeeds', tabType : TabType.ViewNeeds },   
-    { id: 5, name: 'Contact Us', to:'/contactUs', tabType : TabType.ContactUs },      
-    { id: 6, name: 'Search for Jobs',  to:'/jobs', tabType : TabType.SearchForJobs },
-    { id: 7, name: 'Administration',  to:'/administration', tabType : TabType.Administration },
-    { id: 8, name: 'Sign In',  to:'/login', tabType : TabType.SignInOut },
+    { id: 1, name: 'Home', to:'/home', tabType : TabType.Home, canSee : [ RegistrationRoles.Admin, RegistrationRoles.User] },
+    { id: 2, name: 'About Us', to:'/aboutUs', tabType : TabType.AboutUs, canSee : [ RegistrationRoles.Admin, RegistrationRoles.User]},
+    { id: 3, name: 'Donate', to:'/donate', tabType : TabType.Donate, canSee : [ RegistrationRoles.Admin] },
+    { id: 4, name: 'View Needs', to:'/viewNeeds', tabType : TabType.ViewNeeds, canSee : [ RegistrationRoles.Admin] },   
+    { id: 5, name: 'Contact Us', to:'/contactUs', tabType : TabType.ContactUs, canSee : [ RegistrationRoles.Admin, RegistrationRoles.User] },      
+    { id: 6, name: 'Search for Jobs',  to:'/jobs', tabType : TabType.SearchForJobs, canSee : [ RegistrationRoles.Admin, RegistrationRoles.User] },
+    { id: 7, name: 'Administration',  to:'/administration', tabType : TabType.Administration, canSee : [ RegistrationRoles.Admin] },
+    { id: 8, name: 'Sign In',  to:'/login', tabType : TabType.SignInOut, canSee : [ RegistrationRoles.Admin, RegistrationRoles.User] },
 ];
 
 class Tab extends React.Component<ITabProps,{}>{
@@ -116,8 +118,6 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
             }
         });
     }
-
-
 
     handleClick(tab : ITab){
        console.log('Click a Tab: ' + tab.name);
@@ -197,8 +197,10 @@ class Avatar extends React.Component<IAvatar,{}>{
 
     render(){
         return(
-            <div>
-                <h5>{this.props.user.displayName}</h5>
+            <div className="profileCardNavbar hovercard">   
+                <div className="avatar">                                   
+                    <img className="profileCardNavbar hovercard avatar img" src={this.props.user.photoURL} title={this.props.user.displayName}/>
+                </div>
             </div>
         )
     }

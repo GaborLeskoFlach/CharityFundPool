@@ -1,5 +1,5 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { _firebaseApp, register } from '../firebaseAuth/component';
+import { _firebaseApp, _firebaseAuth, register, updateRegistrationToMapping, getMappingInfoForUser } from '../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 import { generateTempPassword } from '../../utils/utils';
 
@@ -147,23 +147,32 @@ export class AdministrationController {
         });
     }
 
-
     @action("Set ProfileImage for Registration")
     setProfileImageForRegistration = (registrationType : RegistrationType, key : string, profileImageURL : string) : Promise<any> => {
-        return new Promise<any>((resolve) => {      
-            const dbRef = this.getDBRefByRegistrationType(registrationType,key);            
-            this.getRegistration(dbRef).then(response => {
-                if(response){
-                    response.profileImageURL = profileImageURL;
-                    _firebaseApp.database().ref(dbRef).update(response).then(result => {                
-                        resolve(response);
+        return new Promise<any>((resolve) => {
+            const dbRef = this.getDBRefByRegistrationType(registrationType,key);
+            this.getRegistration(dbRef).then((userRef : IRegistrationNeedHelpInd) => {
+                if(userRef){
+                    userRef.profileImageURL = profileImageURL;
+                    _firebaseApp.database().ref(dbRef).update(userRef).then(result => {
+                        //Update UserMapping data to keep Firebase UserProfile updated
+                        getMappingInfoForUser(userRef.uid).then((response) => {
+                            if(response){
+                                response.profileImageURL = profileImageURL
+                                updateRegistrationToMapping(response).then((response) => {
+                                    resolve(true)
+                                })
+                            }else{
+                                resolve(true)
+                            }
+                        })
                     }).catch(error => {
                         console.log('Exception occured in setProfileImageForRegistration => {0}', error.message);
                     })
                 }
             }) 
-        });       
-    };
+        })   
+    }
 
     ///
     /// Private Methods

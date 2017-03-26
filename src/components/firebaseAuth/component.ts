@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import { browserHistory } from 'react-router';
 import { observable, action } from 'mobx';
-import { IUserMapping, UserStatus } from '../interfaces';
+import { IUserMapping, UserStatus, IRoleInfo, RegistrationRoles } from '../interfaces';
 
 var config = {
     apiKey: "AIzaSyA-Y-PwwThMfyUuQVIliAIU9JHsuQF03_k",
@@ -56,7 +56,17 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                                     }
 
                                     addNewRegistrationToMapping(mapping).then(response => {
-                                        resolve();
+                                        //Add new entry under ROLES
+
+                                        const role : IRoleInfo = {
+                                            active : true,
+                                            registrationId : dbRef.substring(dbRef.lastIndexOf('/') + 1),
+                                            registrationType : RegistrationRoles.User
+                                        }
+
+                                        addNewRole(role).then((response) => {
+                                            resolve(true)
+                                        })
                                     })                                                                                    
                                 });
                             }
@@ -81,6 +91,15 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                 resolve();
             });
         }
+    });
+}
+
+function addNewRole(role : IRoleInfo){ 
+    return new Promise<any>((resolve) => {
+        const rolesRef : string = 'roles';
+        _firebaseApp.database().ref(rolesRef).push(role).then(result => {
+            resolve(result);                       
+        });
     });
 }
 

@@ -46,6 +46,17 @@ export enum UserStatus{
     Pending
 }
 
+export enum RegistrationRoles{
+    Admin,
+    User
+}
+
+export interface IRoleInfo{
+    registrationId : string
+    registrationType : RegistrationRoles,
+    active : boolean
+}
+
 export interface IUserMapping{
     uid : string;
     status : UserStatus;

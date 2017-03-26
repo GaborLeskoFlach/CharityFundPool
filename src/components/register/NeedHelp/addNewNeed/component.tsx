@@ -102,21 +102,19 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                 </tr>
             );
         }else{
-            return(
-                map(convertData(props.controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
-                    return(
-                        <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
-                            <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
-                            <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
-                            <td className="col-sm-1 col-md-1">
-                                <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
-                                    <span className="glyphicon glyphicon-remove"></span> Remove
-                                </button>
-                            </td>
-                        </tr>
-                    )
-                }))                
-            )
+            map(convertData(props.controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
+                return(
+                    <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
+                        <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
+                        <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
+                        <td className="col-sm-1 col-md-1">
+                            <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
+                                <span className="glyphicon glyphicon-remove"></span> Remove
+                            </button>
+                        </td>
+                    </tr>
+                )
+            }))
         }   
     }
 
