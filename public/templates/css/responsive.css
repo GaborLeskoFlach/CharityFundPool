@@ -328,9 +328,10 @@
 	.navbar-fixed-top .navbar-brand {
 		padding-top:5px;
 	}	
+	/*
 	#navigation .navbar-fixed-top .navbar-brand img {
 		max-width:60%;
-	}
+	}*/
 	#navigation .navbar-fixed-top .navbar-right li a {
 		font-size:14px;
 		line-height:15px;
