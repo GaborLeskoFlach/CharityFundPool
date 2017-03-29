@@ -1,17 +1,28 @@
 {
   "rules": {
+    ".read" : false,
+    ".write": "auth != null",
 		"utils": {
       ".read": true,
       ".write": "auth != null"
     },
     "registrations" : {
-      ".read" : "auth != null",
-      ".write": true
+      ".read" : true,
+      ".write": true,
+      ".indexOn" : ["registrationType","active"]
     },
     "needs" : {
       ".read" : true,
-      ".write": "auth != null"
+      ".write": "auth != null",
+      ".indexOn": ["uid","active"]
     },      
-    ".write": "auth != null"
+    "users" : {
+      ".read" : true,
+      ".write": "auth != null"
+    },
+    "roles" : {
+      ".read" : true,
+      ".write": "auth != null"      
+    }
   }
 }
