@@ -64,10 +64,10 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                                             registrationType : RegistrationRoles.User
                                         }
 
-                                        addNewRole(role).then((response) => {
+                                        addNewRole(registration.uid,role).then((response) => {
                                             resolve(true)
                                         })
-                                    })                                                                                    
+                                    })                                                                             
                                 });
                             }
                         }).catch(error => {
@@ -94,12 +94,21 @@ function register(email: string, password: string, shouldSendVerificationEmail :
     });
 }
 
-function addNewRole(role : IRoleInfo){ 
+function addNewRole(uid :string, role : IRoleInfo){ 
     return new Promise<any>((resolve) => {
-        const rolesRef : string = 'roles';
-        _firebaseApp.database().ref(rolesRef).push(role).then(result => {
+        _firebaseApp.database().ref('roles/' + uid).set(role).then(result => {
             resolve(result);                       
         });
+    });
+}
+
+function getUserRole(uid : string) : Promise<IRoleInfo>{
+    return new Promise<IRoleInfo>((resolve,reject) => {
+        _firebaseApp.database().ref('roles/' + uid).once('value', (snapshot) => {
+            resolve(snapshot.val());     
+        }).catch((error) => {
+            console.log('Unable to fetch roles =>', error.message)
+        })
     });
 }
 
@@ -219,4 +228,4 @@ function isUserLoggedIn() : boolean{
     }
 }
 
-export { requireAuth, register, signIn, signOut, resetPassword, addNewRegistrationToMapping, getMappingInfoForUser, updateRegistrationToMapping  };
+export { requireAuth, register, signIn, signOut, resetPassword, addNewRegistrationToMapping, getMappingInfoForUser, updateRegistrationToMapping, getUserRole  };

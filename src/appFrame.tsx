@@ -1,10 +1,16 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { signIn, _firebaseApp, getMappingInfoForUser, updateRegistrationToMapping } from './components/firebaseAuth/component';
-import { IUserMapping, UserStatus, RegistrationRoles } from './components/interfaces';
+import { signIn, _firebaseApp, getMappingInfoForUser, updateRegistrationToMapping, getUserRole } from './components/firebaseAuth/component';
+import { IUserMapping, UserStatus, RegistrationRoles, IRoleInfo } from './components/interfaces';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
 import './styles.css';
+
+//Ugh...no no no....shouldn't be this way
+//TODO Remove these guids immediately
+const AdminUser1GUID : string = 'Dc6w5JqHUtPXxXvtHHXJ7ozjk7q1'
+const AdminUser2GUID : string = 'sdUQiPafYwavy7XEdyydU9mfg6C3'
+
 
 enum TabType {
     Home = 1,
@@ -69,6 +75,9 @@ class Tab extends React.Component<ITabProps,{}>{
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
     @observable userLoggedIn : boolean = false;
     @observable currentUser : firebase.User = null;
+    registrationId : string
+    currentUserRole : RegistrationRoles
+    @observable isLoading : boolean = false
 
     constructor(props){
         super(props);
@@ -76,26 +85,29 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     }
 
     componentDidMount = () => {
+        this.isLoading = true
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
-                this.userLoggedIn = true;
-                this.currentUser = user;                
+                //this.userLoggedIn = true;
+                //this.currentUser = user;                
                 //THis will run just once when User logs in
                 //this way we can keep User Details being displayed in Navbar up-to-date
                 getMappingInfoForUser(user.uid).then((response : IUserMapping) => {
                     if(response){
-                        
                         response.status = UserStatus.Enabled;
                         response.loggedInFirstTime = true;
                         response.loggedInFirstTimeDate = new Date();
+
+                        //Extract RegistrationID from UserMapping information - Location field
+                        this.registrationId = response.location.substring(response.location.lastIndexOf('/') + 1),
                         
                         updateRegistrationToMapping(response).then(() => {
                             user.updateProfile({
                                 displayName: response.displayName,
                                 photoURL: response.profileImageURL
                             }).then(response =>{
-                                this.userLoggedIn = true;
-                                this.currentUser = user;
+                                //this.userLoggedIn = true;
+                                //this.currentUser = user;
                             }).catch(error => {
                                 console.log('Exception occurred in UpdateProfile => {0}', error.message);
                             });
@@ -105,16 +117,29 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                             displayName: 'Administrator',
                             photoURL : null
                         }).then(response =>{
-                            this.userLoggedIn = true;
-                            this.currentUser = user;
+                            //this.userLoggedIn = true;
+                            //this.currentUser = user;
                         }).catch(error => {
                             console.log('Exception occurred in UpdateProfile => {0}', error.message);
                         });                        
                     }
-                }); 
+                }).then(() => {
+                    //Get User Role information so Tabs can be set based on role
+                    getUserRole(user.uid).then((response : IRoleInfo) => {
+                        if(response){
+                            this.currentUserRole = response.registrationType                             
+                        }
+                        this.userLoggedIn = true;
+                        this.currentUser = user;                        
+                        this.isLoading = false;
+                    })
+                }).catch((error) => {
+                    this.isLoading = false
+                })
             }else{
                 this.userLoggedIn = false;
                 this.currentUser = null;
+                this.isLoading = false
             }
         });
     }
@@ -125,6 +150,14 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
 
     durationFn(deltaTop : number) {
         return deltaTop;
+    }
+
+    hasAdminGUID = () => {
+        if(this.currentUser){
+            return (this.currentUser.uid === AdminUser1GUID || this.currentUser.uid === AdminUser2GUID)
+        }else{
+            return false
+        }
     }
 
     renderTab = (index : number, tab : ITab) => {
@@ -139,13 +172,20 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
             }
         }
 
-        return (
-            <Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />
-        )
+        if(this.currentUserRole){
+            if(tab.canSee[this.currentUserRole]){
+                return <Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />
+            }else{
+                return null
+            }
+        }else{
+            if(tab.id === 1 || tab.id === 2 || tab.id === 5 || tab.id === 8 || this.hasAdminGUID()){
+                return <Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />
+            }
+        }
     }
 
     render(){
-
         return(
             <div>
                 <header id="navigation">
@@ -160,7 +200,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                 </button>
                                 <a className="navbar-brand" href="index.html">
                                     {
-                                        this.currentUser &&
+                                        this.currentUser && !this.isLoading &&
                                         <Avatar user={this.currentUser} />
                                     }                                    
                                 </a>                    
@@ -169,7 +209,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                             <nav className="collapse navbar-collapse navbar-right">					
                                 <ul className="nav navbar-nav">                                    
                                     
-                                    {tabList.map((tab : ITab, index : number) => {
+                                    {!this.isLoading && tabList.map((tab : ITab, index : number) => {
                                         return (this.renderTab(index, tab))
                                     })}
                                 </ul>		
