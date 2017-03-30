@@ -41,6 +41,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
         this.isLoading = true;
         this.props.controller.addNeedHelpWithListItem(this.needHelpWithListItem).then((response) => {
             this.isLoading = false;
+            this.forceUpdate()
         })
     }
 
@@ -49,6 +50,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
         this.isLoading = true;
         this.props.controller.removeNeedHelpWithListItem(id).then((response) => {
             this.isLoading = false;
+            this.forceUpdate()
         })
     }
 
@@ -92,30 +94,6 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
     needHelpWithListItemSelected = (e, id : string) => {
         e.preventDefault();
-    }
-
-    renderNeedsForIndividual = (props : ICreateNewNeedComponent) => {   
-        if(this.isLoading){
-            return(
-                <tr>
-                    <td>Loading...</td>
-                </tr>
-            );
-        }else{
-            map(convertData(props.controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
-                return(
-                    <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
-                        <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
-                        <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
-                        <td className="col-sm-1 col-md-1">
-                            <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
-                                <span className="glyphicon glyphicon-remove"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
-                )
-            }))
-        }   
     }
 
     render() {
@@ -215,7 +193,19 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
-                                        this.renderNeedsForIndividual(this.props)
+                                        map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
+                                            return(
+                                                <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
+                                                    <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>
+                                                    <td className="col-sm-1 col-md-1 text-center">{item.typeOfWork}</td>
+                                                    <td className="col-sm-1 col-md-1">
+                                                        <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
+                                                            <span className="glyphicon glyphicon-remove"></span> Remove
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }))
                                     }
                                 </tbody>
                             </table>
