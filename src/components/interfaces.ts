@@ -48,7 +48,8 @@ export enum UserStatus{
 
 export enum RegistrationRoles{
     Admin,
-    User
+    User,
+    UnAuthenticated
 }
 
 export interface IRoleInfo{

@@ -14,8 +14,13 @@ var config = {
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);
 export const _firebaseAuth : firebase.Auth = _firebaseApp.auth();
 export const _firebaseStorage : firebase.FirebaseStorage = _firebaseApp.storage();
+export let _currentRegistrationRole : RegistrationRoles = RegistrationRoles.UnAuthenticated;
 
 let secondaryApp : firebase.FirebaseApplication;
+
+function setCurrentRegistrationRole(role : RegistrationRoles){
+    _currentRegistrationRole = role;
+}
 
 function requireAuth(nextState : any, replace : any) { 
 
@@ -228,4 +233,4 @@ function isUserLoggedIn() : boolean{
     }
 }
 
-export { requireAuth, register, signIn, signOut, resetPassword, addNewRegistrationToMapping, getMappingInfoForUser, updateRegistrationToMapping, getUserRole  };
+export { requireAuth, register, signIn, signOut, resetPassword, addNewRegistrationToMapping, getMappingInfoForUser, updateRegistrationToMapping, getUserRole, setCurrentRegistrationRole  };

@@ -193,6 +193,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 </thead>
                                 <tbody id="tbody">
                                     {
+                                        controller.individualRegistration.needHelpWithList &&
                                         map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
                                             return(
                                                 <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>

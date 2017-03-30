@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { signIn, _firebaseApp, getMappingInfoForUser, updateRegistrationToMapping, getUserRole } from './components/firebaseAuth/component';
+import { signIn, _firebaseApp, _currentRegistrationRole, getMappingInfoForUser, updateRegistrationToMapping, getUserRole, setCurrentRegistrationRole } from './components/firebaseAuth/component';
 import { IUserMapping, UserStatus, RegistrationRoles, IRoleInfo } from './components/interfaces';
 import {observer} from 'mobx-react';
 import {observable, action } from 'mobx';
@@ -8,9 +8,8 @@ import './styles.css';
 
 //Ugh...no no no....shouldn't be this way
 //TODO Remove these guids immediately
-const AdminUser1GUID : string = 'Dc6w5JqHUtPXxXvtHHXJ7ozjk7q1'
+const AdminUser1GUID : string = ''
 const AdminUser2GUID : string = 'sdUQiPafYwavy7XEdyydU9mfg6C3'
-
 
 enum TabType {
     Home = 1,
@@ -75,10 +74,9 @@ class Tab extends React.Component<ITabProps,{}>{
 export default class AppFrame extends React.Component<INavigationComponentProps,{}>{
     @observable userLoggedIn : boolean = false;
     @observable currentUser : firebase.User = null;
-    registrationId : string
-    currentUserRole : RegistrationRoles
     @observable isLoading : boolean = false
-
+    registrationId : string
+    
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -86,6 +84,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
 
     componentDidMount = () => {
         this.isLoading = true
+
         _firebaseApp.auth().onAuthStateChanged((user) => {
             if(user){
                 //this.userLoggedIn = true;
@@ -127,7 +126,8 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                     //Get User Role information so Tabs can be set based on role
                     getUserRole(user.uid).then((response : IRoleInfo) => {
                         if(response){
-                            this.currentUserRole = response.registrationType                             
+                            //Set Logged in User's Role globally
+                            setCurrentRegistrationRole(response.registrationType)                             
                         }
                         this.userLoggedIn = true;
                         this.currentUser = user;                        
@@ -135,11 +135,12 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                     })
                 }).catch((error) => {
                     this.isLoading = false
-                })
+                })                
             }else{
                 this.userLoggedIn = false;
                 this.currentUser = null;
                 this.isLoading = false
+                setCurrentRegistrationRole(RegistrationRoles.UnAuthenticated)
             }
         });
     }
@@ -172,8 +173,8 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
             }
         }
 
-        if(this.currentUserRole){
-            if(tab.canSee[this.currentUserRole]){
+        if(_currentRegistrationRole !== RegistrationRoles.UnAuthenticated){
+            if(tab.canSee[_currentRegistrationRole]){
                 return <Tab key={index} tabProps={tab} handleClick={() => this.handleClick} history={this.props.history} />
             }else{
                 return null
@@ -198,7 +199,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                                     <span className="icon-bar"></span>
                                     <span className="icon-bar"></span>
                                 </button>
-                                <a className="navbar-brand" href="index.html">
+                                <a className="navbar-brand" >
                                     {
                                         this.currentUser && !this.isLoading &&
                                         <Avatar user={this.currentUser} />

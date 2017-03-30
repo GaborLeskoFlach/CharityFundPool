@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
+import { RegistrationRoles } from '../../interfaces'
+import { _firebaseAuth, _currentRegistrationRole } from '../../firebaseAuth/component'
 
 
 export class HowToHelpComponent extends React.Component<{},{}>{
@@ -19,20 +21,24 @@ export class HowToHelpComponent extends React.Component<{},{}>{
                 </div>
                 <div className="text-center who-we-are">
                     <div className="row">
-                        <Link to="/donate">
-                            <div className="col-sm-4">
-                                <img className="img-responsive" src="../templates/images/about/2.png" alt="" />
-                                <h2 style={styleTemporary}>Donate to the pool</h2>
-                                <h3 style={styleTemporary}>No Registration required</h3>
-                            </div>
-                        </Link>
+                        
+                        {
+                            _currentRegistrationRole !== RegistrationRoles.UnAuthenticated &&
+
+                            <Link to="/donate">
+                                <div className="col-sm-4">
+                                    <img className="img-responsive" src="../templates/images/about/2.png" alt="" />
+                                    <h2 style={styleTemporary}>Donate to the pool</h2>
+                                </div>
+                            </Link>
+                        }
+                        
                         <div className="col-sm-4">            
                         </div>		                            
                         <Link to="/register/WantToHelp">
                             <div className="col-sm-4">
                                 <img className="img-responsive" src="../templates/images/about/3.png" alt="" />
                                 <h2 style={styleTemporary}>Donate money/goods/time</h2>
-                                <h3 style={styleTemporary}>Registration required</h3>
                             </div>		
                         </Link>			
                     </div>
