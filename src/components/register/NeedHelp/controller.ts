@@ -50,6 +50,7 @@ export class RegisterNeedHelpController {
         this.submitBtnCaption = 'Register'; 
         this.individualRegistration = null;
         this.organisationRegistration = null;
+        this.isExistingRegistration = false
         this.resetForm();
     }
 
@@ -67,6 +68,7 @@ export class RegisterNeedHelpController {
     @observable submitBtnCaption : string;
     @observable registerIndividualFormState : IRegisterIndividualFormFields;
     @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
+    @observable isExistingRegistration : boolean
 
     addNeed1 = (value : IWhatWeNeed) => {
         _firebaseApp.database().ref('utils/whatWeNeed').push(value);
@@ -187,7 +189,8 @@ export class RegisterNeedHelpController {
             phoneNo : '',
             email : '',
             websiteLink : '',
-            whatWeDo : ''
+            whatWeDo : '',
+            profileImageURL : ''
         }
         this.needHelpWithListItem = {
             whenINeedHelp : {
@@ -227,10 +230,10 @@ export class RegisterNeedHelpController {
         })        
     })
 
-    @action("Retrieve Causes for current user")
-    getWhatWeNeedForUser = action(() : Promise<Array<ICause>> => {
+    @action("Retrieve Causes for Organisation")
+    getWhatWeNeedForOrganisation = action(() : Promise<Array<ICause>> => {
         return new Promise<Array<ICause>>((resolve) => {     
-            _firebaseApp.database().ref('needs/organisations').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
+            _firebaseApp.database().ref('needs/Organisations').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);
             })
@@ -316,6 +319,19 @@ export class RegisterNeedHelpController {
         });
     };
 
+    @action("Update Registration -> Need Help - for Individuals")
+    updateRegistrationNeedHelpInd = () : Promise<any> => {
+        const dbRef : string = 'registrations/NeedHelp/Individuals/' + this.registrationNeedHelpInd.ID 
+        return new Promise((resolve,reject) => {
+            this.registrationNeedHelpInd.registrationType = this.registrationType;
+            _firebaseApp.database().ref(dbRef).update(this.registrationNeedHelpInd).then(result => {               
+                resolve(true);                         
+            }).catch((error) => {
+                reject('An error occured when trying to update your registration')
+            })
+        })
+    };
+
     @action("Add new Registration -> Need Help - for Organsiations")
     addNewRegistrationNeedHelpOrg = () : Promise<any> => {
         const dbRef : string = 'registrations/NeedHelp/Organisations'
@@ -335,6 +351,19 @@ export class RegisterNeedHelpController {
         })
     }
 
+    @action("Update Registration -> Need Help - for Organsiations")
+    updateRegistrationNeedHelpOrg = () : Promise<any> => {
+        const dbRef : string = 'registrations/NeedHelp/Organisations' + this.registrationNeedHelpOrg.ID
+        return new Promise((resolve,reject) => {
+            this.registrationNeedHelpOrg.registrationType = this.registrationType;
+            _firebaseApp.database().ref(dbRef).update(this.registrationNeedHelpOrg).then(result => {
+                resolve(true);
+            }).catch((error) => {
+                reject('An error occured when trying to update your registration')
+            })
+        })
+    }    
+
     @action("get a registration by type and id")
     getRegistrationByTypeAndID = (registrationType : RegistrationType, key : string) => {
         return new Promise<any>((resolve) => {
@@ -353,6 +382,7 @@ export class RegisterNeedHelpController {
                 }
 
                 this.submitBtnCaption = 'Save';
+                this.isExistingRegistration = true
 
                 resolve();
             });
@@ -375,11 +405,13 @@ export class RegisterNeedHelpController {
                 if(this.individualRegistration){
                     this.submitBtnCaption = 'Save';
                     this.registrationNeedHelpInd = this.individualRegistration;
+                    this.isExistingRegistration = true
                 }
 
                 if(this.organisationRegistration){
                     this.submitBtnCaption = 'Save';
                     this.registrationNeedHelpOrg = this.organisationRegistration;
+                    this.isExistingRegistration = true
                 }
                 resolve();
             });

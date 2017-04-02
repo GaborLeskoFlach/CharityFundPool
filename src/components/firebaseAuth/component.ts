@@ -72,12 +72,13 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                                         addNewRole(registration.uid,role).then((response) => {
                                             resolve(true)
                                         })
-                                    })                                                                             
+                                    }).catch((error) => {
+                                        reject('Failed to add mapping information to Users')
+                                    })                                                                           
                                 });
                             }
-                        }).catch(error => {
-                            console.log('Verification Email was not sent due to error: {0}', error);
-                            reject();
+                        }).catch(error => {                            
+                            reject('Verification Email was not sent due to error: ' + error.message);
                         })
                     }
                 }else{            
@@ -118,17 +119,13 @@ function getUserRole(uid : string) : Promise<IRoleInfo>{
 }
 
 function createUserWithEmailAndPassword(email : string, password : string) : Promise<firebase.User> {
-    return new Promise<firebase.User>((resolve) => {
-        console.log('Creating new DB Context');
-        
+    return new Promise<firebase.User>((resolve) => {        
         if(!secondaryApp){
             secondaryApp = firebase.initializeApp(config, "Secondary");
         }
         
         secondaryApp.auth().createUserWithEmailAndPassword(email, password).then((firebaseUser : firebase.User) => {
-            console.log("User " + firebaseUser.uid + " created successfully!");
             secondaryApp.auth().signOut();
-            console.log('Context disposed');
             resolve(firebaseUser);
         });    
     });
@@ -154,8 +151,7 @@ function unRegisterUser(registration : any, dbRef : string) : Promise<any>{
     
 function addNewRegistrationToMapping(mapping : IUserMapping) : Promise<any> {
     return new Promise<any>((resolve) => {
-        _firebaseApp.database().ref('users/' + mapping.uid).set(mapping)
-        .then(result => {
+        _firebaseApp.database().ref('users/' + mapping.uid).set(mapping).then(result => {
             resolve(result);                       
         });
     });

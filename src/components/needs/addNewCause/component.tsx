@@ -11,7 +11,7 @@ import { Constants } from '../../constants';
 export interface ICreateNewCauseComponent{
     saveCauseTo : DataSource;
     onChanged : (cause:ICause) => void;
-    id : string;
+    registrationId : string;
 }
 
 export class CreateNewCauseComponent extends React.Component<ICreateNewCauseComponent, any>{
@@ -48,7 +48,7 @@ export class CreateNewCauseComponent extends React.Component<ICreateNewCauseComp
 
         //Save into DB or LocalStorage
         if(this.props.saveCauseTo == DataSource.Firebase){
-            this.controller.addCause(this.props.id,cause).then(response => {
+            this.controller.addCause(this.props.registrationId,cause).then(response => {
                 (this.refs[CauseFields.title] as HTMLInputElement).value = '';
                 (this.refs[CauseFields.description] as HTMLInputElement).value = '';
                 (this.refs[CauseFields.bestPrice] as HTMLInputElement).value = '';

@@ -110,7 +110,9 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                     <p>Please come back after you've received your registration from CFP</p>
                 </div>
             )
-        } else {
+        }else if(!controller.individualRegistration){
+            return null
+        }else {
             return (
                 <div>
                     <div className="form-group">

@@ -26,7 +26,8 @@ export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
     websiteLink? : string;
     whatWeDo: string;   
     active:boolean;
-    uid:string;    
+    uid:string;
+    profileImageURL : string;
 }
 
 export interface INeedHelpDateConfig{

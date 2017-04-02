@@ -44,7 +44,7 @@ export class HomeComponent extends React.Component<{},{}>{
                                     <h2>Register now</h2>
                                 </div>
                             </div>		                            
-                            <Link to="/register/HowToHelp">
+                            <Link to="/register/WantToHelp">
                                 <div className="col-sm-4">
                                     <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
                                     <h2 style={styleTemporary}>I want to help</h2>                                    

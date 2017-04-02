@@ -72,7 +72,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         this.controller.isLoading = true;
         this.controller.getWhatINeedHelpWith().then(response => {                
             if(_firebaseAuth.currentUser !== null){
-                this.controller.getWhatWeNeedForUser().then(response => {
+                this.controller.getWhatWeNeedForOrganisation().then(response => {
                     if(this.requestURL_ID){
                         this.controller.getRegistrationByTypeAndID(this.getRegistrationType(),this.requestURL_ID).then(response => {                
                             this.controller.isLoading = false;
@@ -263,12 +263,21 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                     this.controller.registerIndividualFormState.password.fieldValidationError.length == 0 &&
                     this.controller.registerIndividualFormState.passwordConfirm.fieldValidationError.length == 0){       
                         
-                        this.controller.addNewRegistrationNeedHelpInd().then(response => {
-                            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
-                            browserHistory.push('/confirm');
-                        }).catch((error) => {
-                            this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
-                        })
+                        if(this.controller.isExistingRegistration && this.controller.submitBtnCaption === 'Save'){
+                            this.controller.updateRegistrationNeedHelpInd().then(response => {
+                                (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                                browserHistory.push('/confirm/?Save=1');
+                            }).catch((error) => {
+                                this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
+                            })                            
+                        }else{
+                            this.controller.addNewRegistrationNeedHelpInd().then(response => {
+                                (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                                browserHistory.push('/confirm/?Save=0');
+                            }).catch((error) => {
+                                this.controller.registerIndividualFormState.validationError = JSON.stringify(error);
+                            })
+                        }
                     }
                 break;
             case "Org":
@@ -280,12 +289,21 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError.length == 0){
                     
-                    this.controller.addNewRegistrationNeedHelpOrg().then(response => {
-                        (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
-                        browserHistory.push('/confirm');
-                    }).catch((error) => {
-                        this.controller.registerOrganisationFormState.validationError = JSON.stringify(error);
-                    })
+                    if(this.controller.isExistingRegistration && this.controller.submitBtnCaption === 'Save'){
+                        this.controller.updateRegistrationNeedHelpOrg().then(response => {
+                            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                            browserHistory.push('/confirm');
+                        }).catch((error) => {
+                            this.controller.registerOrganisationFormState.validationError = JSON.stringify(error);
+                        })
+                    }else{
+                        this.controller.addNewRegistrationNeedHelpOrg().then(response => {
+                            (this.refs[RegistrationFields.registrationForm] as HTMLFormElement).reset();      
+                            browserHistory.push('/confirm');
+                        }).catch((error) => {
+                            this.controller.registerOrganisationFormState.validationError = JSON.stringify(error);
+                        })
+                    }
                 }
                 break;
         }
@@ -595,8 +613,9 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     <input 
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
-                        type="text" 
+                        type="text"
                         placeholder="Email"
+                        disabled={controller.isExistingRegistration}
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.email}/>
@@ -962,7 +981,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
     }
 
     newCauseAdded = (cause:ICause) => {
-        this.props.controller.getWhatWeNeedForUser();
+        this.props.controller.getWhatWeNeedForOrganisation();
     }
 
     handleChange = (event:any) => {
@@ -1067,7 +1086,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
         return (
             <div>
 
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.validationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.validationError}</p>
 
                 <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="fullName">Your Name</label>
@@ -1082,7 +1101,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         value={controller.registrationNeedHelpInd.fullName === '' ? controller.registrationNeedHelpOrg.fullName : controller.registrationNeedHelpInd.fullName}/>
                         <span className={this.shouldMarkError('fullName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
                 
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="phoneNo">Phone No</label>
@@ -1097,7 +1116,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
                         <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
                 
                 <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="email">Email</label>
@@ -1107,12 +1126,13 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         type="text" 
                         ref="email" 
                         placeholder="Email"
+                        disabled={controller.isExistingRegistration}
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         value={controller.registrationNeedHelpInd.email === '' ? controller.registrationNeedHelpOrg.email : controller.registrationNeedHelpInd.email}/>
                         <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.email.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.email.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('charityName') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="charityName">Charity Name</label>
@@ -1127,7 +1147,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         value={controller.registrationNeedHelpOrg.charityName}/>
                         <span className={this.shouldMarkError('charityName') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>                
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.charityName.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.charityName.fieldValidationError}</p>
                 
                 <div className={this.shouldMarkError('websiteLink') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="websiteLink">Website Link</label>
@@ -1142,7 +1162,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         value={controller.registrationNeedHelpOrg.websiteLink}/>
                         <span className={this.shouldMarkError('websiteLink') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.websiteLink.fieldValidationError}</p>
 
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeDo">What we do</label>
@@ -1156,15 +1176,15 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                         value={controller.registrationNeedHelpOrg.whatWeDo}></textarea>
                         <span className={this.shouldMarkError('whatWeDo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError}</p>        
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.whatWeDo.fieldValidationError}</p>        
 
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeNeed">What we need</label>
                     <div>
-                        <CreateNewCauseComponent id={''} saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
+                        <CreateNewCauseComponent registrationId={controller.registrationNeedHelpOrg.ID} saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
                     </div>     
                 </div>
-                <p className='validationErrorMsg'>{this.props.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>
                 
                 {(_firebaseAuth.currentUser !== null) &&
                     <div className="form-group">
@@ -1190,7 +1210,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                                                     <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
                                                     <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
                                                     <td className="col-sm-1 col-md-1">
-                                                        <button type="button" className="btn btn-danger" id="remove" onClick={controller.archiveCause.bind(this,cause.ID)}>
+                                                        <button type="button" className="btn btn-danger" id="remove" onClick={(id) => controller.archiveCause(cause.ID)}>
                                                             <span className="glyphicon glyphicon-remove"></span> Remove
                                                         </button>
                                                     </td>

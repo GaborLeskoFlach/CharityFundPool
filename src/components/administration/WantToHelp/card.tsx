@@ -106,6 +106,10 @@ export class Card extends React.Component<ICard, {}>{
         )
     }
 
+    isEmpty = (value) => {
+        return (value === '' || value === null || value === undefined || value.length == 0)
+    }
+
     renderActionButtons = () => {
         const userAction : string = !this.props.registration.uid ? 'Enable Access' : 'Disable Access';
         return(
@@ -114,7 +118,11 @@ export class Card extends React.Component<ICard, {}>{
                     <span className="glyphicon glyphicon-edit"></span> Edit
                 </button>
                 
-                <button className="btn btn-default btn-xs" onClick={this.registerUser}> 
+                <button 
+                    className="btn btn-default btn-xs" 
+                    onClick={this.registerUser}
+                    disabled={this.isEmpty(this.props.registration.profileImageURL)}
+                    title={this.isEmpty(this.props.registration.profileImageURL) ? 'Please upload a Profile Image first' : ''}> 
                     <span className="glyphicon glyphicon-cog"></span> {userAction}
                 </button>
                 <button className="btn btn-danger btn-xs pull-right" onClick={this.archiveRegistration}>
@@ -186,9 +194,9 @@ export class Card extends React.Component<ICard, {}>{
                                     {
                                         registration.profileImageURL ?
                                             <img className={this.setUserStatusIndicator()} src={registration.profileImageURL} />
-                                        :                                         
-                                            <img alt="" src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
-                                    }                                
+                                        :                                 
+                                            <img className={this.setUserStatusIndicator()} src="../src/components/administration/ImageUpload/profileImageBlank.jpg" />
+                                    }                              
                                 </div>
                                 {
                                     !registration.profileImageURL &&
