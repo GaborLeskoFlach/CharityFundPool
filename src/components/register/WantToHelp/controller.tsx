@@ -138,12 +138,25 @@ export class RegisterWantToHelpController {
         });   
     }
 
+    @action("get a registration by uid")
+    getRegistrationByUID = (uid : string) => {
+        return new Promise<any>((resolve) => {            
+            _firebaseApp.database().ref('registrations/WantToHelp/').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {
+                snapshot.forEach((item) => {
+                    this.registerWantToHelp = item.val()
+                    resolve()
+                })
+            })
+        });   
+    }
+
     //
     // Private Methods
     //
     
     //set currently selected Trade Options")
     setCurrentTradeOptions = (items : Array<IMultiSelect>) : void => {
+        this.registerWantToHelp.listOfTrades = items
         this.tradeOptionsSelected = items;
     }
 

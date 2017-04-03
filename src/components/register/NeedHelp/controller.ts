@@ -233,7 +233,7 @@ export class RegisterNeedHelpController {
     @action("Retrieve Causes for Organisation")
     getWhatWeNeedForOrganisation = action(() : Promise<Array<ICause>> => {
         return new Promise<Array<ICause>>((resolve) => {     
-            _firebaseApp.database().ref('needs/Organisations').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
+            _firebaseApp.database().ref('needs/').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);
             })

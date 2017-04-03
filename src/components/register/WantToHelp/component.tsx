@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { MultiSelectComponent } from '../../common/multiselect/component';
 import { RegisterWantToHelpController } from './controller';
-
+import { _firebaseAuth } from '../../firebaseAuth/component';
 import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registrations } from '../../interfaces';
 import { convertData, convertFromObservable } from '../../../utils/utils';
 
@@ -32,7 +32,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         //check URL Query
         if(this.props.params){
             this.requestURL_ID = this.props.params.ID;
-        }  
+        }
     }
 
     componentWillMount(){
@@ -42,7 +42,10 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                 this.controller.getRegistrationByID(this.requestURL_ID).then(response => {                    
                     this.controller.isLoading = false;
                 });
-                
+            }else if(_firebaseAuth.currentUser !== null){
+                this.controller.getRegistrationByUID(_firebaseAuth.currentUser.uid).then((response) => {
+                    this.controller.isLoading = false
+                })    
             }else{
                 this.controller.isLoading = false;
             }
