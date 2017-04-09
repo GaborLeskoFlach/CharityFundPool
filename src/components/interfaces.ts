@@ -13,7 +13,7 @@ export interface IRegistrationNeedHelpInd extends IConvertDataConstraint{
     uid:string;
     addressLocation : IPosition;
     profileImageURL : string;
-    needHelpWithList : Array<INeedHelpWithListItem>
+    needHelpWithList : Array<IIndividualNeedHelpWithListItem>
 
 }
 
@@ -28,6 +28,7 @@ export interface IRegistrationNeedHelpOrg extends IConvertDataConstraint{
     active:boolean;
     uid:string;
     profileImageURL : string;
+    needHelpWithList : Array<IOrgNeedHelpWithListItem>
 }
 
 export interface INeedHelpDateConfig{
@@ -83,7 +84,7 @@ export interface IRegistrationWantToHelp extends IConvertDataConstraint{
     profileImageURL : string;
 }
 
-export interface ICause extends IConvertDataConstraint{
+export interface IOrgNeedHelpWithListItem extends IConvertDataConstraint{
     title:string;
     description:string;
     createDate?:string;
@@ -94,10 +95,9 @@ export interface ICause extends IConvertDataConstraint{
     toGo?:number;
     archiveDate?:string;
     active : boolean;
-    uid:string;
 }
 
-export interface INeedHelpWithListItem extends IConvertDataConstraint{
+export interface IIndividualNeedHelpWithListItem extends IConvertDataConstraint{
     whenINeedHelp : INeedHelpDateConfig
     whatINeedHelpWith : string;
     typeOfWork : string;

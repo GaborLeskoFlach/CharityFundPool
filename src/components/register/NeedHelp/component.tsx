@@ -6,9 +6,8 @@ import { observer} from 'mobx-react';
 import { observable } from 'mobx';
 import { map } from 'lodash';
 import { RegisterNeedHelpController } from './controller';
-import { CreateNewCauseComponent } from '../../needs/addNewCause/component';
-import { CreateNewNeedComponent } from './addNewNeed/component';
-import { convertData } from '../../../utils/utils';
+import { CreateNewNeedForOrgsComponent } from './addNewNeedForOrganisations/component';
+import { CreateNewNeedForIndividualsComponent } from './addNewNeedForIndividuals/component';
 import { ImageUpload } from '../../imageUpload/component';
 const Calendar =  require('react-input-calendar').default;
 import { Link } from 'react-router';
@@ -22,8 +21,8 @@ import DateRange from '../../common/dateComponents/dateRange';
 
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
             IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
-            IColumnData, ICause, DataSource, DataFilter, RegistrationType, 
-            IDateRange, IRouteParams_Registrations, IAddressDetails, IPosition, INeedHelpWithListItem } from '../../interfaces';
+            IColumnData, IOrgNeedHelpWithListItem, DataSource, DataFilter, RegistrationType, 
+            IDateRange, IRouteParams_Registrations, IAddressDetails, IPosition, IIndividualNeedHelpWithListItem } from '../../interfaces';
 
 let DataTable = require('react-data-components').DataTable;
 
@@ -966,7 +965,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                     </div>
                 </div>
 
-                <CreateNewNeedComponent controller={this.props.controller} onChanged={this.newNeedAdded} />
+                <CreateNewNeedForIndividualsComponent controller={this.props.controller} onChanged={this.newNeedAdded} />
                 
             </div>                   
         )
@@ -980,7 +979,7 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
         super(props);     
     }
 
-    newCauseAdded = (cause:ICause) => {
+    newCauseAdded = (cause:IOrgNeedHelpWithListItem) => {
         this.props.controller.getWhatWeNeedForOrganisation();
     }
 
@@ -1077,8 +1076,13 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
         }
 
         return hasError ? shouldShow : false;
-    };
+    }
 
+    needHelpWithListItemSelected = (e : any, id : string) => {
+        e.preventDefault()
+
+    }
+    
     render(){
 
         const { controller } = this.props;
@@ -1181,50 +1185,10 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeNeed">What we need</label>
                     <div>
-                        <CreateNewCauseComponent registrationId={controller.registrationNeedHelpOrg.ID} saveCauseTo={DataSource.Firebase} onChanged={this.newCauseAdded}/>
+                        <CreateNewNeedForOrgsComponent controller={this.props.controller}  onChanged={this.newCauseAdded}/>
                     </div>     
                 </div>
-                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>
-                
-                {(_firebaseAuth.currentUser !== null) &&
-                    <div className="form-group">
-                        <div className="table-responsive">
-                            <table className="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th className="text-center">Title</th>
-                                        <th className="text-center">Description</th>
-                                        <th className="text-center">Estimated Value</th>
-                                        <th className="text-center">Best Price</th>
-                                        <th> </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody">
-
-                                    {
-                                        map(convertData(controller.causes,DataFilter.ActiveOnly),((cause : ICause, index) => {
-                                            return(
-                                                <tr key={index}>
-                                                    <td className="col-sm-1 col-md-1 text-center">{cause.title}</td>
-                                                    <td className="col-sm-1 col-md-1 text-center">{cause.description}</td>
-                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
-                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
-                                                    <td className="col-sm-1 col-md-1">
-                                                        <button type="button" className="btn btn-danger" id="remove" onClick={(id) => controller.archiveCause(cause.ID)}>
-                                                            <span className="glyphicon glyphicon-remove"></span> Remove
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    )}
-
-                                </tbody>
-                            </table>
-                        </div>                                     
-                    </div>
-                }
-
+                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.whatWeNeed.fieldValidationError}</p>                
             </div>                          
         )
     }

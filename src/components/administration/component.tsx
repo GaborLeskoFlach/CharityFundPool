@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './styles.css';
-import { ICause, DataFilter, RegistrationType } from '../interfaces';
+import { IOrgNeedHelpWithListItem, DataFilter, RegistrationType } from '../interfaces';
 import { browserHistory } from 'react-router';
 import { AdministrationController } from './controller';
 import { convertData } from '../../utils/utils';

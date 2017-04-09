@@ -1,6 +1,6 @@
 import { map } from 'lodash';
 import { toJS } from 'mobx';
-import { ICause, IDonation, IConvertDataConstraint, DataFilter } from '../components/interfaces';
+import { IOrgNeedHelpWithListItem, IDonation, IConvertDataConstraint, DataFilter } from '../components/interfaces';
 
 export function addDays(date : Date, days:number) : Date {
     var currentDate = date.getDate();

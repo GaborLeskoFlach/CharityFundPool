@@ -1,7 +1,7 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp } from '../firebaseAuth/component'
 import { map, toJS } from 'mobx';
-import { ICause } from '../interfaces';
+import { IOrgNeedHelpWithListItem } from '../interfaces';
 
 export class CauseController {
     
@@ -11,14 +11,24 @@ export class CauseController {
         this.isLoading = false;      
     }
 
-    @observable causes : Array<ICause>;
-    @observable archivedCauses : Array<ICause>;
+    @observable causes : Array<IOrgNeedHelpWithListItem>;
+    @observable archivedCauses : Array<IOrgNeedHelpWithListItem>;
     @observable isLoading : boolean;
 
+    @action("Add new Cause to an organisation")
+    addCause = (id : string, cause : IOrgNeedHelpWithListItem) : Promise<any> => {
+        return new Promise((resolve) => {
+            this.isLoading = true;
+            _firebaseApp.database().ref('needs/').push(cause).then(result => {                
+                resolve();
+                this.isLoading = false;
+            });
+        });
+    };
 
     @action("get causes from DB")
-    getCauses = () : Promise<Array<ICause>> => {
-        return new Promise<Array<ICause>>((resolve) => {     
+    getCauses = () : Promise<Array<IOrgNeedHelpWithListItem>> => {
+        return new Promise<Array<IOrgNeedHelpWithListItem>>((resolve) => {     
             _firebaseApp.database().ref('needs').orderByChild('active').equalTo(true).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);
@@ -27,8 +37,8 @@ export class CauseController {
     };
 
     @action("get archived causes from DB")
-    getArchivedCauses = () : Promise<Array<ICause>> => {
-        return new Promise<Array<ICause>>((resolve) => {
+    getArchivedCauses = () : Promise<Array<IOrgNeedHelpWithListItem>> => {
+        return new Promise<Array<IOrgNeedHelpWithListItem>>((resolve) => {
             _firebaseApp.database().ref('needs').orderByChild('active').equalTo(false).on('value', (snapshot) => {
                 this.archivedCauses = snapshot.val();
                 resolve(this.archivedCauses);
@@ -36,20 +46,9 @@ export class CauseController {
         })
     };
 
-    @action("Add new Cause")
-    addCause = (cause : ICause) : Promise<any> => {
-        return new Promise((resolve) => {
-            this.isLoading = true;
-            _firebaseApp.database().ref('needs').push(cause).then(result => {                
-                resolve();
-                this.isLoading = false;
-            });
-        });
-    };
-
     @action("get a single Cause from DB by id")
-    getCause = (id:string) : Promise<ICause> => {
-        return new Promise<ICause>((resolve) => {     
+    getCause = (id:string) : Promise<IOrgNeedHelpWithListItem> => {
+        return new Promise<IOrgNeedHelpWithListItem>((resolve) => {     
             _firebaseApp.database().ref('needs/' + id).once('value', (snapshot) => {
                 resolve(snapshot.val());
             })

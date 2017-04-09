@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './styles.css';
-import { ICause } from '../interfaces';
+import { IOrgNeedHelpWithListItem } from '../interfaces';
 
 interface INeedCard{
-    need : ICause;
-    onClickArchive : (need : ICause, e : React.FormEvent) => void;
-    onClickDonate : (need : ICause, e : React.FormEvent) => void;
-    onClickEdit : (need : ICause, e : React.FormEvent) => void;
+    need : IOrgNeedHelpWithListItem;
+    onClickArchive : (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => void;
+    onClickDonate : (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => void;
+    onClickEdit : (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => void;
 }
 
 export class NeedCard extends React.Component<INeedCard, {}>{

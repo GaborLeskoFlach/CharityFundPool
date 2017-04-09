@@ -38,6 +38,7 @@ module.exports = {
         'react/lib/ReactContext': 'window'
     },
     devServer: {
+        port: 3000,
         historyApiFallback: true,
         contentBase: './'
     }

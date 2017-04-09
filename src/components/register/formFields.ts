@@ -29,3 +29,8 @@ export const dateRangeReoccurring : string = 'dateRangeReoccurring';
 export const password : string = 'password';
 export const passwordConfirm : string = 'passwordConfirm';
 export const registrationForm : string = "registrationForm";
+
+export const title : string = 'title'
+export const description : string = 'description'
+export const estimatedValue : string = 'estimatedValue'
+export const bestPrice : string = 'bestPrice'

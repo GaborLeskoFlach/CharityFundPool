@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { IWhatINeedHelpWith, INeedHelpWithListItem, IDateRange, DataFilter } from '../../../interfaces';
+import { IWhatINeedHelpWith, IIndividualNeedHelpWithListItem, IDateRange, DataFilter } from '../../../interfaces';
 import { map } from 'lodash';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -12,14 +12,14 @@ import { convertData } from '../../../../utils/utils';
 import SingleDate from '../../../common/dateComponents/singleDate';
 import DateRange from '../../../common/dateComponents/dateRange';
 
-export interface ICreateNewNeedComponent{
+export interface ICreateNewNeedForIndividualsComponent{
     controller : RegisterNeedHelpController;
     onChanged : (any) => void;
 }
 
 @observer
-export class CreateNewNeedComponent extends React.Component<ICreateNewNeedComponent, any>{
-    needHelpWithListItem : INeedHelpWithListItem;
+export class CreateNewNeedForIndividualsComponent extends React.Component<ICreateNewNeedForIndividualsComponent, any>{
+    needHelpWithListItem : IIndividualNeedHelpWithListItem;
     @observable isLoading : boolean = false;
 
     constructor(props) {
@@ -39,7 +39,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
     addNewListItem = (e) => {
         e.preventDefault();
         this.isLoading = true;
-        this.props.controller.addNeedHelpWithListItem(this.needHelpWithListItem).then((response) => {
+        this.props.controller.addNeedHelpForIndsListItem(this.needHelpWithListItem).then((response) => {
             this.isLoading = false;
             this.forceUpdate()
         })
@@ -48,7 +48,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
     removeNeedHelpWithListItem = (e, id : string) => {
         e.preventDefault();
         this.isLoading = true;
-        this.props.controller.removeNeedHelpWithListItem(id).then((response) => {
+        this.props.controller.removeNeedHelpForIndsListItem(id).then((response) => {
             this.isLoading = false;
             this.forceUpdate()
         })
@@ -94,6 +94,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
     needHelpWithListItemSelected = (e, id : string) => {
         e.preventDefault();
+        console.log('Item selected => ', id)
     }
 
     render() {
@@ -162,16 +163,16 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
 
                                                     <fieldset className="tab-content">
                                                         <div className="tab-pane fade in active" id="singleDate">
-                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.needHelpWithListItem.whenINeedHelp.singleDate.day) }/>
-                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
+                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.needHelpForIndividualsListItem.whenINeedHelp.singleDate.day) }/>
+                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade " id="dateRange">								
-                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.needHelpWithListItem.whenINeedHelp.dateRange) }/>
+                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.needHelpForIndividualsListItem.whenINeedHelp.dateRange) }/>
                                                             <br />
-                                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
+                                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade" id="flexible">
-                                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.needHelpWithListItem.whenINeedHelp.flexible}/> Flexible</label>
+                                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.flexible}/> Flexible</label>
                                                         </div>                        
                                                     </fieldset>
                                                 </div>
@@ -196,7 +197,7 @@ export class CreateNewNeedComponent extends React.Component<ICreateNewNeedCompon
                                 <tbody id="tbody">
                                     {
                                         controller.individualRegistration.needHelpWithList &&
-                                        map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : INeedHelpWithListItem, index) => {
+                                        map(convertData(controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : IIndividualNeedHelpWithListItem, index) => {
                                             return(
                                                 <tr key={index} onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
                                                     <td className="col-sm-1 col-md-1 text-center">{item.whatINeedHelpWith}</td>

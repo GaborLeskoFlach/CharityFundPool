@@ -6,7 +6,7 @@ import { StorageClass } from '../../../utils/storage';
 import { Constants } from '../../constants';
 import { DataFilter, IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
         IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, DataSource, 
-        ICause, RegistrationType, IFieldValidation, IUserMapping, INeedHelpWithListItem } from '../../interfaces';
+        IOrgNeedHelpWithListItem, RegistrationType, IFieldValidation, IUserMapping, IIndividualNeedHelpWithListItem } from '../../interfaces';
 
 interface IRegisterIndividualFormFields{
     fullName : IFieldValidation;
@@ -32,6 +32,14 @@ interface IRegisterOrganisationFormFields{
     websiteLink : IFieldValidation;
     whatWeDo : IFieldValidation;
     whatWeNeed : IFieldValidation;
+    validationError : string;
+}
+
+interface IRegisterOrgNeedHelpListItemFormFields{
+    title : IFieldValidation;
+    description : IFieldValidation;
+    bestPrice : IFieldValidation;
+    estimatedValue : IFieldValidation;
     validationError : string;
 }
 
@@ -63,11 +71,13 @@ export class RegisterNeedHelpController {
     @observable isLoading : boolean;
     @observable registrationNeedHelpInd : IRegistrationNeedHelpInd;
     @observable registrationNeedHelpOrg : IRegistrationNeedHelpOrg;
-    @observable causes : Array<ICause>;
-    @observable needHelpWithListItem : INeedHelpWithListItem
+    @observable causes : Array<IOrgNeedHelpWithListItem>;
+    @observable needHelpForIndividualsListItem : IIndividualNeedHelpWithListItem
+    @observable needHelpForOrgsListItem : IOrgNeedHelpWithListItem
     @observable submitBtnCaption : string;
     @observable registerIndividualFormState : IRegisterIndividualFormFields;
     @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
+    @observable orgNeedHelpListItemFormState : IRegisterOrgNeedHelpListItemFormFields
     @observable isExistingRegistration : boolean
 
     addNeed1 = (value : IWhatWeNeed) => {
@@ -162,6 +172,25 @@ export class RegisterNeedHelpController {
             },                                                                           
             validationError : ''            
         }  
+        this.orgNeedHelpListItemFormState = {
+            title : {
+                fieldValidationError : '',
+                touched : false
+            },
+            description : {
+                fieldValidationError : '',
+                touched : false
+            },
+            bestPrice : {
+                fieldValidationError : '',
+                touched : false
+            },
+            estimatedValue : {
+                fieldValidationError : '',
+                touched : false
+            },
+            validationError : ''
+        }
         this.registrationNeedHelpInd = {
             active : true,
             uid: '',
@@ -190,9 +219,10 @@ export class RegisterNeedHelpController {
             email : '',
             websiteLink : '',
             whatWeDo : '',
-            profileImageURL : ''
+            profileImageURL : '',
+            needHelpWithList : []
         }
-        this.needHelpWithListItem = {
+        this.needHelpForIndividualsListItem = {
             whenINeedHelp : {
                 singleDate : { day : '', reoccurring : false},
                 dateRange : { from : '', to : '' , reoccurring : false},
@@ -201,11 +231,23 @@ export class RegisterNeedHelpController {
             typeOfWork : '',
             whatINeedHelpWith : '',
             active : true
-        };                       
+        }
+        this.needHelpForOrgsListItem = {
+            active : true,
+            bestPrice : 0,
+            createDate : '',
+            estimatedValue : 0,
+            description : '',
+            archiveDate : '',
+            photoUrl : '',
+            title : ''
+        }
     }
 
+    //Add/Remove NeedHelpWith ListItems for Individuals
+
     @action("Add new NeedHelpWith List Item to User")
-    addNeedHelpWithListItem = action((item : INeedHelpWithListItem) : Promise<any> => {
+    addNeedHelpForIndsListItem = action((item : IIndividualNeedHelpWithListItem) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {            
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/').push(item).then(response => {
                 this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
@@ -218,7 +260,7 @@ export class RegisterNeedHelpController {
     })
 
     @action("Removes a NeedHelpWith List Item from Registration")
-    removeNeedHelpWithListItem = action((id : string) : Promise<any> => {
+    removeNeedHelpForIndsListItem = action((id : string) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
             _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
                 this.getRegistrationByID('NeedHelp', _firebaseAuth.currentUser.uid).then((response) => {
@@ -230,9 +272,38 @@ export class RegisterNeedHelpController {
         })        
     })
 
+
+    //Add/Remove Causes for Organisations
+
+    @action("Add new NeedHelpWith List Item to User")
+    addNeedHelpForOrgsListItem = action((item : IOrgNeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {            
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.individualRegistration.ID + '/needHelpWithList/').push(item).then(response => {
+                this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })  
+            }).catch((error) => {
+                reject(error.message)
+            })
+        })        
+    })
+
+    @action("Removes a NeedHelpWith List Item from Registration")
+    removeNeedHelpForOrgsListItem = action((id : string) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.individualRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
+                this.getRegistrationByID('NeedHelp', _firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })
+            }).catch((error) => {
+                reject(error.message)
+            })
+        })        
+    })
+
     @action("Retrieve Causes for Organisation")
-    getWhatWeNeedForOrganisation = action(() : Promise<Array<ICause>> => {
-        return new Promise<Array<ICause>>((resolve) => {     
+    getWhatWeNeedForOrganisation = action(() : Promise<Array<IOrgNeedHelpWithListItem>> => {
+        return new Promise<Array<IOrgNeedHelpWithListItem>>((resolve) => {     
             _firebaseApp.database().ref('needs/').orderByChild('uid').equalTo(_firebaseAuth.currentUser.uid).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);
@@ -241,8 +312,8 @@ export class RegisterNeedHelpController {
     })
 
     @action("get a single Cause from DB by id")
-    getCause = (id:string) : Promise<ICause> => {
-        return new Promise<ICause>((resolve) => {     
+    getCause = (id:string) : Promise<IOrgNeedHelpWithListItem> => {
+        return new Promise<IOrgNeedHelpWithListItem>((resolve) => {     
             _firebaseApp.database().ref('needs/' + id).once('value', (snapshot) => {
                 resolve(snapshot.val());
             })
@@ -275,7 +346,7 @@ export class RegisterNeedHelpController {
         });
     })
 
-    @action("move slider right")
+    @action("Set Registration Type (Dropdown)")
     setRegistrationType = action((value:string) => {
         this.registrationType = value;
     });
@@ -353,7 +424,7 @@ export class RegisterNeedHelpController {
 
     @action("Update Registration -> Need Help - for Organsiations")
     updateRegistrationNeedHelpOrg = () : Promise<any> => {
-        const dbRef : string = 'registrations/NeedHelp/Organisations' + this.registrationNeedHelpOrg.ID
+        const dbRef : string = 'registrations/NeedHelp/Organisations/' + this.registrationNeedHelpOrg.ID
         return new Promise((resolve,reject) => {
             this.registrationNeedHelpOrg.registrationType = this.registrationType;
             _firebaseApp.database().ref(dbRef).update(this.registrationNeedHelpOrg).then(result => {
@@ -406,12 +477,14 @@ export class RegisterNeedHelpController {
                     this.submitBtnCaption = 'Save';
                     this.registrationNeedHelpInd = this.individualRegistration;
                     this.isExistingRegistration = true
+                    this.setRegistrationType("Individual")
                 }
 
                 if(this.organisationRegistration){
                     this.submitBtnCaption = 'Save';
                     this.registrationNeedHelpOrg = this.organisationRegistration;
                     this.isExistingRegistration = true
+                    this.setRegistrationType("Org")
                 }
                 resolve();
             });

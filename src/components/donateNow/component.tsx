@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { _firebaseApp, _firebaseAuth } from '../firebaseAuth/component';
-import { ICause, IDonation, IConvertDataConstraint, DataFilter} from '../interfaces';
+import { IOrgNeedHelpWithListItem, IDonation, IConvertDataConstraint, DataFilter} from '../interfaces';
 import * as CauseFields from './formFields';
 import { DonationController } from './controller';
 import { browserHistory } from 'react-router';
@@ -239,7 +239,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
                                             <select ref="needs" className="form-control" id="needs" defaultValue={causeId} >
                                                 <option value="undefined">Please select a value...</option>
 
-                                                    {map(convertData(this.controller.causes, DataFilter.ActiveOnly), (need : ICause, key) => (
+                                                    {map(convertData(this.controller.causes, DataFilter.ActiveOnly), (need : IOrgNeedHelpWithListItem, key) => (
                                                         <option key={key} value={need.title}>{need.title}</option>
                                                     ))}
                                             

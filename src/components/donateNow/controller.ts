@@ -1,7 +1,7 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp } from '../firebaseAuth/component'
 import { map, toJS } from 'mobx';
-import { ICause, IDonation, IFieldValidation } from '../interfaces';
+import { IOrgNeedHelpWithListItem, IDonation, IFieldValidation } from '../interfaces';
 
 interface IDonationFields{
     fullName : IFieldValidation;
@@ -21,7 +21,7 @@ export class DonationController {
         this.resetForm();
     }
 
-    @observable causes : Array<ICause>;
+    @observable causes : Array<IOrgNeedHelpWithListItem>;
     @observable isLoading : boolean;
     @observable donationRegistration : IDonation;
     @observable donationFormState : IDonationFields;
@@ -74,8 +74,8 @@ export class DonationController {
     };
 
     @action("get causes from DB")
-    getCauses = () : Promise<Array<ICause>> => {
-        return new Promise<Array<ICause>>((resolve) => {        
+    getCauses = () : Promise<Array<IOrgNeedHelpWithListItem>> => {
+        return new Promise<Array<IOrgNeedHelpWithListItem>>((resolve) => {        
             _firebaseApp.database().ref('needs').orderByChild('active').equalTo(true).on('value', (snapshot) => {
                 this.causes = snapshot.val();
                 resolve(this.causes);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './styles.css';
-import { ICause, DataFilter } from '../interfaces';
+import { IOrgNeedHelpWithListItem, DataFilter } from '../interfaces';
 import { browserHistory } from 'react-router';
 import { CauseController } from './controller';
 import { NeedCard } from './needCard';
@@ -94,24 +94,24 @@ export class TabContent extends React.Component<ITabContent, {}>{
         super(props);
     }
 
-    onClickArchiveNeed = (need : ICause, e : React.FormEvent) => {
+    onClickArchiveNeed = (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => {
         event.preventDefault();
         this.props.controller.archiveCause(need.ID).then(response => {
             console.log('Awesome');
         })                
     }
 
-    onClickEditNeed = (need : ICause, e : React.FormEvent) => {
+    onClickEditNeed = (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => {
         event.preventDefault();
         console.log('EDIT NEED => {0}', need);
     }
 
-    onClickDonateNeed = (need : ICause, e : React.FormEvent) => {
+    onClickDonateNeed = (need : IOrgNeedHelpWithListItem, e : React.FormEvent) => {
         event.preventDefault();
         browserHistory.push('/donate/' + need.ID);
     }
 
-    renderNeedCard = (need : ICause, index : number) => {
+    renderNeedCard = (need : IOrgNeedHelpWithListItem, index : number) => {
         return(
             <li key={index} className="col-sm-3">
                 <NeedCard 
