@@ -5,7 +5,7 @@ import { IOrgNeedHelpWithListItem, IConvertDataConstraint, DataSource, DataFilte
 import { browserHistory } from 'react-router';
 import { Constants } from '../../../constants';
 import { map } from 'lodash';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { convertData } from '../../../../utils/utils';
 import { RegisterNeedHelpController } from '../controller'
@@ -18,11 +18,17 @@ export interface ICreateNewNeedForOrgsComponent{
 
 @observer
 export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNeedForOrgsComponent, any>{
-    needHelpWithListItem : IOrgNeedHelpWithListItem;
+    @observable needHelpWithListItem : IOrgNeedHelpWithListItem;
     @observable isLoading : boolean = false;
+    @observable btnCaption : string = 'Add new Need'
+    @observable isAdd : boolean = true
 
     constructor(props) {
         super(props);
+        this.resetFormFields()
+    }
+
+    resetFormFields = () => {
         this.needHelpWithListItem = {
             active : true,
             bestPrice : 0,
@@ -32,15 +38,26 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
             photoUrl : '',
             title : ''
         }
+        this.btnCaption = 'Add new Need'
+        this.isAdd = true
     }
 
     addNewListItem = (e) => {
         e.preventDefault();
         this.isLoading = true;
-        this.props.controller.addNeedHelpForOrgsListItem(this.needHelpWithListItem).then((response) => {
-            this.isLoading = false;
-            this.forceUpdate()
-        })
+        if(this.isAdd){
+            this.props.controller.addNeedHelpForOrgsListItem(this.needHelpWithListItem).then((response) => {
+                this.isLoading = false;
+                this.resetFormFields()
+                this.forceUpdate()
+            })
+        }else{
+            this.props.controller.updateNeedHelpForOrgsListItem(this.needHelpWithListItem).then((response) => {
+                this.isLoading = false;
+                this.resetFormFields()
+                this.forceUpdate()
+            })
+        }
     }
 
     removeNeedHelpWithListItem = (e, id : string) => {
@@ -48,32 +65,49 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
         this.isLoading = true;
         this.props.controller.removeNeedHelpForOrgsListItem(id).then((response) => {
             this.isLoading = false;
+            this.resetFormFields()
             this.forceUpdate()
         })
     }
 
     needHelpWithListItemSelected = (e, id : string) => {
         e.preventDefault();
-        console.log('Item selected => ', id)
+        if(this.props.controller.organisationRegistration.needHelpWithList){
+            const selectedItem = convertData(this.props.controller.organisationRegistration.needHelpWithList,DataFilter.ActiveOnly).filter(x => x.ID === id)[0]
+            if(selectedItem){
+                this.btnCaption = 'Update Need'
+                this.isAdd = false
+                this.needHelpWithListItem = {
+                    active : selectedItem.active,
+                    bestPrice : selectedItem.bestPrice,
+                    createDate : selectedItem.createDate,
+                    description : selectedItem.description,
+                    estimatedValue : selectedItem.estimatedValue,
+                    photoUrl : selectedItem.photoUrl,
+                    title : selectedItem.title,
+                    ID : id
+                }                
+            }
+        }
     }
 
     handleChange = (event:any) => {
         switch(event.target.id)
         {
             case RegistrationFields.title: 
-                this.props.controller.needHelpForOrgsListItem.title = event.target.value;
+                this.needHelpWithListItem.title = event.target.value;
                 this.props.controller.orgNeedHelpListItemFormState.title.fieldValidationError = '';
                 break;
             case RegistrationFields.description:
-                this.props.controller.needHelpForOrgsListItem.description = event.target.value;
+                this.needHelpWithListItem.description = event.target.value;
                 this.props.controller.orgNeedHelpListItemFormState.description.fieldValidationError = '';
                 break;
             case RegistrationFields.estimatedValue:
-                this.props.controller.needHelpForOrgsListItem.estimatedValue = event.target.value;
+                this.needHelpWithListItem.estimatedValue = event.target.value;
                 this.props.controller.orgNeedHelpListItemFormState.estimatedValue.fieldValidationError = '';
                 break;
             case RegistrationFields.bestPrice:
-                this.props.controller.needHelpForOrgsListItem.bestPrice = event.target.value;
+                this.needHelpWithListItem.bestPrice = event.target.value;
                 this.props.controller.orgNeedHelpListItemFormState.bestPrice.fieldValidationError = '';
                 break;
         }
@@ -153,7 +187,7 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     placeholder="Title" 
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}
-                                    value={this.props.controller.needHelpForOrgsListItem.title}/>
+                                    value={this.needHelpWithListItem.title}/>
                                     <span className={this.shouldMarkError('title') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                             </div>
                             <p className='validationErrorMsg'>{controller.orgNeedHelpListItemFormState.title.fieldValidationError}</p>
@@ -166,7 +200,7 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     id="description"
                                     onChange={this.handleChange} 
                                     onBlur={this.handleBlur}
-                                    value={this.props.controller.needHelpForOrgsListItem.description}></textarea>
+                                    value={this.needHelpWithListItem.description}></textarea>
                                 <span className={this.shouldMarkError('description') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                             </div>
                             <p className='validationErrorMsg'>{controller.orgNeedHelpListItemFormState.description.fieldValidationError}</p>
@@ -180,7 +214,7 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     placeholder="Estimated Value" 
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}
-                                    value={this.props.controller.needHelpForOrgsListItem.estimatedValue}/>
+                                    value={this.needHelpWithListItem.estimatedValue}/>
                                     <span className={this.shouldMarkError('estimatedValue') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                             </div>
                             <p className='validationErrorMsg'>{controller.orgNeedHelpListItemFormState.estimatedValue.fieldValidationError}</p>
@@ -194,13 +228,13 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     placeholder="Best Price" 
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}
-                                    value={this.props.controller.needHelpForOrgsListItem.bestPrice}/>
+                                    value={this.needHelpWithListItem.bestPrice}/>
                                     <span className={this.shouldMarkError('bestPrice') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                             </div>
                             <p className='validationErrorMsg'>{controller.orgNeedHelpListItemFormState.bestPrice.fieldValidationError}</p>
 
 
-                            <button className="btn btn-default" onClick={this.addNewListItem}>Add new Need</button>
+                            <button className="btn btn-default" onClick={this.addNewListItem}>{this.btnCaption}</button>
 
                         </div>
                     </div>
@@ -220,15 +254,16 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                 <tbody id="tbody">
 
                                     {
-                                        map(convertData(controller.causes,DataFilter.ActiveOnly),((cause : IOrgNeedHelpWithListItem, index) => {
+                                        controller.organisationRegistration.needHelpWithList &&
+                                        map(convertData(controller.organisationRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : IOrgNeedHelpWithListItem, index) => {
                                             return(
-                                                <tr key={index}  onClick={(e) => this.needHelpWithListItemSelected(e,cause.ID)}>
-                                                    <td className="col-sm-1 col-md-1 text-center">{cause.title}</td>
-                                                    <td className="col-sm-1 col-md-1 text-center">{cause.description}</td>
-                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.estimatedValue}</strong></td>
-                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{cause.bestPrice}</strong></td>
+                                                <tr key={index}  onClick={(e) => this.needHelpWithListItemSelected(e,item.ID)}>
+                                                    <td className="col-sm-1 col-md-1 text-center">{item.title}</td>
+                                                    <td className="col-sm-1 col-md-1 text-center">{item.description}</td>
+                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{item.estimatedValue}</strong></td>
+                                                    <td className="col-sm-1 col-md-1 text-center"><strong>{item.bestPrice}</strong></td>
                                                     <td className="col-sm-1 col-md-1">
-                                                        <button type="button" className="btn btn-danger" id="remove" onClick={(id) => controller.archiveCause(cause.ID)}>
+                                                        <button type="button" className="btn btn-danger" id="remove" onClick={(e) => this.removeNeedHelpWithListItem(e,item.ID)}>
                                                             <span className="glyphicon glyphicon-remove"></span> Remove
                                                         </button>
                                                     </td>

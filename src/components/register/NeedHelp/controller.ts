@@ -259,6 +259,19 @@ export class RegisterNeedHelpController {
         })        
     })
 
+    @action("Update NeedHelpWith List Item to User")
+    updateNeedHelpForIndsListItem = action((item : IIndividualNeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {            
+            _firebaseApp.database().ref('registrations/NeedHelp/Individuals/' + this.individualRegistration.ID + '/needHelpWithList/' + item.ID).update(item).then(response => {
+                this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })  
+            }).catch((error) => {
+                reject(error.message)
+            })
+        })        
+    })
+
     @action("Removes a NeedHelpWith List Item from Registration")
     removeNeedHelpForIndsListItem = action((id : string) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
@@ -278,7 +291,20 @@ export class RegisterNeedHelpController {
     @action("Add new NeedHelpWith List Item to User")
     addNeedHelpForOrgsListItem = action((item : IOrgNeedHelpWithListItem) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {            
-            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.individualRegistration.ID + '/needHelpWithList/').push(item).then(response => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.organisationRegistration.ID + '/needHelpWithList/').push(item).then(response => {
+                this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
+                    resolve(true);
+                })  
+            }).catch((error) => {
+                reject(error.message)
+            })
+        })        
+    })
+
+    @action("Update NeedHelpWith List Item to User")
+    updateNeedHelpForOrgsListItem = action((item : IOrgNeedHelpWithListItem) : Promise<any> => {
+        return new Promise<any>((resolve, reject) => {            
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.organisationRegistration.ID + '/needHelpWithList/' + item.ID).update(item).then(response => {
                 this.getRegistrationByID('NeedHelp',_firebaseAuth.currentUser.uid).then((response) => {
                     resolve(true);
                 })  
@@ -291,7 +317,7 @@ export class RegisterNeedHelpController {
     @action("Removes a NeedHelpWith List Item from Registration")
     removeNeedHelpForOrgsListItem = action((id : string) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
-            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.individualRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
+            _firebaseApp.database().ref('registrations/NeedHelp/Organisations/' + this.organisationRegistration.ID + '/needHelpWithList/' + id).remove().then(response => {
                 this.getRegistrationByID('NeedHelp', _firebaseAuth.currentUser.uid).then((response) => {
                     resolve(true);
                 })

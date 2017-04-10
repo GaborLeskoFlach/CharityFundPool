@@ -19,11 +19,17 @@ export interface ICreateNewNeedForIndividualsComponent{
 
 @observer
 export class CreateNewNeedForIndividualsComponent extends React.Component<ICreateNewNeedForIndividualsComponent, any>{
-    needHelpWithListItem : IIndividualNeedHelpWithListItem;
+    @observable needHelpWithListItem : IIndividualNeedHelpWithListItem;
     @observable isLoading : boolean = false;
+    @observable btnCaption : string = 'Add new Need'
+    @observable isAdd : boolean = true    
 
     constructor(props) {
         super(props);
+        this.resetFormFields()
+    }
+
+    resetFormFields = () => {
         this.needHelpWithListItem = {
             active : true,
             whatINeedHelpWith : '',
@@ -34,15 +40,27 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
             },
             typeOfWork : ''
         }
+        this.btnCaption = 'Add new Need'
+        this.isAdd = true
     }
 
     addNewListItem = (e) => {
         e.preventDefault();
         this.isLoading = true;
-        this.props.controller.addNeedHelpForIndsListItem(this.needHelpWithListItem).then((response) => {
-            this.isLoading = false;
-            this.forceUpdate()
-        })
+        if(this.isAdd){
+            this.props.controller.addNeedHelpForIndsListItem(this.needHelpWithListItem).then((response) => {
+                this.isLoading = false;
+                this.resetFormFields()
+                this.forceUpdate()
+            })
+        }else{
+            this.props.controller.updateNeedHelpForIndsListItem(this.needHelpWithListItem).then((response) => {
+                this.isLoading = false;
+                this.resetFormFields()
+                this.forceUpdate()
+            })
+        }
+
     }
 
     removeNeedHelpWithListItem = (e, id : string) => {
@@ -50,6 +68,7 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
         this.isLoading = true;
         this.props.controller.removeNeedHelpForIndsListItem(id).then((response) => {
             this.isLoading = false;
+            this.resetFormFields()
             this.forceUpdate()
         })
     }
@@ -94,7 +113,24 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
 
     needHelpWithListItemSelected = (e, id : string) => {
         e.preventDefault();
-        console.log('Item selected => ', id)
+        if(this.props.controller.individualRegistration.needHelpWithList){
+            const selectedItem = convertData(this.props.controller.individualRegistration.needHelpWithList,DataFilter.ActiveOnly).filter(x => x.ID === id)[0]
+            if(selectedItem){
+                this.btnCaption = 'Update Need'
+                this.isAdd = false
+                this.needHelpWithListItem = {
+                    ID : id,
+                    active : selectedItem.active,
+                    whatINeedHelpWith : selectedItem.whatINeedHelpWith,
+                    whenINeedHelp : {
+                        singleDate : selectedItem.whenINeedHelp.singleDate,
+                        dateRange : selectedItem.whenINeedHelp.dateRange,
+                        flexible : selectedItem.whenINeedHelp.flexible
+                    },
+                    typeOfWork : selectedItem.typeOfWork
+                }                
+            }
+        }        
     }
 
     render() {
@@ -123,7 +159,7 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
                                 <div className="form-group">
                                     <label htmlFor="whatINeedHelpWith">What I need help with</label>
                                     <div>
-                                        <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} >
+                                        <select className="form-control" ref="whatINeedHelpWith" id="whatINeedHelpWith" onChange={this.handleChange} value={this.needHelpWithListItem.whatINeedHelpWith} >
                                             <option value="">Please select an option...</option>
                                             
                                                 {map(this.props.controller.whatINeedHelpWith, (need : IWhatINeedHelpWith, key) => (
@@ -139,8 +175,7 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
                                         <select 
                                             className="form-control"
                                             id="typeOfWork" 
-                                            onChange={this.handleChange}
-                                        >
+                                            onChange={this.handleChange} value={this.needHelpWithListItem.typeOfWork}>
                                             <option value="">Please select an option...</option>
                                             <option value="Light duty work">Light duty work</option>
                                             <option value="Medium duty work">Medium duty work</option>
@@ -180,7 +215,7 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
                                         </div>
                                     </div>
                                 </div>
-                                <button className="btn btn-primary submit" onClick={this.addNewListItem}>Add</button>
+                                <button className="btn btn-primary submit" onClick={this.addNewListItem}>{this.btnCaption}</button>
                             </div>
                         </div>
                     </div>  
