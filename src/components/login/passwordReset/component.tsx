@@ -84,28 +84,21 @@ export class PasswordReset extends React.Component<any,any>{
             <div className="container">
                 <div className="row">
                     <div className="col-md-4"></div>
-                    <div className="col-md-4">
-                        <div className="flip">
-                            <div className="card">
-                                <div className="face front">
-                                    <div className="panel panel-default">                                        
-                                        {
-                                            this.isFormSubmitted ? 
-                                                <PasswordResetSuccess /> 
-                                            : 
-                                                <PasswordResetForm 
-                                                    handleBlur={this.handleBlur} 
-                                                    handleChange={this.handleChange} 
-                                                    shouldMarkError={this.shouldMarkError} 
-                                                    resetPassword={this.resetPassword} 
-                                                    email={this.formState.email}
-                                                    emailValidationError={this.formState.emailValidationError}
-                                                />
-                                        }                                                                            
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="col-md-4">                                    
+                        {
+                            this.isFormSubmitted ? 
+                                <PasswordResetSuccess /> 
+                            : 
+                                <PasswordResetForm 
+                                    handleBlur={this.handleBlur} 
+                                    handleChange={this.handleChange} 
+                                    shouldMarkError={this.shouldMarkError} 
+                                    resetPassword={this.resetPassword} 
+                                    email={this.formState.email}
+                                    emailValidationError={this.formState.emailValidationError}
+                                />
+                        }                                                                            
+                        
                     </div>
                     <div className="col-md-4"></div>
                 </div>

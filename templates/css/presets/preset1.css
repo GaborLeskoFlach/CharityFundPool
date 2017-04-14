@@ -1,3 +1,4 @@
+
 a:focus, 
 a:hover, 
 #navigation .navbar-right .dropdown-menu li a:hover, 
@@ -9,6 +10,7 @@ a:hover,
 #contact a.contact-info:hover{	
 	color:#00aeef;
 }
+
 
 .section-title:after, 
 .btn-primary, 

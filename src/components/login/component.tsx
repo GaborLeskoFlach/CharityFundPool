@@ -132,59 +132,51 @@ export class LoginComponent extends React.Component<{}, {}>{
                 <div className="row">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
-                        <div className="flip">
-                            <div className="card">
-                                <div className="face front">
-                                    <div className="panel panel-default">
-                                        <div className="form">
-                                            <br/>
-                                            <div className="text-center">
-                                                <h3><i className="fa fa-sign-in fa-4x"></i></h3>
-                                                <h2 className="text-center">Sign In</h2>                                              
-                                            </div>
-                                            <br/>
-
-                                            <div className="input-group">
-                                                <span className="input-group-addon"><i className="glyphicon glyphicon-envelope color-blue"></i></span>
-                                                <input 
-                                                    id="email" 
-                                                    name="email" 
-                                                    placeholder="Email" 
-                                                    type="email"
-                                                    onChange={this.handleChange} 
-                                                    onBlur={this.handleBlur}
-                                                    value={this.formState.email.fieldValue}
-                                                    className={this.shouldMarkError('email') ? "form-control error" : "form-control"} /> 
-                                            </div>
-                                            <p className='validationErrorMsg'>{this.formState.email.fieldValidationError}</p>
-
-                                            <div className="input-group">
-                                                <span className="input-group-addon"><i className="glyphicon glyphicon-lock color-blue"></i></span>
-                                                <input 
-                                                    id="password" 
-                                                    name="password" 
-                                                    placeholder="Password"  
-                                                    type="password"
-                                                    onChange={this.handleChange} 
-                                                    onBlur={this.handleBlur}
-                                                    value={this.formState.password.fieldValue}
-                                                    className={this.shouldMarkError('password') ? "form-control error" : "form-control"} />                                                     
-                                            </div>
-                                            <p className='validationErrorMsg'>{this.formState.password.fieldValidationError}</p>
-                                            
-                                            <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
-                                            <button className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
-                                            <hr/>
-
-                                            <p className='validationErrorMsg'>{this.formState.validationError}</p>
-
-                                            <p className="text-center">
-                                                <Link to='/Home' className="fliper-btn">Create new account? Register!</Link>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>                                
+                        <div className="form">
+                            <br/>
+                            <div className="text-center">
+                                <h3><i className="fa fa-sign-in fa-4x"></i></h3>
+                                <h2 className="text-center">Sign In</h2>                                              
                             </div>
+                            <br/>
+
+                            <div className="input-group">
+                                <span className="input-group-addon"><i className="glyphicon glyphicon-envelope color-blue"></i></span>
+                                <input 
+                                    id="email" 
+                                    name="email" 
+                                    placeholder="Email" 
+                                    type="email"
+                                    onChange={this.handleChange} 
+                                    onBlur={this.handleBlur}
+                                    value={this.formState.email.fieldValue}
+                                    className={this.shouldMarkError('email') ? "form-control error" : "form-control"} /> 
+                            </div>
+                            <p className='validationErrorMsg'>{this.formState.email.fieldValidationError}</p>
+
+                            <div className="input-group">
+                                <span className="input-group-addon"><i className="glyphicon glyphicon-lock color-blue"></i></span>
+                                <input 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="Password"  
+                                    type="password"
+                                    onChange={this.handleChange} 
+                                    onBlur={this.handleBlur}
+                                    value={this.formState.password.fieldValue}
+                                    className={this.shouldMarkError('password') ? "form-control error" : "form-control"} />                                                     
+                            </div>
+                            <p className='validationErrorMsg'>{this.formState.password.fieldValidationError}</p>
+                            
+                            <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
+                            <button className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
+                            <hr/>
+
+                            <p className='validationErrorMsg'>{this.formState.validationError}</p>
+
+                            <p className="text-center">
+                                <Link to='/Home' className="fliper-btn">Create new account? Register!</Link>
+                            </p>
                         </div>
                     </div>
                     <div className="col-md-4"></div>

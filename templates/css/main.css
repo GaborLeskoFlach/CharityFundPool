@@ -36,7 +36,11 @@
 ==========================*/
 
 div#body > div > div.container{
-	padding-top:50px
+	position:relative;
+	top:80px;
+	border-radius: 5px;
+	/*padding-top:30px;*/
+	background-color: #A6A2A2
 }
 
 body {
@@ -77,18 +81,22 @@ a:hover {
 
 h1 {
 	font-size:36px;
+	color:white
 }
 
 h2 {
 	font-size: 24px;
+	color:white
 }
 
 h3 {
 	font-size: 20px;
+	color:white
 }
 
 h4 {
 	font-size: 18px;
+	color:white
 }
 
 h5 {
@@ -574,7 +582,7 @@ a.navbar-brand {
 	transform: scale(0.9);
 }
 
-.who-we-are .col-sm-4:hover img {
+.who-we-are .col-lg-4:hover img {
 	opacity:1;
 	-moz-transform: scale(1);
 	-webkit-transform: scale(1);
@@ -1616,3 +1624,68 @@ a.navbar-brand {
 }
 
 /*======================END============================*/
+
+
+
+header {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  background-position: center;
+  background-image: url('../images/header.jpg');
+  text-align: center;
+  color: white;
+}
+header .header-content {
+  position: relative;
+  text-align: center;
+  padding: 100px 15px 100px;
+  width: 100%;
+}
+header .header-content .header-content-inner h1 {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+header .header-content .header-content-inner hr {
+  margin: 30px auto;
+}
+header .header-content .header-content-inner p {
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  margin-bottom: 50px;
+}
+@media (min-width: 768px) {
+  header {
+    min-height: 100%;
+  }
+  header .header-content {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 0 50px;
+  }
+  header .header-content .header-content-inner {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  header .header-content .header-content-inner h1 {
+    font-size: 50px;
+  }
+  header .header-content .header-content-inner p {
+    font-size: 18px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
