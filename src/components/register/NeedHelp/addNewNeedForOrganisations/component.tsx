@@ -172,6 +172,8 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                     <p>Please come back after you've received your registration from CFP</p>
                 </div>
             )
+        } else if(!controller.organisationRegistration){
+            return null
         } else {
             return (
                 <div>

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import { FooterComponent } from '../footer/component';
-
 import './styles.css';
 
 export class HomeComponent extends React.Component<{},{}>{
@@ -65,11 +63,7 @@ export class HomeComponent extends React.Component<{},{}>{
                             </div>
                         </div>
                     </div>            
-                </div>            
-                
-                <footer id="footer">
-                    <FooterComponent />
-                </footer>    
+                </div>             
             </div>                
         )
     }
