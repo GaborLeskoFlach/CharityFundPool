@@ -141,11 +141,15 @@ export class RegisterWantToHelpController {
     @action("get a registration by uid")
     getRegistrationByUID = (uid : string) => {
         return new Promise<any>((resolve) => {            
-            _firebaseApp.database().ref('registrations/WantToHelp/').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {
+            _firebaseApp.database().ref('registrations/WantToHelp/').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {                
                 snapshot.forEach((item) => {
                     this.registerWantToHelp = item.val()
                     resolve()
+                    return
                 })
+                resolve()
+            }).catch((error) => {
+                console.log('Exception occured in getRegistrationByUID', error.message)
             })
         });   
     }

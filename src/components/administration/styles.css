@@ -160,6 +160,11 @@
     color: #404040;
 }
 
+.profileCard.people .card-cardinfo h4 {
+    color: #404040;
+}
+
+
 .profileCard.people .card-cardinfo .desc {
     display: block;
     margin: 8px 14px 0 14px;
@@ -257,6 +262,11 @@
     color: #262626;
     vertical-align: middle;
 }
+
+.profileCard.hovercard .cardinfo h4 {
+    color: #262626;
+}
+
 
 .profileCard.hovercard .cardinfo .desc {
     overflow: hidden;

@@ -6,3 +6,19 @@ div.need-card:hover
 div.need-card{
 	border : 3px solid lightgray;
 }
+
+div.need-card h4{
+	color : #262626
+}
+
+div.need-card p{
+	color:#262626
+}
+
+div.well h1{
+	color : #262626 !important
+}
+
+div.well p{
+	color : #262626 !important
+}
