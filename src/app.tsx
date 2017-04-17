@@ -52,3 +52,7 @@ ReactDOM.render(
     </Router>,
     document.getElementById('body'));
 
+
+
+    /* How to connect to Node API https://typescript-node-api-pyjfiuehfx.now.sh/api/v1/users */
+
