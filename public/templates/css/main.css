@@ -40,7 +40,7 @@ div#body > div > div.container{
 	top:80px;
 	border-radius: 5px;
 	/*padding-top:30px;*/
-	background-color: #A6A2A2
+	/*background-color: #A6A2A2*/
 }
 
 body {
@@ -48,6 +48,10 @@ body {
 	font-size: 14px;
 	color: #454545;
 	background-color: #eaedf4;
+}
+
+label {
+	color : gray;
 }
 
 ul {
@@ -81,31 +85,36 @@ a:hover {
 
 h1 {
 	font-size:36px;
-	color:white
+	color:ghostwhite
 }
 
 h2 {
 	font-size: 24px;
-	color:white
+	color:ghostwhite
 }
 
 h3 {
 	font-size: 20px;
-	color:white
+	color:ghostwhite
 }
 
 h4 {
 	font-size: 18px;
-	color:white
+	color: ghostwhite
 }
 
 h5 {
 	font-size: 16px;
+	color:ghostwhite
 }
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Raleway', sans-serif;
 	font-weight:normal;
+}
+
+p{
+	color:ghostwhite
 }
 
 .padding-top {
