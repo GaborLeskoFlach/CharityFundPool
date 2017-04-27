@@ -24,6 +24,12 @@ export default class SingleDate extends React.Component<ISingleDateProps,{}> {
     }
   }
   
+  componentWillReceiveProps = (nextProps : ISingleDateProps) => {
+    if(nextProps.setSingleDate){
+        this.selectedDay = nextProps.setSingleDate;
+    }
+  }
+
   handleDayClick(e, day){
     if(moment(day).isSame(this.selectedDay)){
       this.selectedDay = null;
@@ -39,9 +45,9 @@ export default class SingleDate extends React.Component<ISingleDateProps,{}> {
         <DayPicker
           selectedDays={ day => DateUtils.isSameDay(this.selectedDay, day) } onDayClick={this.handleDayClick}
         />
-        <p>
+        <h4>
           { new moment(this.selectedDay).isValid() ? this.selectedDay.toLocaleDateString() : 'Please select a day' }
-        </p>
+        </h4>
       </div>
     );
   }

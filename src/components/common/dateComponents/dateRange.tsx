@@ -29,6 +29,15 @@ export default class DateRange extends React.Component<IDateRangeProps,{}> {
     }
   }
 
+  componentWillReceiveProps = (nextProps : IDateRangeProps) => {
+    if(nextProps.setDateRange.from){
+      let rangeToSet = { from : nextProps.setDateRange.from, to : nextProps.setDateRange.to }; 
+      this.range = rangeToSet;
+    }else{
+      this.range = { from : null, to : null }
+    }
+  }
+
   handleDayClick(e, day) {
     //1. retrieve set Date(s) from DayPicker component
     const rangeToSet : { from?: Date, to?: Date } = DateUtils.addDayToRange(day, this.range);

@@ -242,7 +242,7 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                     </div>
 
                     <div className="form-group">
-                        <div className="table-responsive">
+                        <div className="panel table-responsive">
                             <table className="table table-hover">
                                 <thead>
                                     <tr>

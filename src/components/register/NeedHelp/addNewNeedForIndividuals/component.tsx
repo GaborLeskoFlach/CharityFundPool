@@ -81,6 +81,15 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
             case FormFields.typeOfWork:
                 this.needHelpWithListItem.typeOfWork = e.target.value;
                 break;
+            case FormFields.singleDateReoccurring:
+                this.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring = e.target.checked
+                break
+            case FormFields.dateRangeReoccurring:
+                this.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring = e.target.checked
+                break
+            case FormFields.flexibleDates:
+                this.needHelpWithListItem.whenINeedHelp.flexible = e.target.checkbox
+                break
         }
     }
 
@@ -198,16 +207,16 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
 
                                                     <fieldset className="tab-content">
                                                         <div className="tab-pane fade in active" id="singleDate">
-                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(controller.needHelpForIndividualsListItem.whenINeedHelp.singleDate.day) }/>
-                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
+                                                            <SingleDate onDayClick={this.handleDaySelection} setSingleDate={this.convertSingleDate(this.needHelpWithListItem.whenINeedHelp.singleDate.day) }/>
+                                                            <label><input type="checkbox" id="singleDateReoccurring" onChange={this.handleChange} checked={this.needHelpWithListItem.whenINeedHelp.singleDate.reoccurring}/> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade " id="dateRange">								
-                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(controller.needHelpForIndividualsListItem.whenINeedHelp.dateRange) }/>
+                                                            <DateRange onDateRangeClick={this.handleDateRangeSelection} setDateRange={this.convertDateRange(this.needHelpWithListItem.whenINeedHelp.dateRange) }/>
                                                             <br />
-                                                            <label><input type="checkbox" id="dateRangeReoccurring" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.dateRange.reoccurring}/> Reoccurring</label>
+                                                            <label><input type="checkbox" id="dateRangeReoccurring" checked={this.needHelpWithListItem.whenINeedHelp.dateRange.reoccurring} onChange={this.handleChange} /> Reoccurring</label>
                                                         </div>
                                                         <div className="tab-pane fade" id="flexible">
-                                                            <label><input type="checkbox" id="flexibleDates" onChange={this.handleChange} checked={controller.needHelpForIndividualsListItem.whenINeedHelp.flexible}/> Flexible</label>
+                                                            <label><input type="checkbox" id="flexibleDates" checked={this.needHelpWithListItem.whenINeedHelp.flexible} onChange={this.handleChange} /> Flexible</label>
                                                         </div>                        
                                                     </fieldset>
                                                 </div>
@@ -219,8 +228,8 @@ export class CreateNewNeedForIndividualsComponent extends React.Component<ICreat
                             </div>
                         </div>
                     </div>  
-                    <div className="form-group">
-                        <div className="table-responsive">
+                    <div className="form-group">                        
+                        <div className="panel table-responsive">
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
