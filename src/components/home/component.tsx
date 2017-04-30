@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-
+import { Dashboard } from './dashboard/dashboard'
 import './styles.css';
 
 export class HomeComponent extends React.Component<{},{}>{
@@ -9,7 +9,6 @@ export class HomeComponent extends React.Component<{},{}>{
     {
         super(props);
     }
-
 
     render(){
 
@@ -29,6 +28,7 @@ export class HomeComponent extends React.Component<{},{}>{
                                     <img className="homepageimage" src="templates/images/home/CFPHomePageImage.png" alt="Logo" />                                    
                                 </div>
                             </div>
+                            { /*<Dashboard />*/}
                         </div>
                     </div>
                 </section>

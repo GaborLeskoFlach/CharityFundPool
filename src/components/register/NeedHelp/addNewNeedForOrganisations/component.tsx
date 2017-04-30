@@ -131,6 +131,13 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
         }
     }
 
+    handleKeyPress = (event) => {
+        const re = /[0-9A-F:]+/g;
+        if (!re.test(event.key)) {
+            event.preventDefault();
+        }        
+    }
+
     shouldMarkError = (control:string) => {
         let hasError : boolean = false;
         let shouldShow : boolean = false;
@@ -213,7 +220,10 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     className={this.shouldMarkError('estimatedValue') ? "form-control error" : "form-control"}
                                     id="estimatedValue" 
                                     type="text" 
-                                    placeholder="Estimated Value" 
+                                    pattern="[0-9]*" 
+                                    inputmode="numeric"
+                                    placeholder="Estimated Value"
+                                    onKeyPress={(e) => this.handleKeyPress(e)}
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}
                                     value={this.needHelpWithListItem.estimatedValue}/>
@@ -228,6 +238,9 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     id="bestPrice" 
                                     type="text" 
                                     placeholder="Best Price" 
+                                    pattern="[0-9]*" 
+                                    inputmode="numeric"
+                                    onKeyPress={(e) => this.handleKeyPress(e)}
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}
                                     value={this.needHelpWithListItem.bestPrice}/>
@@ -254,7 +267,6 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
-
                                     {
                                         controller.organisationRegistration.needHelpWithList &&
                                         map(convertData(controller.organisationRegistration.needHelpWithList,DataFilter.ActiveOnly),((item : IOrgNeedHelpWithListItem, index) => {
@@ -273,7 +285,6 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                             )
                                         })
                                     )}
-
                                 </tbody>
                             </table>
                         </div>                                     

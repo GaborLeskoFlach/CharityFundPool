@@ -244,8 +244,6 @@ export class RegisterNeedHelpController {
         }
     }
 
-    //Add/Remove NeedHelpWith ListItems for Individuals
-
     @action("Add new NeedHelpWith List Item to User")
     addNeedHelpForIndsListItem = action((item : IIndividualNeedHelpWithListItem) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {            
@@ -517,6 +515,22 @@ export class RegisterNeedHelpController {
         });   
     }
 
+    //Should be in STORE
+    @action("get a User Registration Location by UID")
+    getUserRegistrationLocationByUID = (key : string) => {
+        return new Promise<any>((resolve) => {
+            const dbRef = '/users/' + key
+            _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
+                const user : IUserMapping = snapshot.val()
+                if(user){
+                    resolve(user.location)
+                }else{
+                    resolve()
+                }
+            })
+        })  
+    }
+    
     ///
     /// Private Methods
     ///

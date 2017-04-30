@@ -66,6 +66,13 @@ export class Jobs extends React.Component<{},{}> {
         this.controller.registerIndividualFormState.postCode.touched = true;
     }
 
+    handleKeyPress = (event) => {
+        const re = /[0-9A-F:]+/g;
+        if (!re.test(event.key)) {
+            event.preventDefault();
+        }        
+    }
+
     shouldMarkError = (control:string) => {
         let hasError : boolean = this.controller.registerIndividualFormState.postCode.fieldValidationError.length > 0;
         let shouldShow : boolean = this.controller.registerIndividualFormState.postCode.touched;
@@ -99,6 +106,7 @@ export class Jobs extends React.Component<{},{}> {
                                                 placeholder="Enter post code..."
                                                 onChange={this.handleChange}
                                                 onBlur={this.handleBlur}
+                                                onKeyPress={(e) => this.handleKeyPress(e)}
                                                 value={this.controller.postCode}/>
                                                 <span className={this.shouldMarkError('postCode') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                                         </div>

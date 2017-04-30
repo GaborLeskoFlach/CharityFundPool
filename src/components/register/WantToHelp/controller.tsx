@@ -1,9 +1,9 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
 import { _firebaseApp, register } from '../../firebaseAuth/component';
-import { generateTempPassword } from '../../../utils/utils';
+import { generateTempPassword, convertData } from '../../../utils/utils';
 import { map, toJS } from 'mobx';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect, IFieldValidation } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect, IFieldValidation, DataFilter, IUserMapping } from '../../interfaces';
 
 interface IRegisterWantToHelpFormFields{
     fullName : IFieldValidation;
@@ -24,6 +24,7 @@ export class RegisterWantToHelpController {
         this.isLoading = false;    
         this.tradeOptionsSelected = [];                 
         this.submitBtnCaption = 'Register';
+        this.isExistingRegistration = false
         this.resetForm();
     }
 
@@ -34,7 +35,7 @@ export class RegisterWantToHelpController {
     @observable registerWantToHelp : IRegistrationWantToHelp;
     @observable submitBtnCaption : string;
     @observable registerWantToHelpFormState : IRegisterWantToHelpFormFields;
- 
+    @observable isExistingRegistration : boolean
     tradeOptionsSelected : Array<IMultiSelect>;
 
     @action("Reset Form (state)")
@@ -72,6 +73,7 @@ export class RegisterWantToHelpController {
         }    
         
         this.registerWantToHelp = {
+            ID : '',
             active : true,
             uid : '',        
             fullName : '',
@@ -117,6 +119,24 @@ export class RegisterWantToHelpController {
         });
     };
 
+    @action("Update Registration -> Want to Help")
+    updateNewRegistrationWantToHelp = () : Promise<any> => {
+        const dbRef : string = 'registrations/WantToHelp/' + this.registerWantToHelp.ID;
+        return new Promise((resolve,reject) => {
+            this.registerWantToHelp.email = this.registerWantToHelp.email.trim().toLowerCase()
+            this.doesEmailAlreadyUsed(dbRef,this.registerWantToHelp.email).then((exists) => {
+                if(!exists){
+                    _firebaseApp.database().ref(dbRef).update(this.registerWantToHelp).then(result => {
+                        resolve(true);
+                    });
+                }else{
+                    //TODO - there is already a record in the DB with this email
+                    reject('This email has already been registered in the system. Please use a different one.')
+                }
+            })
+        })
+    }
+
     @action("Fetch TradeOptions")
     getTradeOptions = () : Promise<Array<IMultiSelect>> => {
         return new Promise<Array<IMultiSelect>>((resolve) => {
@@ -133,26 +153,61 @@ export class RegisterWantToHelpController {
         return new Promise<any>((resolve) => {            
             _firebaseApp.database().ref('registrations/WantToHelp/' + key).once('value', (snapshot) => {
                 this.registerWantToHelp = snapshot.val();
+                this.isExistingRegistration = true
+                this.submitBtnCaption = 'Save'
                 resolve();
             });
         });   
     }
 
     @action("get a registration by uid")
-    getRegistrationByUID = (uid : string) => {
-        return new Promise<any>((resolve) => {            
-            _firebaseApp.database().ref('registrations/WantToHelp/').orderByChild('uid').equalTo(uid).once('value', (snapshot) => {                
-                snapshot.forEach((item) => {
-                    this.registerWantToHelp = item.val()
+    getRegistrationByUID = (key : string) => {
+        const dbRef :string = '/registrations/WantToHelp/'
+        return new Promise<any>((resolve, reject) => {            
+            _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
+                let registrations : any = convertData(snapshot.val(), DataFilter.ActiveOnly)            
+                this.registerWantToHelp = registrations.filter(x => x.uid === key)[0]
+                if(this.registerWantToHelp){
+                    this.isExistingRegistration = true
+                    this.submitBtnCaption = 'Save'
                     resolve()
-                    return
-                })
-                resolve()
+                }else{
+                    reject()
+                }
             }).catch((error) => {
                 console.log('Exception occured in getRegistrationByUID', error.message)
             })
-        });   
+        })
     }
+
+    //Should be in STORE
+    @action("get a User Registration Location by UID")
+    getUserRegistrationLocationByUID = (key : string) => {
+        return new Promise<any>((resolve) => {
+            const dbRef = '/users/' + key
+            _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
+                const user : IUserMapping = snapshot.val()
+                if(user){
+                    resolve(user.location)
+                }else{
+                    resolve()
+                }
+            })
+        })  
+    }
+
+   //Should be in the STORE
+    @action("get a registration by location")
+    getRegistrationByLocation = (location : string) => {
+        return new Promise<any>((resolve) => {            
+            _firebaseApp.database().ref(location).once('value', (snapshot) => {
+                this.registerWantToHelp = snapshot.val();
+                this.isExistingRegistration = true
+                this.submitBtnCaption = 'Save'
+                resolve();
+            });
+        });   
+    }    
 
     //
     // Private Methods

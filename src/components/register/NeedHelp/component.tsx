@@ -333,12 +333,14 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 </div>
             )
         }else{      
-
             return(
                 <div className="container">
                     <div className="section-title">
                         <h1>Register (I need help)</h1>
-                        <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange a visit and allocate membership number</h3>
+                        {
+                            !this.controller.isExistingRegistration &&
+                            <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange access to the site</h3>
+                        }
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
@@ -476,6 +478,13 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 this.props.controller.registerIndividualFormState.postCode.touched = true;
                 break;
         }
+    }
+
+    handleKeyPress = (event) => {
+        const re = /[0-9A-F:]+/g;
+        if (!re.test(event.key)) {
+            event.preventDefault();
+        }        
     }
 
     shouldMarkError = (control:string) => {
@@ -955,6 +964,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                             type="text" 
                             ref="postCode" 
                             placeholder="PostCode/postCode" 
+                            onKeyPress={(e) => this.handleKeyPress(e)}
                             onChange={this.handleChange}
                             onBlur={this.handleBlur}
                             value={controller.registrationNeedHelpInd.postCode}/>

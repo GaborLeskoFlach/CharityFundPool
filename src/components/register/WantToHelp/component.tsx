@@ -43,8 +43,10 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                     this.controller.isLoading = false;
                 });
             }else if(_firebaseAuth.currentUser !== null){
-                this.controller.getRegistrationByUID(_firebaseAuth.currentUser.uid).then((response) => {
-                    this.controller.isLoading = false
+                this.controller.getUserRegistrationLocationByUID(_firebaseAuth.currentUser.uid).then((location) => {
+                    this.controller.getRegistrationByLocation(location).then((response) => {
+                        this.controller.isLoading = false
+                    })
                 })    
             }else{
                 this.controller.isLoading = false;
@@ -63,11 +65,20 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
             this.controller.registerWantToHelpFormState.citySuburb.fieldValidationError.length == 0 &&
             this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError.length == 0 &&
             this.controller.registerWantToHelpFormState.limitations.fieldValidationError.length == 0){
-                this.controller.addNewRegistrationWantToHelp().then(response => {            
-                    browserHistory.push('/confirm');
-                }).catch((error) => {
-                    this.controller.registerWantToHelpFormState.validationError = JSON.stringify(error);
-                })   
+                
+                if(this.controller.isExistingRegistration && this.controller.submitBtnCaption === 'Save'){
+                    this.controller.updateNewRegistrationWantToHelp().then(response => {            
+                        browserHistory.push('/confirm');
+                    }).catch((error) => {
+                        this.controller.registerWantToHelpFormState.validationError = JSON.stringify(error);
+                    }) 
+                }else{
+                    this.controller.addNewRegistrationWantToHelp().then(response => {            
+                        browserHistory.push('/confirm');
+                    }).catch((error) => {
+                        this.controller.registerWantToHelpFormState.validationError = JSON.stringify(error);
+                    }) 
+                }
             }
     }
 
@@ -203,6 +214,13 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         }
     }
 
+    handleKeyPress = (event) => {
+        const re = /[0-9A-F:]+/g;
+        if (!re.test(event.key)) {
+            event.preventDefault();
+        }        
+    }    
+
     shouldMarkError = (control:string) => {
         let hasError : boolean = false;
         let shouldShow : boolean = false;
@@ -235,7 +253,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                 break;                
         }    
         return hasError ? shouldShow : false;
-    };
+    }
 
     resetForm = (event) => {
         event.preventDefault();
@@ -260,7 +278,10 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                 <div className="container">
                     <div className="section-title">
                         <h1>Register (I want to help)</h1>
-                        <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange a visit and allocate membership number</h3>                 
+                        {
+                            !this.controller.isExistingRegistration &&
+                            <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange access to the site</h3>                 
+                        }
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
@@ -294,6 +315,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                             placeholder="Email"
                                             onChange={this.handleChange}
                                             onBlur={this.handleBlur}
+                                            disabled={this.controller.isExistingRegistration}
                                             value={this.controller.registerWantToHelp.email}/>
                                             <span className={this.shouldMarkError('email') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>                     
                                     </div>
@@ -337,6 +359,7 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                             type="text" 
                                             ref="postCode" 
                                             placeholder="Postcode" 
+                                            onKeyPress={(e) => this.handleKeyPress(e)}
                                             onChange={this.handleChange}
                                             onBlur={this.handleBlur}
                                             value={this.controller.registerWantToHelp.postCode} />
