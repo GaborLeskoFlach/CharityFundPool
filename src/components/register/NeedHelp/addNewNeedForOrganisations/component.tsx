@@ -220,8 +220,6 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     className={this.shouldMarkError('estimatedValue') ? "form-control error" : "form-control"}
                                     id="estimatedValue" 
                                     type="text" 
-                                    pattern="[0-9]*" 
-                                    inputmode="numeric"
                                     placeholder="Estimated Value"
                                     onKeyPress={(e) => this.handleKeyPress(e)}
                                     onChange={this.handleChange}
@@ -238,8 +236,6 @@ export class CreateNewNeedForOrgsComponent extends React.Component<ICreateNewNee
                                     id="bestPrice" 
                                     type="text" 
                                     placeholder="Best Price" 
-                                    pattern="[0-9]*" 
-                                    inputmode="numeric"
                                     onKeyPress={(e) => this.handleKeyPress(e)}
                                     onChange={this.handleChange}
                                     onBlur={this.handleBlur}

@@ -1,5 +1,5 @@
 import {observable, action, IObservableArray, computed} from 'mobx';
-import { _firebaseApp, _firebaseAuth, register, addNewRegistrationToMapping } from '../../firebaseAuth/component';
+import { _firebaseApp, _firebaseAuth, register, addNewRegistrationToMapping,updateMappingInfoForUser } from '../../firebaseAuth/component';
 import { map, toJS } from 'mobx';
 import { generateTempPassword, convertData } from '../../../utils/utils';
 import { StorageClass } from '../../../utils/storage';
@@ -403,8 +403,13 @@ export class RegisterNeedHelpController {
             this.registrationNeedHelpInd.email = this.registrationNeedHelpInd.email.trim().toLowerCase();
             this.doesEmailAlreadyUsed(dbRef,this.registrationNeedHelpInd.email).then((exists) => {
                 if(!exists){
-                    _firebaseApp.database().ref(dbRef).push(toJS(this.registrationNeedHelpInd)).then(result => {               
-                        resolve(result);                         
+                    const id = _firebaseApp.database().ref(dbRef).push(toJS(this.registrationNeedHelpInd)).then(result => {               
+                        if(this.registrationNeedHelpInd.uid){
+                            updateMappingInfoForUser(this.registrationNeedHelpInd.uid, RegistrationType.NeedHelpOrg,dbRef + '/' + id).then(response => {
+                                resolve(response)
+                            })
+                        }
+                        resolve(result);
                     });
                 }else{
                     //TODO - there is already a record in the DB with this email
@@ -420,7 +425,7 @@ export class RegisterNeedHelpController {
         return new Promise((resolve,reject) => {
             this.registrationNeedHelpInd.registrationType = this.registrationType;
             _firebaseApp.database().ref(dbRef).update(this.registrationNeedHelpInd).then(result => {               
-                resolve(true);                         
+                resolve(true);
             }).catch((error) => {
                 reject('An error occured when trying to update your registration')
             })
@@ -435,9 +440,14 @@ export class RegisterNeedHelpController {
             this.registrationNeedHelpOrg.email = this.registrationNeedHelpOrg.email.trim().toLowerCase();
             this.doesEmailAlreadyUsed(dbRef,this.registrationNeedHelpInd.email).then((exists) => {
                 if(!exists){
-                    _firebaseApp.database().ref('registrations/NeedHelp/Organisations').push(this.registrationNeedHelpOrg).then(result => {
+                    const id = _firebaseApp.database().ref(dbRef).push(this.registrationNeedHelpOrg).then(result => {
+                        if(this.registrationNeedHelpOrg.uid){
+                            updateMappingInfoForUser(this.registrationNeedHelpOrg.uid, RegistrationType.NeedHelpOrg,dbRef + '/' + id).then(response => {
+                                resolve(response)
+                            })
+                        }
                         resolve(result);
-                    });
+                    })
                 }else{
                     //TODO - there is already a record in the DB with this email
                    reject('This email has already been registered in the system. Please use a different one.');
@@ -468,10 +478,12 @@ export class RegisterNeedHelpController {
                 switch(registrationType){
                     case RegistrationType.NeedHelpInd:
                         this.registrationNeedHelpInd = snapshot.val();
+                        this.registrationNeedHelpInd.ID = key
                         this.registrationType = 'Individual';
                         break;
                     case RegistrationType.NeedHelpOrg:
                         this.registrationNeedHelpOrg = snapshot.val();
+                        this.registrationNeedHelpOrg.ID = key
                         this.registrationType = 'Org';
                         break;
                 }
@@ -523,7 +535,19 @@ export class RegisterNeedHelpController {
             _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
                 const user : IUserMapping = snapshot.val()
                 if(user){
-                    resolve(user.location)
+                    if(this.registrationType === 'Individual'){
+                        if(user.locations){
+                            resolve(user.locations.filter(x => x.registrationType === RegistrationType.NeedHelpInd))
+                        }else{
+                            resolve()
+                        }
+                    }else{
+                        if(user.locations){
+                            resolve(user.locations.filter(x => x.registrationType === RegistrationType.NeedHelpOrg))
+                        }else{
+                            resolve()
+                        }
+                    }
                 }else{
                     resolve()
                 }

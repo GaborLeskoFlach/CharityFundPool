@@ -55,9 +55,16 @@ export enum RegistrationRoles{
 }
 
 export interface IRoleInfo{
-    registrationId : string
     registrationType : RegistrationRoles,
     active : boolean
+}
+
+
+export interface ILocation{
+    location : string
+    registrationType : RegistrationType
+    default : boolean
+    createdAt : string
 }
 
 export interface IUserMapping{
@@ -65,7 +72,7 @@ export interface IUserMapping{
     status : UserStatus;
     loggedInFirstTime : boolean;
     loggedInFirstTimeDate : Date;
-    location : string;
+    locations : Array<ILocation>;
     profileImageURL : string;
     displayName : string;
 }

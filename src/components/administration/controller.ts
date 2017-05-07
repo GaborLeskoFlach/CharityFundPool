@@ -135,7 +135,7 @@ export class AdministrationController {
             this.getRegistration(dbRef).then(registration => {
                 if(registration){
                     //TODO => Generate Temporary password instead of this
-                    register(email,'1234567890', true, registration, dbRef, registerUser).then(response => {
+                    register(email,'1234567890', true, registration, dbRef, registerUser, registrationType).then(response => {
                         resolve();
                     }).catch(error => {
                         //TODO => handle exception

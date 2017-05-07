@@ -46,6 +46,7 @@
     "calendar-base": "^0.3.0",
     "classnames": "^2.2.5",
     "es6-promise": "^3.2.1",
+    "fetch": "^1.1.0",
     "firebase": "^3.3.0",
     "google-maps-react": "^1.0.19",
     "lodash": "^4.15.0",

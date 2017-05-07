@@ -203,6 +203,7 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
     resetForm = (event) => {
         event.preventDefault();
         this.controller.resetForm();
+        browserHistory.push('/home')
     }
 
     paymentTabConfigChange = (data : IPaymentSelect[]) => {

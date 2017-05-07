@@ -85,6 +85,12 @@ export class LoginComponent extends React.Component<{}, {}>{
         }
     }
 
+    handleKeyUp = (e) => {
+        if(e.key === 'Enter'){
+            this.signInUser()
+        }
+    }
+
     shouldMarkError = (control:string) => {
         if(control === 'email'){
             const hasError : boolean = this.formState.email.fieldValidationError.length > 0;
@@ -156,7 +162,8 @@ export class LoginComponent extends React.Component<{}, {}>{
 
                             <div className="input-group">
                                 <span className="input-group-addon"><i className="glyphicon glyphicon-lock color-blue"></i></span>
-                                <input 
+                                <input
+                                    onKeyUp={this.handleKeyUp}
                                     id="password" 
                                     name="password" 
                                     placeholder="Password"  
@@ -169,7 +176,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                             <p className='validationErrorMsg'>{this.formState.password.fieldValidationError}</p>
                             
                             <p className="text-right"><Link to='/login/passwordReset'>Forgot your password?</Link></p>
-                            <button className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
+                            <button default className="btn btn-default btn-block" onClick={this.signInUser}>LOG IN</button>
                             <hr/>
 
                             <p className='validationErrorMsg'>{this.formState.validationError}</p>

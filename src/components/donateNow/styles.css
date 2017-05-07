@@ -205,6 +205,11 @@ input#amount {
 	margin:0 15px;
 }
 
+
+.payment-select p{
+	color : black
+}
+
 /*
 .donate-tab .btn-primary {
 	padding:12px 55px;

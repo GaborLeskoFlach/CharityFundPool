@@ -28,7 +28,7 @@ export class HomeComponent extends React.Component<{},{}>{
                                     <img className="homepageimage" src="templates/images/home/CFPHomePageImage.png" alt="Logo" />                                    
                                 </div>
                             </div>
-                            { /*<Dashboard />*/}
+                            <Dashboard />
                         </div>
                     </div>
                 </section>

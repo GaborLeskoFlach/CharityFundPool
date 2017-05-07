@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import { browserHistory } from 'react-router';
 import { observable, action } from 'mobx';
-import { IUserMapping, UserStatus, IRoleInfo, RegistrationRoles } from '../interfaces';
+import { IUserMapping, UserStatus, IRoleInfo, RegistrationRoles, ILocation, RegistrationType } from '../interfaces';
 
 var config = {
     apiKey: "AIzaSyA-Y-PwwThMfyUuQVIliAIU9JHsuQF03_k",
@@ -9,7 +9,7 @@ var config = {
     databaseURL: "https://charityfundpool-staging.firebaseio.com",
     storageBucket: "charityfundpool-staging.appspot.com",
     messagingSenderId: "692978726080"
-};
+}
 
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);
 export const _firebaseAuth : firebase.Auth = _firebaseApp.auth();
@@ -32,7 +32,7 @@ function requireAuth(nextState : any, replace : any) {
     }
 }
 
-function register(email: string, password: string, shouldSendVerificationEmail : boolean, registration : any, dbRef : string, registerUser :  boolean) : Promise<firebase.User>{
+function register(email: string, password: string, shouldSendVerificationEmail : boolean, registration : any, dbRef : string, registerUser :  boolean, registrationType : RegistrationType) : Promise<firebase.User>{
     return new Promise((resolve, reject) => {        
         if(registerUser){
             if (!email || !password) {
@@ -49,13 +49,15 @@ function register(email: string, password: string, shouldSendVerificationEmail :
                                 registration.uid = userRef.uid;
                                 updateRegistration(dbRef,registration).then(response => {                            
                                     //TODO create a new Item under /Users this will make locating users easier
+                                    
+                                    const location : Array<ILocation> = [ {location : dbRef, default : true, registrationType : registrationType, createdAt : new Date().toString()} ]
 
                                     let mapping : IUserMapping = {
                                         uid : registration.uid,
                                         status : UserStatus.Pending,
                                         loggedInFirstTime : false,
                                         loggedInFirstTimeDate : null,
-                                        location : dbRef,
+                                        locations : location,
                                         profileImageURL : registration.profileImageURL,
                                         displayName : registration.fullName
                                     }
@@ -65,7 +67,6 @@ function register(email: string, password: string, shouldSendVerificationEmail :
 
                                         const role : IRoleInfo = {
                                             active : true,
-                                            registrationId : dbRef.substring(dbRef.lastIndexOf('/') + 1),
                                             registrationType : RegistrationRoles.User
                                         }
 
@@ -142,13 +143,30 @@ function unRegisterUser(registration : any, dbRef : string) : Promise<any>{
             getMappingInfoForUser(uid).then(mapping => {
                 mapping.status = UserStatus.Disabled;
                 updateRegistrationToMapping(mapping).then(response => {
-                    resolve();
+                    resolve()
                 })    
             })                                                                                
-        });
-    });    
+        })
+    })   
 }
-    
+
+function updateMappingInfoForUser(uid : string, registrationType : RegistrationType, location : string){
+    return new Promise<any>((resolve) => {
+        getMappingInfoForUser(uid).then(mapping => {
+            if(mapping){
+                if(!mapping.locations || mapping.locations.length === 0){
+                    mapping.locations = [{ createdAt : new Date().toString(), default : true, location : location, registrationType  }]
+                }else{
+                    mapping.locations.push({ createdAt : new Date().toString(), default : true, location : location, registrationType  })
+                }
+                updateRegistrationToMapping(mapping).then(response => {
+                    resolve();
+                }) 
+            }
+        })
+    })
+}
+
 function addNewRegistrationToMapping(mapping : IUserMapping) : Promise<any> {
     return new Promise<any>((resolve) => {
         _firebaseApp.database().ref('users/' + mapping.uid).set(mapping).then(result => {
@@ -229,4 +247,6 @@ function isUserLoggedIn() : boolean{
     }
 }
 
-export { requireAuth, register, signIn, signOut, resetPassword, addNewRegistrationToMapping, getMappingInfoForUser, updateRegistrationToMapping, getUserRole, setCurrentRegistrationRole  };
+export { requireAuth, register, signIn, signOut, resetPassword, 
+        addNewRegistrationToMapping, getMappingInfoForUser, 
+        updateRegistrationToMapping, getUserRole, setCurrentRegistrationRole, updateMappingInfoForUser  };

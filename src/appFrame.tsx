@@ -75,7 +75,6 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
     @observable userLoggedIn : boolean = false;
     @observable currentUser : firebase.User = null;
     @observable isLoading : boolean = false
-    registrationId : string
     
     constructor(props){
         super(props);
@@ -86,9 +85,7 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
         this.isLoading = true
 
         _firebaseApp.auth().onAuthStateChanged((user) => {
-            if(user){
-                //this.userLoggedIn = true;
-                //this.currentUser = user;                
+            if(user){            
                 //THis will run just once when User logs in
                 //this way we can keep User Details being displayed in Navbar up-to-date
                 getMappingInfoForUser(user.uid).then((response : IUserMapping) => {
@@ -97,9 +94,6 @@ export default class AppFrame extends React.Component<INavigationComponentProps,
                         response.loggedInFirstTime = true;
                         response.loggedInFirstTimeDate = new Date();
 
-                        //Extract RegistrationID from UserMapping information - Location field
-                        this.registrationId = response.location.substring(response.location.lastIndexOf('/') + 1),
-                        
                         updateRegistrationToMapping(response).then(() => {
                             user.updateProfile({
                                 displayName: response.displayName,

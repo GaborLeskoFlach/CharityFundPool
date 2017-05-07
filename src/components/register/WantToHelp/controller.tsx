@@ -3,7 +3,9 @@ import { _firebaseApp, register } from '../../firebaseAuth/component';
 import { generateTempPassword, convertData } from '../../../utils/utils';
 import { map, toJS } from 'mobx';
 
-import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, IRegistrationWantToHelp, IMultiSelect, IFieldValidation, DataFilter, IUserMapping } from '../../interfaces';
+import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
+        IRegistrationWantToHelp, IMultiSelect, IFieldValidation, 
+        DataFilter, IUserMapping, RegistrationType, ILocation } from '../../interfaces';
 
 interface IRegisterWantToHelpFormFields{
     fullName : IFieldValidation;
@@ -153,6 +155,7 @@ export class RegisterWantToHelpController {
         return new Promise<any>((resolve) => {            
             _firebaseApp.database().ref('registrations/WantToHelp/' + key).once('value', (snapshot) => {
                 this.registerWantToHelp = snapshot.val();
+                this.registerWantToHelp.ID = key
                 this.isExistingRegistration = true
                 this.submitBtnCaption = 'Save'
                 resolve();
@@ -188,9 +191,13 @@ export class RegisterWantToHelpController {
             _firebaseApp.database().ref(dbRef).once('value', (snapshot) => {
                 const user : IUserMapping = snapshot.val()
                 if(user){
-                    resolve(user.location)
+                    if(user.locations){
+                        resolve(user.locations.filter(x => x.registrationType === RegistrationType.WantToHelp).map(o => { return o.location}))
+                    }else{
+                        resolve('')
+                    }
                 }else{
-                    resolve()
+                    resolve('')
                 }
             })
         })  
@@ -198,14 +205,17 @@ export class RegisterWantToHelpController {
 
    //Should be in the STORE
     @action("get a registration by location")
-    getRegistrationByLocation = (location : string) => {
-        return new Promise<any>((resolve) => {            
+    getRegistrationByLocation = (locations) => {
+        return new Promise<any>((resolve) => {   
+            const location = locations[0]
             _firebaseApp.database().ref(location).once('value', (snapshot) => {
                 this.registerWantToHelp = snapshot.val();
                 this.isExistingRegistration = true
                 this.submitBtnCaption = 'Save'
-                resolve();
-            });
+                resolve()
+            }).catch((error)=>{
+                console.log('Error in getRegistrationByLocation =>', error)
+            })
         });   
     }    
 

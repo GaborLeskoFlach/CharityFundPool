@@ -97,10 +97,10 @@ export class Card extends React.Component<ICard, {}>{
                 <div className="row">
                     <div className="col-sm-12">
                         <h4>{registration.charityName}</h4>
-                        <p>Email: {registration.email}</p>
-                        <p>Phone: {registration.phoneNo}</p>
-                        <p>Full name: {registration.fullName}</p>
-                        <p>Website: {registration.websiteLink}</p>
+                        <p><div>Email:</div> {registration.email}</p>
+                        <p><div>Phone:</div> {registration.phoneNo}</p>
+                        <p><div>Full name:</div> {registration.fullName}</p>
+                        <p><div>Website:</div> {registration.websiteLink}</p>
 
                         <p>Organisation registered: { this.renderRegisteredFlag(registration.uid) }</p>
 

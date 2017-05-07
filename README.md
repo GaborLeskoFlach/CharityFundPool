@@ -1,1 +1,1 @@
-#Typescript, Mobx, Firebase project (need refactoring, lots of code duplocation and not using best practices)
+#Typescript, Mobx, Firebase project (need refactoring, lots of code duplication and not using best practices)

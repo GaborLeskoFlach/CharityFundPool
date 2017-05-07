@@ -44,9 +44,13 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                 });
             }else if(_firebaseAuth.currentUser !== null){
                 this.controller.getUserRegistrationLocationByUID(_firebaseAuth.currentUser.uid).then((location) => {
-                    this.controller.getRegistrationByLocation(location).then((response) => {
+                    if(location && location.length > 0){
+                        this.controller.getRegistrationByLocation(location).then((response) => {
+                            this.controller.isLoading = false
+                        })
+                    }else{
                         this.controller.isLoading = false
-                    })
+                    }
                 })    
             }else{
                 this.controller.isLoading = false;
@@ -256,8 +260,9 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
     }
 
     resetForm = (event) => {
-        event.preventDefault();
-        this.controller.resetForm();  
+        event.preventDefault()
+        this.controller.resetForm()
+        browserHistory.push('/home')
     }
 
     render(){

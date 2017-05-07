@@ -315,6 +315,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
     resetForm = (event) => {
         event.preventDefault();
         this.controller.resetForm();
+        browserHistory.push('/home')
     }
 
     render(){
