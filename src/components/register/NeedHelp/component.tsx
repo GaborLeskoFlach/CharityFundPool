@@ -188,7 +188,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 this.controller.registerOrganisationFormState.fullName.touched = true;
                 this.controller.registerOrganisationFormState.phoneNo.touched = true;
                 this.controller.registerOrganisationFormState.charityName.touched = true;
-                this.controller.registerOrganisationFormState.websiteLink.touched = true;
+                //this.controller.registerOrganisationFormState.websiteLink.touched = true;
                 this.controller.registerOrganisationFormState.whatWeDo.touched = true;      
 
                 //Email
@@ -226,13 +226,14 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 }     
 
                 //WebsiteLink
+                /*
                 if(this.controller.registrationNeedHelpOrg.websiteLink.length == 0){
                     this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = 'Required';
                 }else if (!urlPattern.test(this.controller.registrationNeedHelpOrg.websiteLink)) {
                     this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = 'Not a valid URL';                    
                 }else{
                     this.controller.registerOrganisationFormState.websiteLink.fieldValidationError = '';
-                }     
+                }*/
 
                 //WhatWeDo
                 if(this.controller.registrationNeedHelpOrg.whatWeDo.length == 0){
@@ -284,7 +285,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 this.controller.registerOrganisationFormState.fullName.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.phoneNo.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.charityName.fieldValidationError.length == 0 &&
-                this.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length == 0 &&
+                //this.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length == 0 &&
                 this.controller.registerOrganisationFormState.whatWeNeed.fieldValidationError.length == 0){
                     
@@ -318,6 +319,10 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
         browserHistory.push('/home')
     }
 
+    getRegistrationTypeText = () => {
+        return this.controller.registrationTypeText
+    }
+
     render(){
 
         const myStyle : React.CSSProperties = {
@@ -337,7 +342,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
             return(
                 <div className="container">
                     <div className="section-title">
-                        <h1>Register (I need help)</h1>
+                        <h1>Register (I need help - { this.getRegistrationTypeText() })</h1>
                         {
                             !this.controller.isExistingRegistration &&
                             <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange access to the site</h3>
@@ -353,9 +358,9 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                         <div>
                                             <select className="form-control" ref="registrationType" id="registrationType" 
                                                     value={this.controller.registrationType}                                                     
-                                                    onChange={this.handleRegistrationTypeChange.bind(this)}>                                                
-                                                <option value="Org">I need help for my charity</option>
-                                                <option value="Individual">I need help for myself</option>
+                                                    onChange={this.handleRegistrationTypeChange}>                                                
+                                                <option value="Org">I need help {Constants.registrationTypeNeedHelpForMyCharity}</option>
+                                                <option value="Individual">I need help {Constants.registrationTypeNeedHelpForMySelf}</option>
                                             </select>
                                         </div>                                
                                     </div>
@@ -1013,10 +1018,10 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 this.props.controller.registrationNeedHelpOrg.email = event.target.value;
                 this.props.controller.registerOrganisationFormState.email.fieldValidationError = '';
                 break;
-            case RegistrationFields.websiteLink:
-                this.props.controller.registrationNeedHelpOrg.websiteLink = event.target.value;
-                this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError = '';
-                break;
+            //case RegistrationFields.websiteLink:
+            //    this.props.controller.registrationNeedHelpOrg.websiteLink = event.target.value;
+            //    this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError = '';
+            //    break;
             case RegistrationFields.whatWeDo:
                 this.props.controller.registrationNeedHelpOrg.whatWeDo = event.target.value;
                 this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError = '';
@@ -1039,9 +1044,9 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
             case RegistrationFields.email:
                 this.props.controller.registerOrganisationFormState.email.touched = true;
                 break;
-            case RegistrationFields.websiteLink:
-                this.props.controller.registerOrganisationFormState.websiteLink.touched = true;
-                break;
+            //case RegistrationFields.websiteLink:
+            //    this.props.controller.registerOrganisationFormState.websiteLink.touched = true;
+            //    break;
             case RegistrationFields.whatWeDo:
                 this.props.controller.registerOrganisationFormState.whatWeDo.touched = true;
                 break;
@@ -1072,10 +1077,10 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 hasError = this.props.controller.registerOrganisationFormState.email.fieldValidationError.length > 0;
                 shouldShow = this.props.controller.registerOrganisationFormState.email.touched;
                 break;
-            case RegistrationFields.websiteLink:
-                hasError = this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length > 0;
-                shouldShow = this.props.controller.registerOrganisationFormState.websiteLink.touched;
-                break;
+            //case RegistrationFields.websiteLink:
+            //    hasError = this.props.controller.registerOrganisationFormState.websiteLink.fieldValidationError.length > 0;
+            //    shouldShow = this.props.controller.registerOrganisationFormState.websiteLink.touched;
+            //    break;
             case RegistrationFields.whatWeDo:
                 hasError = this.props.controller.registerOrganisationFormState.whatWeDo.fieldValidationError.length > 0;
                 shouldShow = this.props.controller.registerOrganisationFormState.whatWeDo.touched;
@@ -1164,20 +1169,18 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 </div>                
                 <p className='validationErrorMsg'>{controller.registerOrganisationFormState.charityName.fieldValidationError}</p>
                 
-                <div className={this.shouldMarkError('websiteLink') ? "form-group has-error has-feedback" : ""}>
+                <div className="form-group">
                     <label htmlFor="websiteLink">Website Link</label>
                     <input 
-                        className={this.shouldMarkError('websiteLink') ? "form-control error" : "form-control"}
+                        className="form-control"
                         id="websiteLink" 
                         type="text" 
                         ref="websiteLink" 
                         placeholder="Website Link" 
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpOrg.websiteLink}/>
-                        <span className={this.shouldMarkError('websiteLink') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
-                </div>
-                <p className='validationErrorMsg'>{controller.registerOrganisationFormState.websiteLink.fieldValidationError}</p>
+                        value={controller.registrationNeedHelpOrg.websiteLink}/>                        
+                </div>                
 
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="whatWeDo">What we do</label>

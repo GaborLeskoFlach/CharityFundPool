@@ -29,7 +29,7 @@ interface IRegisterOrganisationFormFields{
     phoneNo : IFieldValidation;
     email : IFieldValidation;
     charityName : IFieldValidation;
-    websiteLink : IFieldValidation;
+    //websiteLink : IFieldValidation;
     whatWeDo : IFieldValidation;
     whatWeNeed : IFieldValidation;
     validationError : string;
@@ -59,6 +59,7 @@ export class RegisterNeedHelpController {
         this.individualRegistration = null;
         this.organisationRegistration = null;
         this.isExistingRegistration = false
+        this.registrationTypeText = Constants.registrationTypeNeedHelpForMySelf
         this.resetForm();
     }
 
@@ -79,6 +80,7 @@ export class RegisterNeedHelpController {
     @observable registerOrganisationFormState : IRegisterOrganisationFormFields;
     @observable orgNeedHelpListItemFormState : IRegisterOrgNeedHelpListItemFormFields
     @observable isExistingRegistration : boolean
+    @observable registrationTypeText : string
 
     addNeed1 = (value : IWhatWeNeed) => {
         _firebaseApp.database().ref('utils/whatWeNeed').push(value);
@@ -106,11 +108,11 @@ export class RegisterNeedHelpController {
             charityName : {
                 fieldValidationError : '',
                 touched : false
-            },
+            },/*
             websiteLink : {
                 fieldValidationError : '',
                 touched : false
-            },
+            },*/
             whatWeDo : {
                 fieldValidationError : '',
                 touched : false
@@ -373,6 +375,16 @@ export class RegisterNeedHelpController {
     @action("Set Registration Type (Dropdown)")
     setRegistrationType = action((value:string) => {
         this.registrationType = value;
+
+        switch(this.registrationType){
+            case 'Individual':
+            this.registrationTypeText = Constants.registrationTypeNeedHelpForMySelf
+            break
+            case 'Org':
+            this.registrationTypeText = Constants.registrationTypeNeedHelpForMyCharity
+            break
+        }
+
     });
 
     @action("set Form visibility")

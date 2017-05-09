@@ -13,4 +13,7 @@ export module Constants{
     export const userStatusIndicatorEnabled : string = 'Enabled';
     export const userStatusIndicatorDisabled : string = 'Disabled';
     export const userStatusIndicatorPending : string = 'Pending';
+
+    export const registrationTypeNeedHelpForMySelf : string = 'for myself'
+    export const registrationTypeNeedHelpForMyCharity : string = 'for my charity'
 }
