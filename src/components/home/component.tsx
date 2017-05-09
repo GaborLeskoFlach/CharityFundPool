@@ -51,40 +51,29 @@ export class HomeComponent extends React.Component<{},{}>{
                             </div>
                         </div>
                     </div>
-                    <div className="container">
+                    
+                    <div className="container text-center who-we-are">
                         <div className="row">
                             <div className="col-lg-6 col-md-6 text-center">
                                 <Link to="/register/NeedHelp">
                                     <div className="service-box">                                
-                                        <i className="fa fa-4x fa-group text-primary sr-icons img-responsive"></i>                                   
-                                        <h3>I need help</h3>
-                                        <p className="text-muted">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                        <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
+                                        <h2 style={styleTemporary}>I need help</h2>
                                     </div>
                                 </Link>
                             </div>
-                            {/*
-                            <div className="col-lg-4 col-md-6 text-center">
-                                <Link to="/donate">
-                                    <div className="service-box">
-                                        <i className="fa fa-4x fa-money text-primary sr-icons img-responsive"></i>
-                                        <h3>Donate</h3>
-                                        <p className="text-muted">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    </div>
-                                </Link>
-                            </div>
-                            */}
                             <div className="col-lg-6 col-md-6 text-center">
                                 <Link to="/register/WantToHelp">
                                     <div className="service-box">
-                                        <i className="fa fa-4x fa-group text-primary sr-icons img-responsive"></i>
-                                        <h3>I want to help</h3>
-                                        <p className="text-muted">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                        <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
+                                        <h2 style={styleTemporary}>I want to help</h2>   
                                     </div>
                                 </Link>
                             </div>
-
                         </div>
                     </div>
+
+
                 </section>
           
             </div>                
