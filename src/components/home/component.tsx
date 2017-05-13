@@ -43,36 +43,51 @@ export class HomeComponent extends React.Component<{},{}>{
                 </section>
 
                 <section>
+                    <section className="main">
+                        <ul className="ch-grid">
+                            <li>
+                                <Link to="/register/NeedHelp">
+                                    <div className="ch-item ch-img-1">
+                                        <div className="ch-info">
+                                            <h3>Need Help?</h3>                                        
+                                        </div>
+                                    </div>
+                                </Link>
+                            </li>
+                            {/*
+                            <li>
+                                <Link to="/Donate">
+                                    <div className="ch-item ch-img-2">
+                                        <div className="ch-info">
+                                            <h3>Donate</h3>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </li>*/}
+                            <li>
+                                <Link to="/register/WantToHelp">
+                                    <div className="ch-item ch-img-3">
+                                        <div className="ch-info">
+                                            <h3>Want to Help?</h3>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </li>
+                        </ul>                        
+                    </section>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12 text-center">
-                                <h2 className="section-heading">Bringing the community together</h2>
                                 <hr className="primary"/>
-                            </div>
+                                <div className="description wow fadeInLeftBig animated" style={{ visibility: 'visible', animationName: 'fadeInLeftBig'}}>
+                                    <h2 className="section-heading">
+                                        C.F.P. is a community based not for profit website. We put people in need of help in touch with people who want to help and manage the whole process. Funds raised by the community go direct to provide goods and facilities for those in need through Charities and not for profit organisations.                                    
+                                    </h2>
+                                </div>                                
+                                <hr className="primary"/>
+                            </div>                            
                         </div>
                     </div>
-                    
-                    <div className="container text-center who-we-are">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-6 text-center">
-                                <Link to="/register/NeedHelp">
-                                    <div className="service-box">                                
-                                        <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
-                                        <h2 style={styleTemporary}>I need help</h2>
-                                    </div>
-                                </Link>
-                            </div>
-                            <div className="col-lg-6 col-md-6 text-center">
-                                <Link to="/register/WantToHelp">
-                                    <div className="service-box">
-                                        <img className="img-responsive" src="templates/images/glossy-green-circle-button-hi.png" alt="" />
-                                        <h2 style={styleTemporary}>I want to help</h2>   
-                                    </div>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
 
                 </section>
           

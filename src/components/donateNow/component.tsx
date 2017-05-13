@@ -9,7 +9,7 @@ import * as DonationFields from './formFields';
 import { convertData } from '../../utils/utils';
 import {observer} from 'mobx-react';
 import { map } from 'lodash';
-
+const Mask = require('react-masking').default
 import { DonationPaymentConfiguration, IPaymentSelect } from './donationPaymentConfiguration';
 
 interface IRouteParams{
@@ -280,15 +280,17 @@ export class DonateNowComponent extends React.Component<IDonateNowComponentProps
 
                                     <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                                         <label htmlFor="phoneNo">Phone No (*)</label>
-                                        <input 
-                                            className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
-                                            id="phoneNo" 
-                                            type="text" 
-                                            ref="phoneNo" 
-                                            placeholder="Phone no" 
-                                            onChange={this.handleChange}
-                                            onBlur={this.handleBlur}
-                                            value={this.controller.donationRegistration.phoneNo}/>
+                                        <Mask mask="+61 9 9999 9999" maskCharacter="_" onChange={this.handleChange}>
+                                            <input 
+                                                className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
+                                                id="phoneNo" 
+                                                type="text" 
+                                                ref="phoneNo" 
+                                                placeholder="Phone no" 
+                                                onChange={this.handleChange}
+                                                onBlur={this.handleBlur}
+                                                value={this.controller.donationRegistration.phoneNo}/>
+                                        </Mask>
                                             <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                                     </div>
                                     <p className='validationErrorMsg'>{this.controller.donationFormState.phoneNo.fieldValidationError}</p>

@@ -11,7 +11,7 @@ import { IRegistrationWantToHelp, IMultiSelect, DataFilter, IRouteParams_Registr
 import { convertData, convertFromObservable } from '../../../utils/utils';
 
 import { Link } from 'react-router';
-
+const Mask = require('react-masking').default
 import './styles.css';
 
 interface IRegisterWantToHelpComponent{
@@ -165,8 +165,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
         //Phone no
         if(this.controller.registerWantToHelp.phoneNo.length == 0){
             this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Required';
-        }else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.phoneNo)) {
-            this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+        //}else if (!numericOnlyPatter.test(this.controller.registerWantToHelp.phoneNo)) {
+        //    this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
         }else{
             this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError = '';
         }       
@@ -328,15 +328,17 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                                         <label htmlFor="phoneNo">Phone No (*)</label>
-                                        <input 
-                                            className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
-                                            id="phoneNo" 
-                                            type="text" 
-                                            ref="phoneNo" 
-                                            placeholder="Phone no" 
-                                            onChange={this.handleChange}
-                                            onBlur={this.handleBlur}
-                                            value={this.controller.registerWantToHelp.phoneNo}/>
+                                        <Mask mask="+61 9 9999 9999" maskCharacter="_" onChange={this.handleChange}>
+                                            <input 
+                                                className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
+                                                id="phoneNo" 
+                                                type="text" 
+                                                ref="phoneNo" 
+                                                placeholder="Phone no" 
+                                                onChange={this.handleChange}
+                                                onBlur={this.handleBlur}
+                                                value={this.controller.registerWantToHelp.phoneNo}/>
+                                        </Mask>
                                             <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                                     </div>
                                     <p className='validationErrorMsg'>{this.controller.registerWantToHelpFormState.phoneNo.fieldValidationError}</p>

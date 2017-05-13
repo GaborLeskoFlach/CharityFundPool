@@ -70,6 +70,7 @@
     "react-firebase-file-uploader": "^2.1.1",
     "react-google-maps": "^6.0.1",
     "react-input-calendar": "^0.3.14",
+    "react-masking": "^0.1.7",
     "react-modal-dialog": "^4.0.5",
     "react-router": "^2.8.1",
     "react-select-box": "^3.0.1",

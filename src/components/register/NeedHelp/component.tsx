@@ -19,6 +19,8 @@ import './styles.css';
 import SingleDate from '../../common/dateComponents/singleDate';
 import DateRange from '../../common/dateComponents/dateRange';
 
+const Mask = require('react-masking').default
+
 import { IRegistrationNeedHelpInd, IRegistrationNeedHelpOrg, 
             IRegistrationWantToHelp, IWhatWeNeed, IWhatINeedHelpWith, 
             IColumnData, IOrgNeedHelpWithListItem, DataSource, DataFilter, RegistrationType, 
@@ -128,8 +130,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 //Phone no
                 if(this.controller.registrationNeedHelpInd.phoneNo.length == 0){
                     this.controller.registerIndividualFormState.phoneNo.fieldValidationError = 'Required';
-                }else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpInd.phoneNo)) {
-                    this.controller.registerIndividualFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+                //}else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpInd.phoneNo)) {
+                 //   this.controller.registerIndividualFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
                 }else{
                     this.controller.registerIndividualFormState.phoneNo.fieldValidationError = '';
                 }   
@@ -212,8 +214,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                 //Phone no
                 if(this.controller.registrationNeedHelpOrg.phoneNo.length == 0){
                     this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = 'Required';
-                }else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpOrg.phoneNo)) {
-                    this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
+                //}else if (!numericOnlyPatter.test(this.controller.registrationNeedHelpOrg.phoneNo)) {
+                //    this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = 'Phone No can contain numbers only';
                 }else{
                     this.controller.registerOrganisationFormState.phoneNo.fieldValidationError = '';
                 }     
@@ -609,16 +611,18 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="phoneNo">Phone No (*)</label>
-                    <input 
-                        className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
-                        id="phoneNo" 
-                        type="text" 
-                        ref="phoneNo" 
-                        placeholder="Phone no"
-                        onChange={this.handleChange}
-                        onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpInd.phoneNo}/>
-                        <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
+
+                    <Mask mask="+61 9 9999 9999" maskCharacter="_" onChange={this.handleChange}>
+                        <input 
+                            className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
+                            id="phoneNo" 
+                            type="text" 
+                            ref="phoneNo"                         
+                            onBlur={this.handleBlur}
+                            value={controller.registrationNeedHelpInd.phoneNo}/>
+                    </Mask>
+
+                    <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{this.props.controller.registerIndividualFormState.phoneNo.fieldValidationError}</p>
 
@@ -1125,15 +1129,16 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <label htmlFor="phoneNo">Phone No</label>
-                    <input 
-                        className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
-                        id="phoneNo" 
-                        type="text" 
-                        ref="phoneNo" 
-                        placeholder="Phone no"
-                        onChange={this.handleChange}
-                        onBlur={this.handleBlur}
-                        value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
+                    <Mask mask="+61 9 9999 9999" maskCharacter="_" onChange={this.handleChange}>
+                        <input 
+                            className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
+                            id="phoneNo" 
+                            type="text" 
+                            ref="phoneNo" 
+                            placeholder="Phone no"
+                            onBlur={this.handleBlur}
+                            value={controller.registrationNeedHelpInd.phoneNo === '' ? controller.registrationNeedHelpOrg.phoneNo : controller.registrationNeedHelpInd.phoneNo}/>
+                    </Mask>
                         <span className={this.shouldMarkError('phoneNo') ? "glyphicon glyphicon-remove form-control-feedback" : ""}></span>
                 </div>
                 <p className='validationErrorMsg'>{controller.registerOrganisationFormState.phoneNo.fieldValidationError}</p>
