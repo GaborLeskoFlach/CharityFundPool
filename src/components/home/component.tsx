@@ -37,6 +37,8 @@ export class HomeComponent extends React.Component<{},{}>{
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12 text-center">
+                                <h2 className="section-heading">Bringing the Community together</h2>
+                                <hr className="primary"/>
                             </div>
                         </div>
                     </div>
