@@ -190,3 +190,13 @@ p.validationErrorMsg {
 .our-details-tab .tab-list li.active a:hover {
 	background-color:#ffe600;
 }
+
+
+span.mandatory-asterix ::after {
+  content : "*";
+  float:right;
+  color: red !important;
+  font-size:large;
+  padding-left:5px;
+  margin-bottom: 0px !important;
+}
