@@ -316,14 +316,51 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
     }
 
     resetForm = (event) => {
-        event.preventDefault();
-        this.controller.resetForm();
+        event.preventDefault()
+        this.controller.resetForm()
         browserHistory.push('/home')
     }
 
     getRegistrationTypeText = () => {
         return this.controller.registrationTypeText
     }
+
+    handleTabSelection = (e) => {
+        this.controller.setRegistrationType(e.target.id)
+    }
+
+    renderRegistrationTypeSelectionTabs = () => {
+        const innerStyle : React.CSSProperties = {
+            marginBottom : 0,
+            textAlign : 'left'
+        }
+
+        return (
+            <div className="row">
+
+                <div className="col-sm-12">
+                    <div className="donate-tab text-center">
+                        <div id="donate">
+                            <ul className="tab-list list-inline" role="tablist" onClick={this.handleTabSelection} value={this.controller.registrationType} >
+                                <li className={ this.controller.registrationType === 'Individual' ? 'active' : ''}><a id='Individual' href="#individualTab" role="tab" data-toggle="tab">I need help for myself</a></li>
+                                <li className={ this.controller.registrationType === 'Org' ? 'active' : ''}><a id='Org' href="#organisationTab" role="tab" data-toggle="tab">I need help for my charity</a></li>
+                            </ul>
+                            <fieldset className="tab-content" style={innerStyle}>
+                                <div className={ this.controller.registrationType === 'Individual' ? 'tab-pane fade in active' : 'tab-pane fade '} id="individualTab">
+                                    <RegisterIndividualComponent controller={this.controller} />
+                                </div>
+                                <div className={ this.controller.registrationType === 'Org' ? 'tab-pane fade in active' : 'tab-pane fade '} id="organisationTab">
+                                    <RegisterOrganisationComponent controller={this.controller} />                      
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        )        
+    }
+
 
     render(){
 
@@ -344,7 +381,8 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
             return(
                 <div className="container">
                     <div className="section-title">
-                        <h1>Register (I need help - { this.getRegistrationTypeText() })</h1>
+                        {/*<h1>Register (I need help - { this.getRegistrationTypeText() })</h1>*/}
+                        <h1>Register</h1>
                         {
                             !this.controller.isExistingRegistration &&
                             <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange access to the site</h3>
@@ -355,10 +393,11 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                             <div className="contact-form">
                                 <form ref="registrationForm" onSubmit={this.register.bind(this)}>
 
+                                    {/*
                                     <div className="form-group">
                                         <label htmlFor="registrationTion">Registration Type</label>
                                         <div>
-                                            <select className="form-control" ref="registrationType" id="registrationType" 
+                                            <select className="form-control" id="registrationType" 
                                                     value={this.controller.registrationType}                                                     
                                                     onChange={this.handleRegistrationTypeChange}>                                                
                                                 <option value="Org">I need help {Constants.registrationTypeNeedHelpForMyCharity}</option>
@@ -366,10 +405,15 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                                             </select>
                                         </div>                                
                                     </div>
+                                    */}
 
                                     {
-                                        this.controller.registrationType === 'Individual' ? <RegisterIndividualComponent controller={this.controller} /> : <RegisterOrganisationComponent controller={this.controller} />
+                                        this.renderRegistrationTypeSelectionTabs()
                                     }
+
+                                    {/*
+                                        this.controller.registrationType === 'Individual' ? <RegisterIndividualComponent controller={this.controller} /> : <RegisterOrganisationComponent controller={this.controller} />
+                                    */}
 
                                     {
                                         this.controller.hasRegistered &&
