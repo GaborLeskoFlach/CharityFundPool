@@ -385,7 +385,7 @@ export class RegisterNeedHelpComponent extends React.Component<IRegisterNeedHelp
                         <h1>Register</h1>
                         {
                             !this.controller.isExistingRegistration &&
-                            <h3>Fill in the form below and wait for a CFP consultant to contact you to arrange access to the site</h3>
+                            <h3>Please fill in the form below and wait for a C.F.P. Member to contact you to arrange access to the site</h3>
                         }
                     </div>
                     <div className="row">
