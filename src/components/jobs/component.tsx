@@ -99,7 +99,8 @@ export class Jobs extends React.Component<{},{}> {
                                         
                                         <div className={this.shouldMarkError('postcode') ? "form-group has-error has-feedback" : ""}>
                                             <label className="sr-only" htmlFor="searchByPostCode">Post code</label>
-                                            <input 
+                                            <input
+                                                autoComplete="off" 
                                                 className={this.shouldMarkError('postCode') ? "form-control error" : "subscribe form-control"}
                                                 id="searchByPostCode" 
                                                 type="text" 

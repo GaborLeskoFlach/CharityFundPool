@@ -640,8 +640,9 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
                 <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="fullName">Your Name</label></span>
-                    <input 
-                        className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
+                    <input
+                        autoComplete="off"
+                        className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}                        
                         id="fullName" 
                         type="text" 
                         ref="fullName" 
@@ -656,7 +657,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="phoneNo">Phone No</label></span>
                     <Mask mask="(09)99 999 999" maskCharacter="_" onChange={this.handleChange}>
-                        <input 
+                        <input
+                            autoComplete="off"
                             className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                             id="phoneNo" 
                             type="text" 
@@ -671,7 +673,8 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
                 <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="email">Email</label></span>
-                    <input 
+                    <input
+                        autoComplete="off"
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
                         type="text"
@@ -1011,7 +1014,7 @@ export class RegisterIndividualComponent extends React.Component<IRegistrationPr
 
                     <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
                         <span className="mandatory-asterix"><label htmlFor="postCode">Zip/Postcode</label></span>
-                        <input 
+                        <input                         
                             className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
                             id="postCode"
                             type="text" 
@@ -1157,7 +1160,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
 
                 <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="fullName">Your Name</label></span>
-                    <input 
+                    <input
+                        autoComplete="off"
                         className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                         id="fullName" 
                         type="text" 
@@ -1173,7 +1177,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="phoneNo">Phone No</label></span>
                     <Mask mask="(09)99 999 999" maskCharacter="_" onChange={this.handleChange}>
-                        <input 
+                        <input
+                            autoComplete="off"
                             className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                             id="phoneNo" 
                             type="text" 
@@ -1188,7 +1193,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 
                 <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="email">Email</label></span>
-                    <input 
+                    <input
+                        autoComplete="off"
                         className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                         id="email" 
                         type="text" 
@@ -1204,7 +1210,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
 
                 <div className={this.shouldMarkError('charityName') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="charityName">Charity Name</label></span>
-                    <input 
+                    <input
+                        autoComplete="off"
                         className={this.shouldMarkError('charityName') ? "form-control error" : "form-control"}
                         id="charityName" 
                         type="text" 
@@ -1219,7 +1226,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
                 
                 <div className="form-group">
                     <label htmlFor="websiteLink">Website Link</label>
-                    <input 
+                    <input
+                        autoComplete="off" 
                         className="form-control"
                         id="websiteLink" 
                         type="text" 
@@ -1232,7 +1240,8 @@ export class RegisterOrganisationComponent extends React.Component<IRegistration
 
                 <div className={this.shouldMarkError('whatWeDo') ? "form-group has-error has-feedback" : ""}>
                     <span className="mandatory-asterix"><label htmlFor="whatWeDo">What we do</label></span>
-                    <textarea 
+                    <textarea
+                        autoComplete="off" 
                         className={this.shouldMarkError('whatWeDo') ? "form-control error" : "form-control"}
                         ref="whatWeDo" 
                         rows={5} 

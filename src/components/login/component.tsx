@@ -134,7 +134,7 @@ export class LoginComponent extends React.Component<{}, {}>{
         }
 
         return (
-            <div className="container">
+            <div className="container">                
                 <div className="row">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
@@ -148,7 +148,8 @@ export class LoginComponent extends React.Component<{}, {}>{
 
                             <div className="input-group">
                                 <span className="input-group-addon"><i className="glyphicon glyphicon-envelope color-blue"></i></span>
-                                <input 
+                                <input
+                                    autoComplete="off"
                                     id="email" 
                                     name="email" 
                                     placeholder="Email" 
@@ -163,6 +164,7 @@ export class LoginComponent extends React.Component<{}, {}>{
                             <div className="input-group">
                                 <span className="input-group-addon"><i className="glyphicon glyphicon-lock color-blue"></i></span>
                                 <input
+                                    autoComplete="off"
                                     onKeyUp={this.handleKeyUp}
                                     id="password" 
                                     name="password" 

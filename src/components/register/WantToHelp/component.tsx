@@ -297,7 +297,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className={this.shouldMarkError('fullName') ? "form-group has-error has-feedback" : ""}>
                                         <span className="mandatory-asterix"><label htmlFor="fullName">Name</label></span>
-                                        <input 
+                                        <input
+                                            autoComplete="off" 
                                             className={this.shouldMarkError('fullName') ? "form-control error" : "form-control"}
                                             id="fullName" 
                                             type="text" 
@@ -312,7 +313,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className={this.shouldMarkError('email') ? "form-group has-error has-feedback" : ""}>
                                         <span className="mandatory-asterix"><label htmlFor="email">Email address</label></span>
-                                        <input 
+                                        <input
+                                            autoComplete="off"
                                             className={this.shouldMarkError('email') ? "form-control error" : "form-control"}
                                             id="email" 
                                             type="text" 
@@ -329,7 +331,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
                                     <div className={this.shouldMarkError('phoneNo') ? "form-group has-error has-feedback" : ""}>
                                         <span className="mandatory-asterix"><label htmlFor="phoneNo">Phone No</label></span>
                                         <Mask mask="(09)99 999 999" maskCharacter="_" onChange={this.handleChange}>
-                                            <input 
+                                            <input
+                                                autoComplete="off"
                                                 className={this.shouldMarkError('phoneNo') ? "form-control error" : "form-control"}
                                                 id="phoneNo" 
                                                 type="text" 
@@ -345,7 +348,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className={this.shouldMarkError('citySuburb') ? "form-group has-error has-feedback" : ""}>
                                         <span className="mandatory-asterix"><label htmlFor="citySuburb">City</label></span>
-                                        <input 
+                                        <input
+                                            autoComplete="off"
                                             className={this.shouldMarkError('citySuburb') ? "form-control error" : "form-control"}
                                             id="citySuburb" 
                                             type="text" 
@@ -360,7 +364,8 @@ export class RegisterWantToHelpComponent extends React.Component<IRegisterWantTo
 
                                     <div className={this.shouldMarkError('postCode') ? "form-group has-error has-feedback" : ""}>
                                         <span className="mandatory-asterix"><label htmlFor="postCode">Postcode</label></span>
-                                        <input 
+                                        <input
+                                            autoComplete="off"
                                             className={this.shouldMarkError('postCode') ? "form-control error" : "form-control"}
                                             id="postCode" 
                                             type="text" 

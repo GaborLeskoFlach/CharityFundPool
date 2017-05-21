@@ -3,12 +3,22 @@ import { browserHistory } from 'react-router';
 import { observable, action } from 'mobx';
 import { IUserMapping, UserStatus, IRoleInfo, RegistrationRoles, ILocation, RegistrationType } from '../interfaces';
 
+/*
 var config = {
     apiKey: "AIzaSyA-Y-PwwThMfyUuQVIliAIU9JHsuQF03_k",
     authDomain: "charityfundpool-staging.firebaseapp.com",
     databaseURL: "https://charityfundpool-staging.firebaseio.com",
     storageBucket: "charityfundpool-staging.appspot.com",
     messagingSenderId: "692978726080"
+}*/
+
+const config = {
+    apiKey: "AIzaSyAh5vjIaONRfbKPjeHiAc-UvV5nOXseA8Y",
+    authDomain: "charityfundpool.firebaseapp.com",
+    databaseURL: "https://charityfundpool.firebaseio.com",
+    projectId: "charityfundpool",
+    storageBucket: "charityfundpool.appspot.com",
+    messagingSenderId: "42018346299"
 }
 
 export const _firebaseApp : firebase.FirebaseApplication = firebase.initializeApp(config);

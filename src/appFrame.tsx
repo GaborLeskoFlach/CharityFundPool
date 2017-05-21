@@ -8,8 +8,8 @@ import './styles.css';
 
 //Ugh...no no no....shouldn't be this way
 //TODO Remove these guids immediately
-const AdminUser1GUID : string = ''
-const AdminUser2GUID : string = 'sdUQiPafYwavy7XEdyydU9mfg6C3'
+const AdminUser1GUID : string = 'm7xAfRWPgyMmwjbhNT3gHudTuSJ3'  //PROD
+const AdminUser2GUID : string = 'sdUQiPafYwavy7XEdyydU9mfg6C3'  //UAT
 
 enum TabType {
     Home = 1,
